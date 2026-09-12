@@ -43,6 +43,9 @@ const memberForm = useForm({
 const submitMemberProfile = () => {
   memberForm.post(route('profile.update'), {
     preserveScroll: true,
+    onSuccess: () => {
+      memberForm.password = '';
+    },
   });
 };
 
@@ -104,10 +107,16 @@ const handleLogoChange = (e) => {
 };
 
 const submitProfile = () => {
-  form.post(route('profile.update'), {
+  const options = {
     preserveScroll: true,
-    forceFormData: true,
-  });
+    onSuccess: () => {
+      form.password = '';
+    },
+  };
+  if (form.site_logo instanceof File) {
+    options.forceFormData = true;
+  }
+  form.post(route('profile.update'), options);
 };
 
 const addBank = () => {
@@ -310,6 +319,7 @@ const saveBanks = () => {
                 placeholder="Kosongkan jika tidak ingin mengubah password"
                 class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
               />
+              <p v-if="memberForm.errors.password" class="text-xs text-rose-600 font-bold mt-1">{{ memberForm.errors.password }}</p>
             </div>
           </div>
 
@@ -624,6 +634,7 @@ const saveBanks = () => {
                   placeholder="Password Baru"
                   class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
                 />
+                <p v-if="form.errors.password" class="text-xs text-rose-600 font-bold mt-1">{{ form.errors.password }}</p>
               </div>
             </div>
           </div>

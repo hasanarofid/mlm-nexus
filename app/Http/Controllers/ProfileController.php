@@ -77,6 +77,10 @@ class ProfileController extends Controller
         $user = $request->user();
         $isAdmin = $user->hasRole('admin') || $user->username === 'admin' || $user->email === 'admin@xseller.id';
 
+        if ($request->has('site_logo') && !($request->file('site_logo') instanceof \Illuminate\Http\UploadedFile)) {
+            $request->request->remove('site_logo');
+        }
+
         $rules = [
             'name' => 'required|string|max:100',
             'username' => 'required|string|max:50|unique:users,username,' . $user->id,
