@@ -132,16 +132,16 @@ class ProfileController extends Controller
         $user->name = $validated['name'];
         $user->username = $validated['username'];
         $user->email = $validated['email'];
-        if (array_key_exists('phone', $validated)) {
+        if (array_key_exists('phone', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'phone')) {
             $user->phone = $validated['phone'];
         }
-        if (array_key_exists('bank_name', $validated)) {
+        if (array_key_exists('bank_name', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'bank_name')) {
             $user->bank_name = $validated['bank_name'];
         }
-        if (array_key_exists('bank_account_number', $validated)) {
+        if (array_key_exists('bank_account_number', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'bank_account_number')) {
             $user->bank_account_number = $validated['bank_account_number'];
         }
-        if (array_key_exists('bank_account_name', $validated)) {
+        if (array_key_exists('bank_account_name', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'bank_account_name')) {
             $user->bank_account_name = $validated['bank_account_name'];
         }
         if (!empty($validated['password'])) {
