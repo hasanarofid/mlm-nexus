@@ -18,10 +18,15 @@ class Setting extends Model
      */
     public static function getValue(string $key, $default = null)
     {
-        return Cache::rememberForever("setting.{$key}", function () use ($key, $default) {
+        try {
+            return Cache::rememberForever("setting.{$key}", function () use ($key, $default) {
+                $setting = self::where('key', $key)->first();
+                return $setting ? $setting->value : $default;
+            });
+        } catch (\Throwable $e) {
             $setting = self::where('key', $key)->first();
             return $setting ? $setting->value : $default;
-        });
+        }
     }
 
     /**
@@ -39,7 +44,11 @@ class Setting extends Model
             ['value' => $value, 'type' => $type]
         );
 
-        Cache::forget("setting.{$key}");
+        try {
+            Cache::forget("setting.{$key}");
+        } catch (\Throwable $e) {
+            // Ignore cache storage errors
+        }
 
         return $setting;
     }

@@ -21,9 +21,16 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         $user = $request->user();
-        $isAdmin = $user->hasRole('admin') || $user->username === 'admin' || $user->email === 'admin@xseller.id';
-        $settings = Setting::all()->pluck('value', 'key');
+        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@xseller.id');
+        if (!$isAdmin) {
+            try {
+                $isAdmin = $user->hasRole('admin');
+            } catch (\Throwable $e) {
+                $isAdmin = false;
+            }
+        }
 
+        $settings = Setting::all()->pluck('value', 'key');
         $companyBanks = json_decode($settings['company_banks'] ?? '[]', true);
 
         return Inertia::render('Profile/Edit', [
@@ -49,7 +56,7 @@ class ProfileController extends Controller
                 'name' => $settings['company_name'] ?? 'PT.Xseller Punya Kita',
                 'owner' => $settings['company_owner'] ?? 'PT.Xseller Punya Kita',
                 'copyright' => $settings['company_copyright'] ?? 'PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
-                'logo_url' => !empty($settings['site_logo']) ? Storage::url($settings['site_logo']) : null,
+                'logo_url' => !empty($settings['site_logo']) ? (str_starts_with($settings['site_logo'], '/') ? $settings['site_logo'] : '/' . $settings['site_logo']) : null,
                 'banks' => is_array($companyBanks) && count($companyBanks) > 0 ? $companyBanks : [
                     [
                         'type' => 'bank',
@@ -75,7 +82,14 @@ class ProfileController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $user = $request->user();
-        $isAdmin = $user->hasRole('admin') || $user->username === 'admin' || $user->email === 'admin@xseller.id';
+        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@xseller.id');
+        if (!$isAdmin) {
+            try {
+                $isAdmin = $user->hasRole('admin');
+            } catch (\Throwable $e) {
+                $isAdmin = false;
+            }
+        }
 
         if ($request->has('site_logo') && !($request->file('site_logo') instanceof \Illuminate\Http\UploadedFile)) {
             $request->request->remove('site_logo');
@@ -108,8 +122,10 @@ class ProfileController extends Controller
             Setting::setValue('company_copyright', $validated['company_copyright'] ?? 'PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.', 'text');
 
             if ($request->hasFile('site_logo')) {
-                $path = $request->file('site_logo')->store('settings', 'public');
-                Setting::setValue('site_logo', $path, 'image');
+                $file = $request->file('site_logo');
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('images/settings'), $filename);
+                Setting::setValue('site_logo', '/images/settings/' . $filename, 'image');
             }
         }
 
