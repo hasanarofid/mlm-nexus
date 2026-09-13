@@ -36,10 +36,11 @@ const resetFocus = () => {
 
 const getBadgeColor = (pkg) => {
   const p = (pkg || '').toLowerCase();
-  if (p.includes('ultimate') || p.includes('10.500')) return 'bg-amber-100 text-amber-800 border-amber-300';
-  if (p.includes('pro') || p.includes('4.300')) return 'bg-purple-100 text-purple-800 border-purple-300';
-  if (p.includes('medium') || p.includes('2.100')) return 'bg-indigo-100 text-indigo-800 border-indigo-300';
-  if (p.includes('basic') || p.includes('550')) return 'bg-blue-100 text-blue-800 border-blue-300';
+  if (p.includes('partner') || p.includes('ultimate') || p.includes('10.500') || p.includes('10500')) return 'bg-amber-100 text-amber-800 border-amber-300';
+  if (p.includes('business') || p.includes('pro') || p.includes('4.300') || p.includes('4300')) return 'bg-purple-100 text-purple-800 border-purple-300';
+  if (p.includes('affiliate') || p.includes('medium') || p.includes('2.100') || p.includes('2100')) return 'bg-indigo-100 text-indigo-800 border-indigo-300';
+  if (p.includes('star') || p.includes('basic') || p.includes('550')) return 'bg-blue-100 text-blue-800 border-blue-300';
+  if (p.includes('seller') || p.includes('125')) return 'bg-emerald-100 text-emerald-800 border-emerald-300';
   return 'bg-slate-100 text-slate-700 border-slate-300';
 };
 </script>

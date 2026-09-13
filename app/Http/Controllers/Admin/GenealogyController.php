@@ -16,7 +16,29 @@ class GenealogyController extends Controller
     {
         $currentUser = auth()->user() ?: User::first();
         
-        $focusId = $request->query('focus_id', $currentUser->id);
+        $isAdmin = $currentUser->username === 'admin' || 
+                   $currentUser->email === 'admin@xseller.id' || 
+                   ($currentUser->roles && $currentUser->hasRole('admin'));
+
+        // Fetch allowed user IDs for focus selector
+        if ($isAdmin) {
+            $allowedUserQuery = User::query();
+            $allowedUserIds = null;
+        } else {
+            $downlineIds = $this->getAllDownlineIds($currentUser->id);
+            $allowedUserIds = array_merge([$currentUser->id], $downlineIds);
+            $allowedUserQuery = User::whereIn('id', $allowedUserIds);
+        }
+
+        $focusId = (int) $request->query('focus_id', $currentUser->id);
+
+        // Security check: Non-admin can only focus on self or users in their downline tree
+        if (!$isAdmin && $allowedUserIds !== null) {
+            if (!in_array($focusId, $allowedUserIds)) {
+                $focusId = $currentUser->id;
+            }
+        }
+
         $focusedUser = User::find($focusId) ?: $currentUser;
 
         // Fetch Direct Downlines (Generasi 1)
@@ -40,8 +62,8 @@ class GenealogyController extends Controller
         // Calculate team breakdown by generation depth (Generasi 1 s/d Generasi 15)
         $generations = $this->calculateGenerations($focusedUser->id);
 
-        // Search options for quick focus selector
-        $allUsers = User::select('id', 'name', 'username', 'email')->get()->map(function ($u) {
+        // Search options for quick focus selector (Admin: all users, Member: self + downlines)
+        $allUsers = $allowedUserQuery->select('id', 'name', 'username', 'email')->get()->map(function ($u) {
             return [
                 'id' => $u->id,
                 'name' => $u->name,
@@ -54,15 +76,37 @@ class GenealogyController extends Controller
             'focus_user' => [
                 'id' => $focusedUser->id,
                 'name' => $focusedUser->name,
-                'username' => $focusedUser->username ? '@' . $focusedUser->username : '@admin',
-                'package_name' => $focusedUser->package_name ?? 'Ultimate',
+                'username' => $focusedUser->username ? '@' . $focusedUser->username : '@' . strtolower(explode(' ', $focusedUser->name)[0]),
+                'package_name' => $focusedUser->package_name ?? 'Partner',
+                'active_tier' => $focusedUser->getActiveTier(),
                 'total_direct' => count($directDownlines),
                 'total_team' => array_sum(array_column($generations, 'count')),
             ],
+            'is_admin' => $isAdmin,
             'direct_downlines' => $directDownlines,
             'generations' => $generations,
             'all_users' => $allUsers,
         ]);
+    }
+
+    /**
+     * Recursively fetch all downline IDs under a root user (under referral).
+     */
+    private function getAllDownlineIds($rootUserId): array
+    {
+        $allDownlines = [];
+        $currentIds = [$rootUserId];
+
+        while (!empty($currentIds)) {
+            $downlineIds = User::whereIn('parent_id', $currentIds)->pluck('id')->toArray();
+            if (empty($downlineIds)) {
+                break;
+            }
+            $allDownlines = array_merge($allDownlines, $downlineIds);
+            $currentIds = $downlineIds;
+        }
+
+        return $allDownlines;
     }
 
     /**
