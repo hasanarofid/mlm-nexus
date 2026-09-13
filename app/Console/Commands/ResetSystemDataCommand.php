@@ -72,11 +72,14 @@ class ResetSystemDataCommand extends Command
         // Usernames to keep
         $preservedUsernames = ['admin', 'yayan', 'arif'];
 
-        // 2. Delete all non-preserved users
-        $deletedUsers = User::whereNotIn('username', $preservedUsernames)
-            ->where('email', '!=', 'admin@xseller.id')
-            ->where('id', '>', 1)
-            ->delete();
+        // 2. Delete all non-preserved users (including users with NULL username)
+        $deletedUsers = User::where(function ($query) use ($preservedUsernames) {
+            $query->whereNotIn('username', $preservedUsernames)
+                  ->orWhereNull('username');
+        })
+        ->where('email', '!=', 'admin@xseller.id')
+        ->where('id', '>', 1)
+        ->delete();
 
         $this->info("✓ Deleted {$deletedUsers} other member user accounts.");
 
