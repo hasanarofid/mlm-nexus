@@ -14,7 +14,6 @@ use App\Models\VoucherTransfer;
 use App\Models\WalletTransaction;
 use App\Models\Withdrawal;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class ResetSystemDataCommand extends Command
@@ -31,18 +30,18 @@ class ResetSystemDataCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Reset all transactional data, member users, bonus logs, and orders except admin & product catalog.';
+    protected $description = 'Reset all transactional data, member users, bonus logs, and orders except admin, yayan, arif & product catalog.';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('Starting System Data Reset (Keeping Admin & Product Catalog)...');
+        $this->info('Starting System Data Reset (Keeping Admin, Yayan, Arif & Product Catalog)...');
 
         Schema::disableForeignKeyConstraints();
 
-        // 1. Clear all transaction logs
+        // 1. Clear all transaction logs & orders
         BonusLog::query()->delete();
         $this->info('✓ Bonus logs cleared.');
 
@@ -70,22 +69,26 @@ class ResetSystemDataCommand extends Command
         TprRequest::query()->delete();
         $this->info('✓ TPR requests cleared.');
 
-        // 2. Delete all non-admin users
-        $deletedUsers = User::where(function ($q) {
-            $q->where('username', '!=', 'admin')
-              ->where('email', '!=', 'admin@xseller.id');
-        })->where('id', '>', 1)->delete();
+        // Usernames to keep
+        $preservedUsernames = ['admin', 'yayan', 'arif'];
 
-        $this->info("✓ Deleted {$deletedUsers} member user accounts.");
+        // 2. Delete all non-preserved users
+        $deletedUsers = User::whereNotIn('username', $preservedUsernames)
+            ->where('email', '!=', 'admin@xseller.id')
+            ->where('id', '>', 1)
+            ->delete();
 
-        // 3. Reset Admin User
-        $admin = User::where('username', 'admin')
-            ->orWhere('email', 'admin@xseller.id')
-            ->orWhere('id', 1)
-            ->first();
+        $this->info("✓ Deleted {$deletedUsers} other member user accounts.");
 
-        if ($admin) {
-            $admin->update([
+        // 3. Reset preserved users (Admin, Yayan, Arif)
+        $preservedUsers = User::where(function($q) use ($preservedUsernames) {
+            $q->whereIn('username', $preservedUsernames)
+              ->orWhere('email', 'admin@xseller.id')
+              ->orWhere('id', 1);
+        })->get();
+
+        foreach ($preservedUsers as $u) {
+            $u->update([
                 'saldo' => 0,
                 'total_bonus' => 0,
                 'parent_id' => null,
@@ -99,7 +102,7 @@ class ResetSystemDataCommand extends Command
                 'po_points' => 0,
                 'bonus_uncashed' => 0,
             ]);
-            $this->info("✓ Admin user (@{$admin->username}) reset to initial state.");
+            $this->info("✓ User @{$u->username} ({$u->name}) reset to initial 0 state.");
         }
 
         Schema::enableForeignKeyConstraints();

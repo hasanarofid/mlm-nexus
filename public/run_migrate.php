@@ -45,7 +45,7 @@ try {
         ],
         'reset-data' => [
             'command' => 'reset:system-data',
-            'label'   => 'Reset Total Data Member & Transaksi (Kecuali Admin & Produk)',
+            'label'   => 'Reset Total Data Member & Transaksi (Kecuali Admin, Yayan, Arif & Produk)',
         ],
     ];
 
