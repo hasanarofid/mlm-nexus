@@ -116,9 +116,9 @@ try {
         ]);
         $migrateLog = $kernel->output();
         
-        // Auto seed ProductSeeder to ensure product catalog is updated
+        // Auto seed DatabaseSeeder to ensure admin & default users are created/updated
         $kernel->call('db:seed', [
-            '--class' => 'ProductSeeder',
+            '--class' => 'DatabaseSeeder',
             '--force' => true,
         ]);
         $seedLog = $kernel->output();
