@@ -106,5 +106,4 @@ class DashboardController extends Controller
 
         return back()->with('success', 'Pembayaran Premi Bulanan sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil ditambahkan 100% ke Saldo WD Anda!');
     }
-    }
 }
