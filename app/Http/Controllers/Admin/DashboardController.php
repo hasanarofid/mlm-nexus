@@ -53,6 +53,9 @@ class DashboardController extends Controller
                 'bonus_generasi' => $bonusGenerasi,
                 'bonus_ro' => $bonusRO,
                 'bonus_tpr' => $bonusTPR,
+                'po_points' => (int) ($user->po_points ?? 0),
+                'ro_points' => (int) ($user->ro_points ?? 0),
+                'team_points' => (int) ($user->team_points ?? 0),
             ],
             'binary_legs' => [
                 'left' => [

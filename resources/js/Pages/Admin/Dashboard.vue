@@ -142,8 +142,46 @@ const formatRupiah = (val) => {
 
       </div>
 
+      <!-- 3. Mini Metrics Grid -->
+      <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <!-- POIN PO -->
+          <div class="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm flex flex-col justify-center">
+            <p class="text-[10px] sm:text-xs font-extrabold text-slate-800 uppercase tracking-tight">Poin PO</p>
+            <h4 class="text-lg sm:text-xl font-black text-[#009c94] mt-1">{{ wallet?.po_points ?? 0 }}</h4>
+          </div>
 
+          <!-- POIN RO -->
+          <div class="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm flex flex-col justify-center">
+            <p class="text-[10px] sm:text-xs font-extrabold text-slate-800 uppercase tracking-tight">Poin RO</p>
+            <h4 class="text-lg sm:text-xl font-black text-[#009c94] mt-1">{{ wallet?.ro_points ?? 0 }}</h4>
+          </div>
 
+          <!-- STEPING -->
+          <div class="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm flex flex-col justify-center">
+            <p class="text-[10px] sm:text-xs font-extrabold text-slate-800 uppercase tracking-tight">Steping</p>
+            <h4 class="text-lg sm:text-xl font-black text-[#009c94] mt-1">Gen {{ steping_status?.current_tier ?? 0 }}</h4>
+          </div>
+
+          <!-- TEAM POIN -->
+          <div class="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm flex flex-col justify-center">
+            <p class="text-[10px] sm:text-xs font-extrabold text-slate-800 uppercase tracking-tight">Team Poin</p>
+            <h4 class="text-lg sm:text-xl font-black text-[#009c94] mt-1">{{ wallet?.team_points ?? 0 }}</h4>
+          </div>
+
+          <!-- DIRECT REFERRAL -->
+          <div class="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm flex flex-col justify-center">
+            <p class="text-[10px] sm:text-xs font-extrabold text-slate-800 uppercase tracking-tight">Direct Referral</p>
+            <h4 class="text-sm sm:text-base font-black text-[#009c94] mt-1">{{ formatRupiah(wallet?.bonus_sponsor ?? 0) }}</h4>
+          </div>
+
+          <!-- GENERASI -->
+          <div class="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm flex flex-col justify-center">
+            <p class="text-[10px] sm:text-xs font-extrabold text-slate-800 uppercase tracking-tight">Generasi</p>
+            <h4 class="text-sm sm:text-base font-black text-[#009c94] mt-1">{{ formatRupiah(wallet?.bonus_generasi ?? 0) }}</h4>
+          </div>
+        </div>
+      </div>
       <!-- 4. Membership Packages & TPR Plan PRD 2026 Overview -->
       <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
