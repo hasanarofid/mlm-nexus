@@ -20,106 +20,106 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSeeder::class);
 
         // 2. Seed Default Users and Assign Roles
-        $admin = User::updateOrCreate(
-            ['email' => 'admin@talenta52.com'],
-            [
-                'name' => 'President Director (Admin)',
-                'username' => 'admin',
-                'password' => bcrypt('password'),
-                'left_count' => 3,
-                'right_count' => 2,
-                'left_points' => 1,
-                'right_points' => 0,
-                'package_name' => 'Ultimate',
-            ]
-        );
+        $admin = User::where('username', 'admin')->orWhere('email', 'admin@talenta52.com')->first() ?: new User();
+        $admin->fill([
+            'name' => 'President Director (Admin)',
+            'username' => 'admin',
+            'email' => 'admin@talenta52.com',
+            'password' => bcrypt('password'),
+            'left_count' => 3,
+            'right_count' => 2,
+            'left_points' => 1,
+            'right_points' => 0,
+            'package_name' => 'Ultimate',
+        ]);
+        $admin->save();
         $admin->assignRole('admin');
 
         // Level 2 (Children of Admin)
-        $budi = User::updateOrCreate(
-            ['email' => 'budi@talenta52.com'],
-            [
-                'name' => 'Budi Santoso',
-                'username' => 'budi',
-                'password' => bcrypt('password'),
-                'parent_id' => $admin->id,
-                'position' => 'left',
-                'left_count' => 1,
-                'right_count' => 1,
-                'left_points' => 0,
-                'right_points' => 0,
-                'package_name' => 'Pro',
-            ]
-        );
+        $budi = User::where('username', 'budi')->orWhere('email', 'budi@talenta52.com')->first() ?: new User();
+        $budi->fill([
+            'name' => 'Budi Santoso',
+            'username' => 'budi',
+            'email' => 'budi@talenta52.com',
+            'password' => bcrypt('password'),
+            'parent_id' => $admin->id,
+            'position' => 'left',
+            'left_count' => 1,
+            'right_count' => 1,
+            'left_points' => 0,
+            'right_points' => 0,
+            'package_name' => 'Pro',
+        ]);
+        $budi->save();
         $budi->assignRole('client');
 
-        $siti = User::updateOrCreate(
-            ['email' => 'siti@talenta52.com'],
-            [
-                'name' => 'Siti Rahma',
-                'username' => 'siti',
-                'password' => bcrypt('password'),
-                'parent_id' => $admin->id,
-                'position' => 'right',
-                'left_count' => 1,
-                'right_count' => 0,
-                'left_points' => 0,
-                'right_points' => 0,
-                'package_name' => 'Medium',
-            ]
-        );
+        $siti = User::where('username', 'siti')->orWhere('email', 'siti@talenta52.com')->first() ?: new User();
+        $siti->fill([
+            'name' => 'Siti Rahma',
+            'username' => 'siti',
+            'email' => 'siti@talenta52.com',
+            'password' => bcrypt('password'),
+            'parent_id' => $admin->id,
+            'position' => 'right',
+            'left_count' => 1,
+            'right_count' => 0,
+            'left_points' => 0,
+            'right_points' => 0,
+            'package_name' => 'Medium',
+        ]);
+        $siti->save();
         $siti->assignRole('client');
 
         // Level 3 (Grandchildren)
-        $dewi = User::updateOrCreate(
-            ['email' => 'dewi@talenta52.com'],
-            [
-                'name' => 'Dewi Lestari',
-                'username' => 'dewi',
-                'password' => bcrypt('password'),
-                'parent_id' => $budi->id,
-                'position' => 'left',
-                'left_count' => 0,
-                'right_count' => 0,
-                'left_points' => 0,
-                'right_points' => 0,
-                'package_name' => 'Basic',
-            ]
-        );
+        $dewi = User::where('username', 'dewi')->orWhere('email', 'dewi@talenta52.com')->first() ?: new User();
+        $dewi->fill([
+            'name' => 'Dewi Lestari',
+            'username' => 'dewi',
+            'email' => 'dewi@talenta52.com',
+            'password' => bcrypt('password'),
+            'parent_id' => $budi->id,
+            'position' => 'left',
+            'left_count' => 0,
+            'right_count' => 0,
+            'left_points' => 0,
+            'right_points' => 0,
+            'package_name' => 'Basic',
+        ]);
+        $dewi->save();
         $dewi->assignRole('client');
 
-        $eko = User::updateOrCreate(
-            ['email' => 'eko@talenta52.com'],
-            [
-                'name' => 'Eko Prasetyo',
-                'username' => 'eko',
-                'password' => bcrypt('password'),
-                'parent_id' => $budi->id,
-                'position' => 'right',
-                'left_count' => 0,
-                'right_count' => 0,
-                'left_points' => 0,
-                'right_points' => 0,
-                'package_name' => 'Basic',
-            ]
-        );
+        $eko = User::where('username', 'eko')->orWhere('email', 'eko@talenta52.com')->first() ?: new User();
+        $eko->fill([
+            'name' => 'Eko Prasetyo',
+            'username' => 'eko',
+            'email' => 'eko@talenta52.com',
+            'password' => bcrypt('password'),
+            'parent_id' => $budi->id,
+            'position' => 'right',
+            'left_count' => 0,
+            'right_count' => 0,
+            'left_points' => 0,
+            'right_points' => 0,
+            'package_name' => 'Basic',
+        ]);
+        $eko->save();
         $eko->assignRole('client');
 
-        $fajar = User::updateOrCreate(
-            ['email' => 'fajar@talenta52.com'],
-            [
-                'name' => 'Fajar Hidayat',
-                'username' => 'fajar',
-                'password' => bcrypt('password'),
-                'parent_id' => $siti->id,
-                'position' => 'left',
-                'left_count' => 0,
-                'right_count' => 0,
-                'left_points' => 0,
-                'right_points' => 0,
-                'package_name' => 'Starter',
-            ]
-        );
+        $fajar = User::where('username', 'fajar')->orWhere('email', 'fajar@talenta52.com')->first() ?: new User();
+        $fajar->fill([
+            'name' => 'Fajar Hidayat',
+            'username' => 'fajar',
+            'email' => 'fajar@talenta52.com',
+            'password' => bcrypt('password'),
+            'parent_id' => $siti->id,
+            'position' => 'left',
+            'left_count' => 0,
+            'right_count' => 0,
+            'left_points' => 0,
+            'right_points' => 0,
+            'package_name' => 'Starter',
+        ]);
+        $fajar->save();
         $fajar->assignRole('client');
 
         // 2b. Seed Active & Used Vouchers for Admin matching mockup
