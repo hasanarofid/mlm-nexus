@@ -125,7 +125,12 @@ try {
 
         $action = "Migrate & Seed Catalog (Update Only)";
 
-        // 3. Clear & rebuild application caches
+        // 3. Clear & rebuild application caches and bring app online (turn off maintenance mode)
+        @$kernel->call('up');
+        $downFile = __DIR__ . '/../storage/framework/down';
+        if (file_exists($downFile)) {
+            @unlink($downFile);
+        }
         @$kernel->call('config:clear');
         @$kernel->call('route:clear');
         @$kernel->call('view:clear');
