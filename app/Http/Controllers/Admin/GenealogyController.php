@@ -17,7 +17,7 @@ class GenealogyController extends Controller
         $currentUser = auth()->user() ?: User::first();
         
         $isAdmin = $currentUser->username === 'admin' || 
-                   $currentUser->email === 'admin@xseller.id' || 
+                   $currentUser->email === 'admin@talenta52.id' || 
                    ($currentUser->roles && $currentUser->hasRole('admin'));
 
         // Fetch allowed user IDs for focus selector
@@ -110,14 +110,14 @@ class GenealogyController extends Controller
     }
 
     /**
-     * Recursively calculate team members count up to 15 generations depth.
+     * Recursively calculate team members count up to 10 generations depth.
      */
     private function calculateGenerations($rootUserId): array
     {
         $result = [];
         $currentIds = [$rootUserId];
 
-        for ($gen = 1; $gen <= 15; $gen++) {
+        for ($gen = 1; $gen <= 10; $gen++) {
             if (empty($currentIds)) {
                 $result[] = [
                     'generation' => $gen,

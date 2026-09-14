@@ -1,6 +1,6 @@
-# Aturan Pengembangan & Dokumentasi Sistem - Proyek XSELLER.ID
+# Aturan Pengembangan & Dokumentasi Sistem - Proyek talenta52.id
 
-- **Domain Utama:** https://xseller.id
+- **Domain Utama:** https://talenta52.id
 - **Branch Utama:** `main` / `master`
 - **Lisensi & Owner:** [@hasanarofid.site](https://hasanarofid.site)
 
@@ -8,161 +8,68 @@
 
 ## 1. Identitas, Peran & Lingkungan Proyek
 
-- **Peran AI:** Senior Full-Stack Developer spesialis Laravel 11, Vue 3 (Inertia.js), System Binary MLM/Affiliate, & Manajemen Bonus Multi-Tier.
+- **Peran AI:** Senior Full-Stack Developer spesialis Laravel 11, Vue 3 (Inertia.js), System Unilevel Matahari Multi-Tier Generasi 1-10, & Manajemen Bonus Auto Save & Saldo WD.
 - **Tech Stack Utama:**
   - **Backend:** Laravel 11 (PHP 8.2+).
   - **Frontend:** Vue 3 (Inertia.js), Tailwind CSS, `@lucide/vue`, Headless UI / Shadcn-Vue components.
   - **Database:** MySQL.
   - **Auth & Authorization:** Laravel Sanctum & Spatie Laravel Permission.
 - **Aturan Istilah & Terminologi (Wajib Dipatuhi):**
-  - **DILARANG** menggunakan istilah "PIN" atau "Beli PIN". **Gunakan istilah "VOUCHER" atau "BELI VOUCHER"** untuk transaksi produk/kemitraan agar bisnis model tampak sebagai E-Commerce Trade Promotion Program & Affiliasi.
-  - **Tier:** Menyebutkan level/generasi keanggotaan (Generasi 1 s/d Generasi 15).
-  - **Jaringan Binary:** Struktur jaringan 2 kaki (Left Leg & Right Leg).
+  - **Generasi:** Level jaringan Unilevel Matahari (Generasi 1 s/d Generasi 10).
   - **Prosedur Migration Database Production:**
-    - Karena terminal SSH di server live terkadang mengalami kendala/error, cara merunning database migration di server production adalah dengan membuka URL: **`https://xseller.id/run_migrate.php`** di browser setelah melakukan `git push origin master`.
+    - Karena terminal SSH di server live terkadang mengalami kendala/error, cara merunning database migration di server production adalah dengan membuka URL: **`https://talenta52.id/run_migrate.php`** di browser setelah melakukan `git push origin master`.
 
 ---
 
-## 2. Arsitektur Sistem Bisnis & Plan XSELLER (PRD 2026)
+## 2. Arsitektur Sistem Bisnis & Plan TALENTA52 (PRD 2026)
 
-### A. Paket Join (Membership Packages)
-1. **Paket Rp 125.000 (Seller / Steping Base)**
-   - Benefit: Produk Madu/Kopi/Teh.
-   - Bonus Direct Referral (Sponsor / Generasi 1): Rp 20.000.
-   - Tier Allocation: Generasi 1 = Rp 20.000, Generasi 2-15 = Rp 0.
-   - Team Poin: 0 Poin.
-   - Max Generasi Tier: Tier 3 Generasi (Bisa di-Steping hingga Tier 15).
-   - Fitur TPR: Non-TPR.
-2. **Paket Rp 550.000 (Star Seller)**
-   - Benefit: Produk.
-   - Bonus Direct Referral (Sponsor / Generasi 1): Rp 100.000.
-   - Tier Allocation: Generasi 1 = Rp 100.000, Generasi 2-15 = Rp 5.000/gen.
-   - Team Poin: 1 Poin Redemption.
-   - Max Generasi Tier: Tier 5 Generasi (Bisa di-Steping hingga Tier 15).
-   - Fitur TPR: Non-TPR.
-3. **Paket Rp 2.100.000 (Affiliate)**
-   - Benefit: Produk.
-   - Bonus Direct Referral (Sponsor / Generasi 1): Rp 300.000.
-   - Tier Allocation: Generasi 1 = Rp 300.000, Generasi 2-15 = Rp 15.000/gen.
-   - Team Poin: 4 Poin Redemption.
-   - Max Generasi Tier: Tier 8 Generasi (Bisa di-Steping hingga Tier 15).
-   - Fitur TPR: Non-TPR.
-4. **Paket Rp 4.300.000 (Business)**
-   - Benefit: Produk + Akses Fitur TPR.
-   - Bonus Direct Referral (Sponsor / Generasi 1): Rp 600.000.
-   - Tier Allocation: Generasi 1 = Rp 600.000, Generasi 2-15 = Rp 30.000/gen.
-   - Team Poin: 8 Poin Redemption.
-   - Max Generasi Tier: Tier 12 Generasi (Bisa di-Steping hingga Tier 15).
-   - Fitur TPR: Qualified TPR.
-5. **Paket Rp 10.500.000 (Partner)**
-   - Benefit: Produk + Akses Fitur TPR.
-   - Bonus Direct Referral (Sponsor / Generasi 1): Rp 1.500.000.
-   - Tier Allocation: Generasi 1 = Rp 1.500.000, Generasi 2-15 = Rp 100.000/gen.
-   - Team Poin: 12 Poin Redemption.
-   - Max Generasi Tier: Tier 15 Generasi.
-   - Fitur TPR: Qualified TPR.
+### A. Uang Pendaftaran & Bonus Generasi
+1. **Biaya Pendaftaran Mitra:** Rp 100.000
+   - **Alokasi Yayasan:** Rp 10.000 per pendaftaran member baru.
+   - **Alokasi Founder:** Rp 10.000 per pendaftaran member baru.
+2. **Bonus Rekrut Mitra (Multi-tier Generasi 1 s/d Generasi 10):**
+   - Setiap pendaftaran mitra baru memberikan bonus **Rp 7.000** untuk setiap Upline dari Generasi 1 s/d Generasi 10.
+   - Formula Pembagian Bonus Rp 7.000:
+     - **50% Auto Save:** Rp 3.500
+     - **50% Saldo WD:** Rp 3.500
+   - **Total Saldo Mitra:** Auto Save (50%) + Saldo WD (50%).
 
 ---
 
-### B. Mekanisme Steping (Penambahan Kedalaman Generasi Tier)
-Semua Paket Join dapat menambah kedalaman Tier (Generasi) hingga Tier 15 tanpa Overwrite Paket, dengan syarat pencapaian **Direct Referral Paket Rp 125.000**:
-
-1. **Paket Rp 125.000 (Starter - Base Tier 3):**
-   - **Go to Tier 4:** Direct Referral 4 paket Rp 125.000
-   - **Go to Tier 5:** Direct Referral 8 paket Rp 125.000
-   - **Go to Tier 6:** Direct Referral 12 paket Rp 125.000
-   - **Go to Tier 7:** Direct Referral 16 paket Rp 125.000
-   - **Go to Tier 9:** Direct Referral 20 paket Rp 125.000
-   - **Go to Tier 11:** Direct Referral 24 paket Rp 125.000
-   - **Go to Tier 13:** Direct Referral 28 paket Rp 125.000
-   - **Go to Tier 15:** Direct Referral 32 paket Rp 125.000
-
-2. **Paket Rp 550.000 (Basic - Base Tier 5):**
-   - **Go to Tier 6:** Direct Referral 12 paket Rp 125.000
-   - **Go to Tier 7:** Direct Referral 16 paket Rp 125.000
-   - **Go to Tier 9:** Direct Referral 20 paket Rp 125.000
-   - **Go to Tier 11:** Direct Referral 24 paket Rp 125.000
-   - **Go to Tier 13:** Direct Referral 28 paket Rp 125.000
-   - **Go to Tier 15:** Direct Referral 32 paket Rp 125.000
-
-3. **Paket Rp 2.100.000 (Medium - Base Tier 8):**
-   - **Go to Tier 9:** Direct Referral 20 paket Rp 125.000
-   - **Go to Tier 11:** Direct Referral 24 paket Rp 125.000
-   - **Go to Tier 13:** Direct Referral 28 paket Rp 125.000
-   - **Go to Tier 15:** Direct Referral 32 paket Rp 125.000
-
-4. **Paket Rp 4.300.000 (Pro - Base Tier 12):**
-   - **Go to Tier 13:** Direct Referral 28 paket Rp 125.000
-   - **Go to Tier 15:** Direct Referral 32 paket Rp 125.000
-
-5. **Paket Rp 10.500.000 (Ultimate - Base Tier 15):**
-   - Default Tier 15 (Maksimal).
+### B. Premi Bulanan
+- Setiap pembayaran Premi Bulanan (minimal Rp 10.000) dialokasikan **100% Full** masuk ke Total Saldo / Saldo WD Mitra.
 
 ---
 
-### C. Reward Team Poin (Redemption)
-Poin diakumulasikan dari alokasi Team Poin paket join bawahan.
-- **35 Poin:** Cash Rp 500.000
-- **90 Poin:** Cash Rp 1.500.000
-- **300 Poin:** Cash Rp 6.000.000
-- **2.000 Poin:** Cash Rp 35.000.000
-- **5.000 Poin:** Cash Rp 80.000.000
-*Ketentuan Reset:* Poin akan di-reset untuk pencapaian s/d 350 poin. Di atas 350 poin, sisa poin akan di-HOLD untuk reward tahapan selanjutnya.
+### C. Syarat Penarikan Saldo (Withdrawal / WD)
+- **Minimal Penarikan:** Rp 50.000
+- **Potongan Biaya Admin Bank:** Rp 10.000 per permohonan WD.
+- Penarikan diambil dari **Saldo WD** mitra.
 
 ---
 
-### D. Incentive Promotion (Target Omset & Income)
-- Target Omset 250.000 -> Income Rp 5.000.000
-- Target Omset 1.500.000 -> Income Rp 15.000.000
-- Target Omset 5.000.000 -> Income Rp 50.000.000
-- Target Omset 10.000.000 -> Income Rp 100.000.000
-- Target Omset 40.000.000 -> Income Rp 400.000.000
+### D. Struktur Jaringan Matahari (Unilevel Network)
+- Tampilan Jaringan Matahari menampilkan:
+  - Total Jumlah Mitra.
+  - Jumlah Mitra per Generasi (Generasi 1 s/d Generasi 10).
 
 ---
 
-### E. Repeat Order (Paket RO)
-- **Syarat Paket:** Hanya dapat dilakukan oleh **Paket Seller (Rp 125.000)**.
-- **Harga Paket RO:** Rp 125.000 (hanya berlaku pada nominal ini).
-- **Kompensasi RO:** 1 Poin RO (Dapat dikonversi menjadi Rp 500.000 saat mencapai 35 Poin RO).
-- **Bonus RO:** Direct Referral Rp 20.000 + Matching Bonus 20%.
-
----
-
-### F. Purchase Order (PO) & Personal Poin Reward
-- **Syarat Paket:** Hanya dapat dilakukan oleh **Paket Star Seller** dan **Paket Affiliate**.
-Pembelian produk tambahan (PO) memberikan alokasi Tier hingga 15 Generasi:
-1. **PO Paket Rp 550.000:**
-   - Alokasi 15 Generasi: Rp 10.000 / gen.
-   - Additional Product: +3 Botol/Pouch/Box dari paket Join.
-   - Personal Poin Reward: 2 Poin.
-2. **PO Paket Rp 2.100.000:**
-   - Alokasi 15 Generasi: Rp 50.000 / gen.
-   - Additional Product: +10 Botol/Pouch/Box dari paket Join.
-   - Personal Poin Reward: 8 Poin.
-
-**Reward Poin Personal (Hasil Akumulasi Poin PO):**
-- **35 Poin:** Rp 1.000.000 (PAL Bonus => Rp 200.000)
-- **90 Poin:** Rp 3.000.000 (PAL Bonus => Rp 600.000)
-- **300 Poin:** Rp 12.000.000 (PAL Bonus => Rp 2.400.000)
-- **2.000 Poin:** Rp 70.000.000 (PAL Bonus => Rp 14.000.000)
-- **5.000 Poin:** Rp 150.000.000 (PAL Bonus => Rp 30.000.000)
-
----
-
-### G. Fitur TPR (Trade Promotion Program / Titip Produk) & Bonus Rebate
-- **Syarat Paket:** Hanya dapat dilakukan oleh **Paket Business** dan **Paket Partner**.
-Program menitipkan produk ke perusahaan untuk mendapatkan profit sharing bulanan selama 3 bulan:
-- **Paket Rp 4.300.000:** User mendapatkan Bagi Hasil **Rp 301.000 / Bulan** (7% / bulan selama 3 bulan). Bonus Rebate TPR untuk Sponsor Langsung: **Rp 60.200 / Bulan** (20% dari sharing selama 3 bulan).
-- **Paket Rp 10.500.000:** User mendapatkan Bagi Hasil **Rp 378.000 / Bulan** (selama 3 bulan). Bonus Rebate TPR untuk Sponsor Langsung: **Rp 378.000 / Bulan** (selama 3 bulan).
+### E. Navigasi Member Area (Sidebar)
+Menu yang ditampilkan pada sidebar area Member (`client` role):
+1. **Dashboard**
+2. **Team Mitra**
+3. **Penarikan Saldo**
+4. **Laporan**
 
 ---
 
 ## 3. Kualitas Kode & Standar Pemrograman
 
 1. **Clean & Maintainable:** DRY (Don't Repeat Yourself) dan KISS (Keep It Simple, Stupid).
-2. **Strict DB Transactions:** Semua logika kalkulasi bonus, distribusi alokasi tier, pencatatan transaksi voucher, dan mutasi e-wallet WAJIB dibungkus `DB::transaction()` untuk menjamin keutuhan data.
-3. **Optimasi Binary Tree Query:** Gunakan pola database tree yang efisien (seperti Nested Set Model atau Closure Table / CTE Recursive) untuk penelusuran 2 kaki binary dan perhitungan 15 generasi tanpa masalah performa.
-4. **Validasi & Integritas Data:** Selalu buat Form Request & DTO/Service layer terpisah dari Controller untuk logika perhitungan bonus.
+2. **Strict DB Transactions:** Semua logika kalkulasi bonus, alokasi 50% Auto Save & 50% Saldo WD, alokasi Yayasan & Founder, serta mutasi wallet WAJIB dibungkus `DB::transaction()` untuk menjamin keutuhan data.
+3. **Optimasi Unilevel Query:** Gunakan query pohon generasi unilevel yang presisi dan cepat hingga kedalaman 10 generasi.
+4. **Validasi & Integritas Data:** Selalu gunakan Form Request & DTO/Service layer terpisah dari Controller.
 
 ---
 

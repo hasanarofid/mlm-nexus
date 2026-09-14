@@ -41,12 +41,12 @@ class CustomResetPasswordNotification extends Notification
         ], false));
 
         return (new MailMessage)
-            ->subject('Reset Password Akun XSELLER.ID')
+            ->subject('Reset Password Akun talenta52.id')
             ->greeting('Halo ' . $notifiable->name . ',')
-            ->line('Anda menerima email ini karena kami menerima permintaan reset password untuk akun XSELLER.ID Anda.')
+            ->line('Anda menerima email ini karena kami menerima permintaan reset password untuk akun talenta52.id Anda.')
             ->action('Reset Password Sekarang', $resetUrl)
             ->line('Tautan reset password ini akan kedaluwarsa dalam waktu 60 menit.')
             ->line('Jika Anda tidak merasa melakukan permintaan reset password, tidak ada tindakan lanjutan yang perlu dilakukan.')
-            ->line('Terima kasih, Salam sukses XSELLER.ID!');
+            ->line('Terima kasih, Salam sukses talenta52.id!');
     }
 }

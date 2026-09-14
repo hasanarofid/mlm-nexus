@@ -1,27 +1,27 @@
 <script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head, useForm, usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
-import { 
-  Settings, 
-  Building2, 
-  UserCheck, 
-  CreditCard, 
-  Plus, 
-  Trash2, 
-  Check, 
-  CheckCircle2, 
-  AlertCircle,
-  Image as ImageIcon,
-  Upload
-} from '@lucide/vue';
+import AdminLayout from "@/Layouts/AdminLayout.vue";
+import { Head, useForm, usePage } from "@inertiajs/vue3";
+import { ref, computed } from "vue";
+import {
+    Settings,
+    Building2,
+    UserCheck,
+    CreditCard,
+    Plus,
+    Trash2,
+    Check,
+    CheckCircle2,
+    AlertCircle,
+    Image as ImageIcon,
+    Upload,
+} from "@lucide/vue";
 
 const props = defineProps({
-  is_admin: Boolean,
-  user: Object,
-  admin_user: Object,
-  company_profile: Object,
-  status: String,
+    is_admin: Boolean,
+    user: Object,
+    admin_user: Object,
+    company_profile: Object,
+    status: String,
 });
 
 const page = usePage();
@@ -30,36 +30,38 @@ const flashError = computed(() => page.props.flash?.error);
 
 // Form for Member Profile
 const memberForm = useForm({
-  name: props.user?.name || '',
-  username: props.user?.username || '',
-  email: props.user?.email || '',
-  phone: props.user?.phone || '',
-  bank_name: props.user?.bank_name || 'Bank BRI',
-  bank_account_number: props.user?.bank_account_number || '',
-  bank_account_name: props.user?.bank_account_name || props.user?.name || '',
-  password: '',
+    name: props.user?.name || "",
+    username: props.user?.username || "",
+    email: props.user?.email || "",
+    phone: props.user?.phone || "",
+    bank_name: props.user?.bank_name || "Bank BRI",
+    bank_account_number: props.user?.bank_account_number || "",
+    bank_account_name: props.user?.bank_account_name || props.user?.name || "",
+    password: "",
 });
 
 const submitMemberProfile = () => {
-  memberForm.post(route('profile.update'), {
-    preserveScroll: true,
-    onSuccess: () => {
-      memberForm.password = '';
-    },
-  });
+    memberForm.post(route("profile.update"), {
+        preserveScroll: true,
+        onSuccess: () => {
+            memberForm.password = "";
+        },
+    });
 };
 
 // Form for Corporate & Admin Profile
 const form = useForm({
-  company_name: props.company_profile?.name || 'PT.Xseller Punya Kita',
-  company_owner: props.company_profile?.owner || 'PT.Xseller Punya Kita',
-  company_copyright: props.company_profile?.copyright || 'PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
-  name: props.admin_user?.name || 'President Director (Admin)',
-  username: props.admin_user?.username || 'admin',
-  email: props.admin_user?.email || 'admin@xseller.id',
-  phone: props.admin_user?.phone || '081234567890',
-  password: '',
-  site_logo: null,
+    company_name: props.company_profile?.name || "PT.Xseller Punya Kita",
+    company_owner: props.company_profile?.owner || "PT.Xseller Punya Kita",
+    company_copyright:
+        props.company_profile?.copyright ||
+        "PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.",
+    name: props.admin_user?.name || "President Director (Admin)",
+    username: props.admin_user?.username || "admin",
+    email: props.admin_user?.email || "admin@talenta52.id",
+    phone: props.admin_user?.phone || "081234567890",
+    password: "",
+    site_logo: null,
 });
 
 // Bank & Virtual Wallet Accounts list state
@@ -67,594 +69,873 @@ const banksList = ref(props.company_profile?.banks || []);
 
 // Bank & Virtual Wallet add form state
 const showAddBank = ref(false);
-const accountType = ref('bank'); // 'bank' or 'ewallet'
-const selectedProvider = ref('Bank BRI');
-const customProvider = ref('');
+const accountType = ref("bank"); // 'bank' or 'ewallet'
+const selectedProvider = ref("Bank BRI");
+const customProvider = ref("");
 
 const bankProviders = [
-  'Bank BRI',
-  'Bank Mandiri',
-  'Bank Central Asia (BCA)',
-  'Bank Negara Indonesia (BNI)',
-  'Bank Syariah Indonesia (BSI)',
-  'CIMB Niaga',
-  'Bank Permata',
-  'Bank Danamon',
-  'Bank Lainnya'
+    "Bank BRI",
+    "Bank Mandiri",
+    "Bank Central Asia (BCA)",
+    "Bank Negara Indonesia (BNI)",
+    "Bank Syariah Indonesia (BSI)",
+    "CIMB Niaga",
+    "Bank Permata",
+    "Bank Danamon",
+    "Bank Lainnya",
 ];
 
 const ewalletProviders = [
-  'DANA (E-Wallet)',
-  'OVO (E-Wallet)',
-  'GoPay (E-Wallet)',
-  'ShopeePay (E-Wallet)',
-  'LinkAja (E-Wallet)',
-  'QRIS / Virtual Account',
-  'Virtual Wallet Lainnya'
+    "DANA (E-Wallet)",
+    "OVO (E-Wallet)",
+    "GoPay (E-Wallet)",
+    "ShopeePay (E-Wallet)",
+    "LinkAja (E-Wallet)",
+    "QRIS / Virtual Account",
+    "Virtual Wallet Lainnya",
 ];
 
 const newBank = useForm({
-  type: 'bank',
-  bank_name: 'Bank BRI',
-  account_number: '',
-  account_name: '',
+    type: "bank",
+    bank_name: "Bank BRI",
+    account_number: "",
+    account_name: "",
 });
 
 const handleLogoChange = (e) => {
-  if (e.target.files.length > 0) {
-    form.site_logo = e.target.files[0];
-  }
+    if (e.target.files.length > 0) {
+        form.site_logo = e.target.files[0];
+    }
 };
 
 const submitProfile = () => {
-  const options = {
-    preserveScroll: true,
-    onSuccess: () => {
-      form.password = '';
-    },
-  };
-  if (form.site_logo instanceof File) {
-    options.forceFormData = true;
-  }
-  form.post(route('profile.update'), options);
+    const options = {
+        preserveScroll: true,
+        onSuccess: () => {
+            form.password = "";
+        },
+    };
+    if (form.site_logo instanceof File) {
+        options.forceFormData = true;
+    }
+    form.post(route("profile.update"), options);
 };
 
 const addBank = () => {
-  let providerName = selectedProvider.value;
-  if (selectedProvider.value.includes('Lainnya') && customProvider.value.trim()) {
-    providerName = customProvider.value.trim();
-  }
+    let providerName = selectedProvider.value;
+    if (
+        selectedProvider.value.includes("Lainnya") &&
+        customProvider.value.trim()
+    ) {
+        providerName = customProvider.value.trim();
+    }
 
-  if (!newBank.account_number || !newBank.account_name || !providerName) return;
+    if (!newBank.account_number || !newBank.account_name || !providerName)
+        return;
 
-  banksList.value.push({
-    type: accountType.value,
-    bank_name: providerName,
-    account_number: newBank.account_number,
-    account_name: newBank.account_name,
-  });
+    banksList.value.push({
+        type: accountType.value,
+        bank_name: providerName,
+        account_number: newBank.account_number,
+        account_name: newBank.account_name,
+    });
 
-  newBank.reset();
-  customProvider.value = '';
-  showAddBank.value = false;
-  saveBanks();
+    newBank.reset();
+    customProvider.value = "";
+    showAddBank.value = false;
+    saveBanks();
 };
 
 const removeBank = (index) => {
-  banksList.value.splice(index, 1);
-  saveBanks();
+    banksList.value.splice(index, 1);
+    saveBanks();
 };
 
 const bankForm = useForm({ banks: [] });
 const saveBanks = () => {
-  bankForm.banks = banksList.value;
-  bankForm.post(route('profile.update-banks'), {
-    preserveScroll: true,
-  });
+    bankForm.banks = banksList.value;
+    bankForm.post(route("profile.update-banks"), {
+        preserveScroll: true,
+    });
 };
 </script>
 
 <template>
-  <Head :title="is_admin ? 'Pengaturan Profil Instansi & Administrator - XSELLER' : 'Pengaturan Profil Member - XSELLER'" />
+    <Head
+        :title="
+            is_admin
+                ? 'Pengaturan Profil Instansi & Administrator - XSELLER'
+                : 'Pengaturan Profil Member - XSELLER'
+        "
+    />
 
-  <AdminLayout>
-    <div class="space-y-6">
-      
-      <!-- Flash Alert Notifications -->
-      <div v-if="flashSuccess" class="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-2xl text-xs font-semibold flex items-center justify-between shadow-sm animate-fade-in">
-        <div class="flex items-center gap-2">
-          <CheckCircle2 class="w-4 h-4 text-emerald-500 shrink-0" />
-          <span>{{ flashSuccess }}</span>
-        </div>
-      </div>
-
-      <div v-if="flashError" class="p-4 bg-rose-50 border border-rose-300 text-rose-800 rounded-2xl text-xs font-semibold flex items-center justify-between shadow-sm animate-fade-in">
-        <div class="flex items-center gap-2">
-          <AlertCircle class="w-4 h-4 text-rose-500 shrink-0" />
-          <span>{{ flashError }}</span>
-        </div>
-      </div>
-
-      <!-- MEMBER PROFILE EDIT CARD (When is_admin is false) -->
-      <div v-if="!is_admin" class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-        <!-- Header -->
-        <div class="flex items-start gap-3 border-b border-slate-100 pb-5">
-          <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-2xl shrink-0 mt-0.5">
-            <Settings class="w-6 h-6" />
-          </div>
-          <div>
-            <h2 class="text-lg md:text-xl font-black text-slate-900 tracking-tight">
-              Pengaturan Profil Member & Rekening Bank
-            </h2>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">
-              Kelola data diri pribadi serta nomor rekening bank atau e-wallet untuk tujuan pencairan saldo (WD) Anda.
-            </p>
-          </div>
-        </div>
-
-        <form @submit.prevent="submitMemberProfile" class="space-y-6">
-          <!-- Section 1: Informasi Diri -->
-          <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-2 border-b border-slate-200/60 pb-3">
-              <UserCheck class="w-4 h-4 text-emerald-600" />
-              <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight">
-                INFORMASI DIRI MEMBER
-              </h3>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NAMA LENGKAP
-                </label>
-                <input 
-                  v-model="memberForm.name"
-                  type="text"
-                  required
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  USERNAME
-                </label>
-                <input 
-                  v-model="memberForm.username"
-                  type="text"
-                  required
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  ALAMAT EMAIL
-                </label>
-                <input 
-                  v-model="memberForm.email"
-                  type="email"
-                  required
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NO HP / WHATSAPP
-                </label>
-                <input 
-                  v-model="memberForm.phone"
-                  type="text"
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 2: Rekening Bank Penarikan Saldo -->
-          <div class="bg-emerald-50/40 border border-emerald-200/60 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-2 border-b border-emerald-200/60 pb-3">
-              <CreditCard class="w-4 h-4 text-emerald-600" />
-              <h3 class="text-xs font-black text-emerald-900 uppercase tracking-tight">
-                INFORMASI REKENING BANK & VIRTUAL WALLET UNTUK PENARIKAN SALDO (WD)
-              </h3>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NAMA BANK / PROVIDER E-WALLET
-                </label>
-                <input 
-                  v-model="memberForm.bank_name"
-                  type="text"
-                  placeholder="cth: Bank Mandiri / DANA"
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NOMOR REKENING / NO. HP E-WALLET
-                </label>
-                <input 
-                  v-model="memberForm.bank_account_number"
-                  type="text"
-                  placeholder="cth: 1234567890"
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  ATAS NAMA (PEMILIK REKENING)
-                </label>
-                <input 
-                  v-model="memberForm.bank_account_name"
-                  type="text"
-                  placeholder="cth: Nama Anda"
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 3: Ubah Password -->
-          <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-2 border-b border-slate-200/60 pb-3">
-              <Settings class="w-4 h-4 text-slate-600" />
-              <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight">
-                UBAH PASSWORD (OPSIONAL)
-              </h3>
-            </div>
-
-            <div class="max-w-md">
-              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                PASSWORD BARU
-              </label>
-              <input 
-                v-model="memberForm.password"
-                type="password"
-                placeholder="Kosongkan jika tidak ingin mengubah password"
-                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-              />
-              <p v-if="memberForm.errors.password" class="text-xs text-rose-600 font-bold mt-1">{{ memberForm.errors.password }}</p>
-            </div>
-          </div>
-
-          <!-- Bottom Submit Button -->
-          <div class="flex justify-end pt-2">
-            <button 
-              type="submit"
-              :disabled="memberForm.processing"
-              class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+    <AdminLayout>
+        <div class="space-y-6">
+            <!-- Flash Alert Notifications -->
+            <div
+                v-if="flashSuccess"
+                class="p-4 bg-emerald-50 border border-emerald-300 text-emerald-800 rounded-2xl text-xs font-semibold flex items-center justify-between shadow-sm animate-fade-in"
             >
-              <Check class="w-4 h-4 stroke-[3]" />
-              <span>Simpan Profil Saya</span>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- ADMIN CORPORATE PROFILE EDIT CARD (When is_admin is true) -->
-      <div v-else class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-        
-        <!-- Header -->
-        <div class="flex items-start gap-3 border-b border-slate-100 pb-5">
-          <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-2xl shrink-0 mt-0.5">
-            <Settings class="w-6 h-6" />
-          </div>
-          <div>
-            <h2 class="text-lg md:text-xl font-black text-slate-900 tracking-tight">
-              Pengaturan Profil Instansi & Administrator Utama
-            </h2>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">
-              Kelola Identitas korporat perusahaan, nomor rekening bank admin utama untuk transfer penarikan, serta kredensial akun login admin.
-            </p>
-          </div>
-        </div>
-
-        <form @submit.prevent="submitProfile" class="space-y-6">
-          
-          <!-- SECTION 1: LOGOS & AVATARS (Matching Mockup Gray Card) -->
-          <div class="bg-slate-50/80 border border-slate-100 rounded-2xl p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Company Logo -->
-            <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 text-xs font-bold shrink-0 shadow-xs">
-                <img v-if="company_profile?.logo_url" :src="company_profile.logo_url" class="max-h-12 max-w-12 object-contain" />
-                <span v-else>LOGO</span>
-              </div>
-              <div class="space-y-1.5">
-                <h4 class="text-xs font-extrabold text-slate-900">Logo Perusahaan</h4>
-                <p class="text-[10px] text-slate-400 font-medium">Tampil di header utama navigasi.</p>
-                <label class="inline-flex items-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs cursor-pointer transition-colors">
-                  <Upload class="w-3.5 h-3.5 mr-1.5" />
-                  <span>Pilih File Logo</span>
-                  <input type="file" @change="handleLogoChange" accept="image/*" class="hidden" />
-                </label>
-              </div>
+                <div class="flex items-center gap-2">
+                    <CheckCircle2 class="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>{{ flashSuccess }}</span>
+                </div>
             </div>
 
-            <!-- Admin Profile Picture -->
-            <div class="flex items-center gap-4">
-              <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 border-2 border-emerald-300 flex items-center justify-center text-xl font-extrabold shrink-0 shadow-xs">
-                A
-              </div>
-              <div class="space-y-1.5">
-                <h4 class="text-xs font-extrabold text-slate-900">Foto Profil Admin</h4>
-                <p class="text-[10px] text-slate-400 font-medium">Foto avatar administrator utama.</p>
-                <button type="button" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs cursor-pointer transition-colors inline-flex items-center">
-                  <span>Pilih Avatar</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- SECTION 2: COMPANY IDENTITIES (Inputs Grid) -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                NAMA PERUSAHAAN / PLATFORM
-              </label>
-              <input 
-                v-model="form.company_name"
-                type="text"
-                required
-                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-              />
+            <div
+                v-if="flashError"
+                class="p-4 bg-rose-50 border border-rose-300 text-rose-800 rounded-2xl text-xs font-semibold flex items-center justify-between shadow-sm animate-fade-in"
+            >
+                <div class="flex items-center gap-2">
+                    <AlertCircle class="w-4 h-4 text-rose-500 shrink-0" />
+                    <span>{{ flashError }}</span>
+                </div>
             </div>
 
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                NAMA PEMILIK / OWNER UTAMA
-              </label>
-              <input 
-                v-model="form.company_owner"
-                type="text"
-                required
-                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-              />
-            </div>
-
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                TEKS KETERANGAN HAK CIPTA / FOOTER
-              </label>
-              <input 
-                v-model="form.company_copyright"
-                type="text"
-                required
-                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-              />
-            </div>
-          </div>
-
-          <!-- SECTION 3: COMPANY BANK ACCOUNTS & VIRTUAL WALLET (Matching Green Box Mockup) -->
-          <div class="bg-emerald-50/40 border border-emerald-200/60 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-              <div class="flex items-center gap-2">
-                <CreditCard class="w-4 h-4 text-emerald-600" />
-                <h3 class="text-xs font-black text-emerald-900 uppercase tracking-tight">
-                  DAFTAR REKENING BANK & VIRTUAL WALLET / E-WALLET PERUSAHAAN (ADMIN)
-                </h3>
-              </div>
-
-              <button 
-                type="button"
-                @click="showAddBank = !showAddBank"
-                class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
-              >
-                <Plus class="w-3.5 h-3.5" />
-                <span>Tambah Rekening / Virtual Wallet</span>
-              </button>
-            </div>
-
-            <!-- Add Bank / Virtual Wallet Form Dropdown -->
-            <div v-if="showAddBank" class="p-4 bg-white border border-emerald-200 rounded-2xl space-y-4 shadow-sm">
-              <!-- Type Switcher -->
-              <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                <span class="text-xs font-bold text-slate-500 mr-2">Pilih Jenis:</span>
-                <button
-                  type="button"
-                  @click="accountType = 'bank'; selectedProvider = bankProviders[0];"
-                  :class="[accountType === 'bank' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200', 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer']"
+            <!-- MEMBER PROFILE EDIT CARD (When is_admin is false) -->
+            <div
+                v-if="!is_admin"
+                class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-6"
+            >
+                <!-- Header -->
+                <div
+                    class="flex items-start gap-3 border-b border-slate-100 pb-5"
                 >
-                  🏦 Rekening Bank
-                </button>
-                <button
-                  type="button"
-                  @click="accountType = 'ewallet'; selectedProvider = ewalletProviders[0];"
-                  :class="[accountType === 'ewallet' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200', 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer']"
-                >
-                  📲 Virtual Wallet / E-Wallet
-                </button>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <!-- Provider Select -->
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    {{ accountType === 'bank' ? 'PILIH BANK' : 'PILIH PROVIDER E-WALLET' }}
-                  </label>
-                  <select
-                    v-model="selectedProvider"
-                    class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-500"
-                  >
-                    <option v-for="p in (accountType === 'bank' ? bankProviders : ewalletProviders)" :key="p" :value="p">
-                      {{ p }}
-                    </option>
-                  </select>
-                </div>
-
-                <!-- Custom Provider Name (if Lainnya) -->
-                <div v-if="selectedProvider.includes('Lainnya')">
-                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    NAMA {{ accountType === 'bank' ? 'BANK' : 'E-WALLET' }} KUSTOM
-                  </label>
-                  <input 
-                    v-model="customProvider" 
-                    placeholder="Masukkan nama bank/e-wallet" 
-                    class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-500" 
-                  />
-                </div>
-
-                <!-- Account Number / E-Wallet ID -->
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    {{ accountType === 'bank' ? 'NOMOR REKENING' : 'NO. HP / ID VIRTUAL WALLET' }}
-                  </label>
-                  <input 
-                    v-model="newBank.account_number" 
-                    :placeholder="accountType === 'bank' ? 'cth: 806401000095564' : 'cth: 081234567890'" 
-                    class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-emerald-500" 
-                  />
-                </div>
-
-                <!-- Owner Name (a.n) -->
-                <div>
-                  <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    NAMA PEMILIK / ATAS NAMA (A.N)
-                  </label>
-                  <input 
-                    v-model="newBank.account_name" 
-                    placeholder="cth: PT.Xseller Punya Kita" 
-                    class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-500" 
-                  />
-                </div>
-              </div>
-
-              <div class="flex justify-end gap-2 pt-1">
-                <button type="button" @click="showAddBank = false" class="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-bold rounded-xl cursor-pointer">Batal</button>
-                <button @click="addBank" type="button" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer">Simpan Rekening / E-Wallet</button>
-              </div>
-            </div>
-
-            <!-- Bank & Virtual Wallet List -->
-            <div v-if="banksList.length === 0" class="text-center py-6 text-xs text-slate-400 italic">
-              Belum ada rekening bank atau virtual wallet yang tersimpan. Gunakan tombol + Tambah Rekening / Virtual Wallet.
-            </div>
-
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div 
-                v-for="(b, idx) in banksList" 
-                :key="idx" 
-                class="p-3.5 bg-white border border-emerald-200/80 rounded-2xl flex items-center justify-between shadow-2xs"
-              >
-                <div class="space-y-1">
-                  <div class="flex items-center gap-2">
-                    <span 
-                      :class="[
-                        (b.type === 'ewallet' || b.bank_name.toLowerCase().includes('wallet') || b.bank_name.toLowerCase().includes('dana') || b.bank_name.toLowerCase().includes('ovo') || b.bank_name.toLowerCase().includes('gopay') || b.bank_name.toLowerCase().includes('shopee') || b.bank_name.toLowerCase().includes('qris'))
-                          ? 'bg-indigo-100 text-indigo-700 border-indigo-200'
-                          : 'bg-emerald-100 text-emerald-700 border-emerald-200',
-                        'px-2 py-0.5 text-[9px] font-extrabold rounded-md border uppercase tracking-wider'
-                      ]"
+                    <div
+                        class="p-2.5 bg-emerald-50 text-emerald-600 rounded-2xl shrink-0 mt-0.5"
                     >
-                      {{ (b.type === 'ewallet' || b.bank_name.toLowerCase().includes('wallet') || b.bank_name.toLowerCase().includes('dana') || b.bank_name.toLowerCase().includes('ovo') || b.bank_name.toLowerCase().includes('gopay') || b.bank_name.toLowerCase().includes('shopee') || b.bank_name.toLowerCase().includes('qris')) ? 'VIRTUAL WALLET' : 'BANK' }}
-                    </span>
-                    <h4 class="text-xs font-black text-slate-900">{{ b.bank_name }}</h4>
-                  </div>
-                  <p class="text-[11px] text-slate-700 font-mono">
-                    <strong class="text-slate-900">{{ b.account_number }}</strong> <span class="text-slate-500">a.n</span> {{ b.account_name }}
-                  </p>
+                        <Settings class="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h2
+                            class="text-lg md:text-xl font-black text-slate-900 tracking-tight"
+                        >
+                            Pengaturan Profil Member & Rekening Bank
+                        </h2>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5">
+                            Kelola data diri pribadi serta nomor rekening bank
+                            atau e-wallet untuk tujuan pencairan saldo (WD)
+                            Anda.
+                        </p>
+                    </div>
                 </div>
 
-                <button type="button" @click="removeBank(idx)" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer shrink-0">
-                  <Trash2 class="w-4 h-4" />
-                </button>
-              </div>
+                <form @submit.prevent="submitMemberProfile" class="space-y-6">
+                    <!-- Section 1: Informasi Diri -->
+                    <div
+                        class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4"
+                    >
+                        <div
+                            class="flex items-center gap-2 border-b border-slate-200/60 pb-3"
+                        >
+                            <UserCheck class="w-4 h-4 text-emerald-600" />
+                            <h3
+                                class="text-xs font-black text-slate-900 uppercase tracking-tight"
+                            >
+                                INFORMASI DIRI MEMBER
+                            </h3>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+                        >
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    NAMA LENGKAP
+                                </label>
+                                <input
+                                    v-model="memberForm.name"
+                                    type="text"
+                                    required
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    USERNAME
+                                </label>
+                                <input
+                                    v-model="memberForm.username"
+                                    type="text"
+                                    required
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    ALAMAT EMAIL
+                                </label>
+                                <input
+                                    v-model="memberForm.email"
+                                    type="email"
+                                    required
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    NO HP / WHATSAPP
+                                </label>
+                                <input
+                                    v-model="memberForm.phone"
+                                    type="text"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Rekening Bank Penarikan Saldo -->
+                    <div
+                        class="bg-emerald-50/40 border border-emerald-200/60 rounded-2xl p-5 space-y-4"
+                    >
+                        <div
+                            class="flex items-center gap-2 border-b border-emerald-200/60 pb-3"
+                        >
+                            <CreditCard class="w-4 h-4 text-emerald-600" />
+                            <h3
+                                class="text-xs font-black text-emerald-900 uppercase tracking-tight"
+                            >
+                                INFORMASI REKENING BANK & VIRTUAL WALLET UNTUK
+                                PENARIKAN SALDO (WD)
+                            </h3>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    NAMA BANK / PROVIDER E-WALLET
+                                </label>
+                                <input
+                                    v-model="memberForm.bank_name"
+                                    type="text"
+                                    placeholder="cth: Bank Mandiri / DANA"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    NOMOR REKENING / NO. HP E-WALLET
+                                </label>
+                                <input
+                                    v-model="memberForm.bank_account_number"
+                                    type="text"
+                                    placeholder="cth: 1234567890"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    ATAS NAMA (PEMILIK REKENING)
+                                </label>
+                                <input
+                                    v-model="memberForm.bank_account_name"
+                                    type="text"
+                                    placeholder="cth: Nama Anda"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Ubah Password -->
+                    <div
+                        class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4"
+                    >
+                        <div
+                            class="flex items-center gap-2 border-b border-slate-200/60 pb-3"
+                        >
+                            <Settings class="w-4 h-4 text-slate-600" />
+                            <h3
+                                class="text-xs font-black text-slate-900 uppercase tracking-tight"
+                            >
+                                UBAH PASSWORD (OPSIONAL)
+                            </h3>
+                        </div>
+
+                        <div class="max-w-md">
+                            <label
+                                class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                            >
+                                PASSWORD BARU
+                            </label>
+                            <input
+                                v-model="memberForm.password"
+                                type="password"
+                                placeholder="Kosongkan jika tidak ingin mengubah password"
+                                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                            />
+                            <p
+                                v-if="memberForm.errors.password"
+                                class="text-xs text-rose-600 font-bold mt-1"
+                            >
+                                {{ memberForm.errors.password }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Submit Button -->
+                    <div class="flex justify-end pt-2">
+                        <button
+                            type="submit"
+                            :disabled="memberForm.processing"
+                            class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                        >
+                            <Check class="w-4 h-4 stroke-[3]" />
+                            <span>Simpan Profil Saya</span>
+                        </button>
+                    </div>
+                </form>
             </div>
-          </div>
 
-          <!-- SECTION 4: ADMIN LOGIN CREDENTIALS (Matching Mockup Box) -->
-          <div class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4">
-            <div class="flex items-center gap-2 border-b border-slate-200/60 pb-3">
-              <UserCheck class="w-4 h-4 text-slate-600" />
-              <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight">
-                DETAIL AKUN KREDENSIAL ADMINISTRATOR UTAMA (UNTUK LOGIN)
-              </h3>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  USERNAME ADMIN
-                </label>
-                <input 
-                  v-model="form.username"
-                  type="text"
-                  required
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NAMA LENGKAP ADMIN
-                </label>
-                <input 
-                  v-model="form.name"
-                  type="text"
-                  required
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  ALAMAT EMAIL
-                </label>
-                <input 
-                  v-model="form.email"
-                  type="email"
-                  required
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NO HP / WHATSAPP
-                </label>
-                <input 
-                  v-model="form.phone"
-                  type="text"
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  PASSWORD BARU ADMIN
-                </label>
-                <input 
-                  v-model="form.password"
-                  type="password"
-                  placeholder="Password Baru"
-                  class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
-                />
-                <p v-if="form.errors.password" class="text-xs text-rose-600 font-bold mt-1">{{ form.errors.password }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Submit Button -->
-          <div class="flex justify-end pt-2">
-            <button 
-              type="submit"
-              :disabled="form.processing"
-              class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+            <!-- ADMIN CORPORATE PROFILE EDIT CARD (When is_admin is true) -->
+            <div
+                v-else
+                class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-6"
             >
-              <Check class="w-4 h-4 stroke-[3]" />
-              <span>Simpan Profil & Identitas Perusahaan</span>
-            </button>
-          </div>
+                <!-- Header -->
+                <div
+                    class="flex items-start gap-3 border-b border-slate-100 pb-5"
+                >
+                    <div
+                        class="p-2.5 bg-emerald-50 text-emerald-600 rounded-2xl shrink-0 mt-0.5"
+                    >
+                        <Settings class="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h2
+                            class="text-lg md:text-xl font-black text-slate-900 tracking-tight"
+                        >
+                            Pengaturan Profil Instansi & Administrator Utama
+                        </h2>
+                        <p class="text-xs text-slate-500 font-medium mt-0.5">
+                            Kelola Identitas korporat perusahaan, nomor rekening
+                            bank admin utama untuk transfer penarikan, serta
+                            kredensial akun login admin.
+                        </p>
+                    </div>
+                </div>
 
-        </form>
+                <form @submit.prevent="submitProfile" class="space-y-6">
+                    <!-- SECTION 1: LOGOS & AVATARS (Matching Mockup Gray Card) -->
+                    <div
+                        class="bg-slate-50/80 border border-slate-100 rounded-2xl p-5 grid grid-cols-1 md:grid-cols-2 gap-6"
+                    >
+                        <!-- Company Logo -->
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 text-xs font-bold shrink-0 shadow-xs"
+                            >
+                                <img
+                                    v-if="company_profile?.logo_url"
+                                    :src="company_profile.logo_url"
+                                    class="max-h-12 max-w-12 object-contain"
+                                />
+                                <span v-else>LOGO</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <h4
+                                    class="text-xs font-extrabold text-slate-900"
+                                >
+                                    Logo Perusahaan
+                                </h4>
+                                <p
+                                    class="text-[10px] text-slate-400 font-medium"
+                                >
+                                    Tampil di header utama navigasi.
+                                </p>
+                                <label
+                                    class="inline-flex items-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs cursor-pointer transition-colors"
+                                >
+                                    <Upload class="w-3.5 h-3.5 mr-1.5" />
+                                    <span>Pilih File Logo</span>
+                                    <input
+                                        type="file"
+                                        @change="handleLogoChange"
+                                        accept="image/*"
+                                        class="hidden"
+                                    />
+                                </label>
+                            </div>
+                        </div>
 
-      </div>
+                        <!-- Admin Profile Picture -->
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 border-2 border-emerald-300 flex items-center justify-center text-xl font-extrabold shrink-0 shadow-xs"
+                            >
+                                A
+                            </div>
+                            <div class="space-y-1.5">
+                                <h4
+                                    class="text-xs font-extrabold text-slate-900"
+                                >
+                                    Foto Profil Admin
+                                </h4>
+                                <p
+                                    class="text-[10px] text-slate-400 font-medium"
+                                >
+                                    Foto avatar administrator utama.
+                                </p>
+                                <button
+                                    type="button"
+                                    class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs cursor-pointer transition-colors inline-flex items-center"
+                                >
+                                    <span>Pilih Avatar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-    </div>
-  </AdminLayout>
+                    <!-- SECTION 2: COMPANY IDENTITIES (Inputs Grid) -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                            >
+                                NAMA PERUSAHAAN / PLATFORM
+                            </label>
+                            <input
+                                v-model="form.company_name"
+                                type="text"
+                                required
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                            >
+                                NAMA PEMILIK / OWNER UTAMA
+                            </label>
+                            <input
+                                v-model="form.company_owner"
+                                type="text"
+                                required
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                            >
+                                TEKS KETERANGAN HAK CIPTA / FOOTER
+                            </label>
+                            <input
+                                v-model="form.company_copyright"
+                                type="text"
+                                required
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: COMPANY BANK ACCOUNTS & VIRTUAL WALLET (Matching Green Box Mockup) -->
+                    <div
+                        class="bg-emerald-50/40 border border-emerald-200/60 rounded-2xl p-5 space-y-4"
+                    >
+                        <div
+                            class="flex items-center justify-between flex-wrap gap-2"
+                        >
+                            <div class="flex items-center gap-2">
+                                <CreditCard class="w-4 h-4 text-emerald-600" />
+                                <h3
+                                    class="text-xs font-black text-emerald-900 uppercase tracking-tight"
+                                >
+                                    DAFTAR REKENING BANK & VIRTUAL WALLET /
+                                    E-WALLET PERUSAHAAN (ADMIN)
+                                </h3>
+                            </div>
+
+                            <button
+                                type="button"
+                                @click="showAddBank = !showAddBank"
+                                class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                            >
+                                <Plus class="w-3.5 h-3.5" />
+                                <span>Tambah Rekening / Virtual Wallet</span>
+                            </button>
+                        </div>
+
+                        <!-- Add Bank / Virtual Wallet Form Dropdown -->
+                        <div
+                            v-if="showAddBank"
+                            class="p-4 bg-white border border-emerald-200 rounded-2xl space-y-4 shadow-sm"
+                        >
+                            <!-- Type Switcher -->
+                            <div
+                                class="flex items-center gap-2 border-b border-slate-100 pb-3"
+                            >
+                                <span
+                                    class="text-xs font-bold text-slate-500 mr-2"
+                                    >Pilih Jenis:</span
+                                >
+                                <button
+                                    type="button"
+                                    @click="
+                                        accountType = 'bank';
+                                        selectedProvider = bankProviders[0];
+                                    "
+                                    :class="[
+                                        accountType === 'bank'
+                                            ? 'bg-emerald-600 text-white'
+                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                                        'px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer',
+                                    ]"
+                                >
+                                    🏦 Rekening Bank
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="
+                                        accountType = 'ewallet';
+                                        selectedProvider = ewalletProviders[0];
+                                    "
+                                    :class="[
+                                        accountType === 'ewallet'
+                                            ? 'bg-indigo-600 text-white'
+                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+                                        'px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer',
+                                    ]"
+                                >
+                                    📲 Virtual Wallet / E-Wallet
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <!-- Provider Select -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    >
+                                        {{
+                                            accountType === "bank"
+                                                ? "PILIH BANK"
+                                                : "PILIH PROVIDER E-WALLET"
+                                        }}
+                                    </label>
+                                    <select
+                                        v-model="selectedProvider"
+                                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-500"
+                                    >
+                                        <option
+                                            v-for="p in accountType === 'bank'
+                                                ? bankProviders
+                                                : ewalletProviders"
+                                            :key="p"
+                                            :value="p"
+                                        >
+                                            {{ p }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Custom Provider Name (if Lainnya) -->
+                                <div
+                                    v-if="selectedProvider.includes('Lainnya')"
+                                >
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    >
+                                        NAMA
+                                        {{
+                                            accountType === "bank"
+                                                ? "BANK"
+                                                : "E-WALLET"
+                                        }}
+                                        KUSTOM
+                                    </label>
+                                    <input
+                                        v-model="customProvider"
+                                        placeholder="Masukkan nama bank/e-wallet"
+                                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-emerald-500"
+                                    />
+                                </div>
+
+                                <!-- Account Number / E-Wallet ID -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    >
+                                        {{
+                                            accountType === "bank"
+                                                ? "NOMOR REKENING"
+                                                : "NO. HP / ID VIRTUAL WALLET"
+                                        }}
+                                    </label>
+                                    <input
+                                        v-model="newBank.account_number"
+                                        :placeholder="
+                                            accountType === 'bank'
+                                                ? 'cth: 806401000095564'
+                                                : 'cth: 081234567890'
+                                        "
+                                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-emerald-500"
+                                    />
+                                </div>
+
+                                <!-- Owner Name (a.n) -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    >
+                                        NAMA PEMILIK / ATAS NAMA (A.N)
+                                    </label>
+                                    <input
+                                        v-model="newBank.account_name"
+                                        placeholder="cth: PT.Xseller Punya Kita"
+                                        class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-2 pt-1">
+                                <button
+                                    type="button"
+                                    @click="showAddBank = false"
+                                    class="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-bold rounded-xl cursor-pointer"
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    @click="addBank"
+                                    type="button"
+                                    class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
+                                >
+                                    Simpan Rekening / E-Wallet
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Bank & Virtual Wallet List -->
+                        <div
+                            v-if="banksList.length === 0"
+                            class="text-center py-6 text-xs text-slate-400 italic"
+                        >
+                            Belum ada rekening bank atau virtual wallet yang
+                            tersimpan. Gunakan tombol + Tambah Rekening /
+                            Virtual Wallet.
+                        </div>
+
+                        <div
+                            v-else
+                            class="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                        >
+                            <div
+                                v-for="(b, idx) in banksList"
+                                :key="idx"
+                                class="p-3.5 bg-white border border-emerald-200/80 rounded-2xl flex items-center justify-between shadow-2xs"
+                            >
+                                <div class="space-y-1">
+                                    <div class="flex items-center gap-2">
+                                        <span
+                                            :class="[
+                                                b.type === 'ewallet' ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes('wallet') ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes('dana') ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes('ovo') ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes('gopay') ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes('shopee') ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes('qris')
+                                                    ? 'bg-indigo-100 text-indigo-700 border-indigo-200'
+                                                    : 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                                                'px-2 py-0.5 text-[9px] font-extrabold rounded-md border uppercase tracking-wider',
+                                            ]"
+                                        >
+                                            {{
+                                                b.type === "ewallet" ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes("wallet") ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes("dana") ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes("ovo") ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes("gopay") ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes("shopee") ||
+                                                b.bank_name
+                                                    .toLowerCase()
+                                                    .includes("qris")
+                                                    ? "VIRTUAL WALLET"
+                                                    : "BANK"
+                                            }}
+                                        </span>
+                                        <h4
+                                            class="text-xs font-black text-slate-900"
+                                        >
+                                            {{ b.bank_name }}
+                                        </h4>
+                                    </div>
+                                    <p
+                                        class="text-[11px] text-slate-700 font-mono"
+                                    >
+                                        <strong class="text-slate-900">{{
+                                            b.account_number
+                                        }}</strong>
+                                        <span class="text-slate-500">a.n</span>
+                                        {{ b.account_name }}
+                                    </p>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    @click="removeBank(idx)"
+                                    class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer shrink-0"
+                                >
+                                    <Trash2 class="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: ADMIN LOGIN CREDENTIALS (Matching Mockup Box) -->
+                    <div
+                        class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4"
+                    >
+                        <div
+                            class="flex items-center gap-2 border-b border-slate-200/60 pb-3"
+                        >
+                            <UserCheck class="w-4 h-4 text-slate-600" />
+                            <h3
+                                class="text-xs font-black text-slate-900 uppercase tracking-tight"
+                            >
+                                DETAIL AKUN KREDENSIAL ADMINISTRATOR UTAMA
+                                (UNTUK LOGIN)
+                            </h3>
+                        </div>
+
+                        <div
+                            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+                        >
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    USERNAME ADMIN
+                                </label>
+                                <input
+                                    v-model="form.username"
+                                    type="text"
+                                    required
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    NAMA LENGKAP ADMIN
+                                </label>
+                                <input
+                                    v-model="form.name"
+                                    type="text"
+                                    required
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    ALAMAT EMAIL
+                                </label>
+                                <input
+                                    v-model="form.email"
+                                    type="email"
+                                    required
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    NO HP / WHATSAPP
+                                </label>
+                                <input
+                                    v-model="form.phone"
+                                    type="text"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                            </div>
+
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                >
+                                    PASSWORD BARU ADMIN
+                                </label>
+                                <input
+                                    v-model="form.password"
+                                    type="password"
+                                    placeholder="Password Baru"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                />
+                                <p
+                                    v-if="form.errors.password"
+                                    class="text-xs text-rose-600 font-bold mt-1"
+                                >
+                                    {{ form.errors.password }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Submit Button -->
+                    <div class="flex justify-end pt-2">
+                        <button
+                            type="submit"
+                            :disabled="form.processing"
+                            class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                        >
+                            <Check class="w-4 h-4 stroke-[3]" />
+                            <span>Simpan Profil & Identitas Perusahaan</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </AdminLayout>
 </template>

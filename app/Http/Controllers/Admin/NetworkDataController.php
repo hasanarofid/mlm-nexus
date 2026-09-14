@@ -18,7 +18,7 @@ class NetworkDataController extends Controller
         $currentUser = auth()->user();
 
         // Ensure non-admin users cannot access Data Mitra
-        $isAdmin = $currentUser->hasRole('admin') || $currentUser->username === 'admin' || $currentUser->email === 'admin@xseller.id';
+        $isAdmin = $currentUser->hasRole('admin') || $currentUser->username === 'admin' || $currentUser->email === 'admin@talenta52.id';
         if (!$isAdmin) {
             return redirect()->route('admin.dashboard')->with('error', 'Akses ditolak. Halaman Data Mitra hanya dapat diakses oleh Administrator utama.');
         }

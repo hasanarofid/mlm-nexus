@@ -58,12 +58,12 @@ class WithdrawalStatusNotification extends Notification
         } else {
             $mail->subject('Permohonan Penarikan Saldo ' . $amountFormatted . ' Diterima (WD #' . $this->withdrawal->id . ')')
                 ->greeting('Halo ' . $notifiable->name . ',')
-                ->line('Permohonan penarikan saldo (WD) Anda sebesar ' . $amountFormatted . ' telah berhasil terkirim dan sedang diproses oleh Tim Keuangan XSELLER.ID.')
+                ->line('Permohonan penarikan saldo (WD) Anda sebesar ' . $amountFormatted . ' telah berhasil terkirim dan sedang diproses oleh Tim Keuangan talenta52.id.')
                 ->line('• **Bank Tujuan:** ' . $this->withdrawal->bank_name . ' (' . $this->withdrawal->bank_account_number . ')');
         }
 
         return $mail
             ->action('Lihat Riwayat Penarikan', $wdUrl)
-            ->line('Terima kasih atas kepercayaan Anda menggunakan XSELLER.ID.');
+            ->line('Terima kasih atas kepercayaan Anda menggunakan talenta52.id.');
     }
 }

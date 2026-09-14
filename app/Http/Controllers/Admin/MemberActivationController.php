@@ -123,7 +123,7 @@ class MemberActivationController extends Controller
         $sponsorBonus = $alloc['gen_1'];
         $teamPoints = $alloc['team_points'];
 
-        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName, $alloc, $sponsorBonus, $teamPoints) {
+        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName) {
             // Create new member in Matahari system (parent_id = sponsor_id)
             $newUser = User::create([
                 'name' => $request->name,
@@ -131,7 +131,7 @@ class MemberActivationController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt('password'),
                 'parent_id' => $sponsorUser->id,
-                'package_name' => $packageName,
+                'package_name' => $packageName ?: 'Standard (Rp 100.000)',
             ]);
             $newUser->assignRole('client');
 
@@ -148,36 +148,36 @@ class MemberActivationController extends Controller
                 'used_at' => now(),
             ]);
 
-            // 1. Direct Sponsor Bonus (Generasi 1) & Team Points for Sponsor
-            if ($sponsorBonus > 0) {
-                $sponsorUser->increment('saldo', $sponsorBonus);
-                $sponsorUser->increment('total_bonus', $sponsorBonus);
+            // 1. Allocation for Yayasan (Rp 10.000) & Founder (Rp 10.000) from Rp 100.000 registration fee
+            $adminUser = User::where('username', 'admin')->first() ?: User::first();
+            if ($adminUser) {
+                BonusLog::create([
+                    'transaction_code' => 'Y' . sprintf('%03d', BonusLog::count() + 1),
+                    'user_id' => $adminUser->id,
+                    'category' => 'yayasan',
+                    'source_user_id' => $newUser->id,
+                    'description' => "Alokasi Dana Yayasan (Rp 10.000) dari pendaftaran @{$newUser->username}",
+                    'amount' => 10000,
+                ]);
 
                 BonusLog::create([
-                    'transaction_code' => 'B' . sprintf('%03d', BonusLog::count() + 1),
-                    'user_id' => $sponsorUser->id,
-                    'category' => 'sponsor',
+                    'transaction_code' => 'F' . sprintf('%03d', BonusLog::count() + 1),
+                    'user_id' => $adminUser->id,
+                    'category' => 'founder',
                     'source_user_id' => $newUser->id,
-                    'description' => "Bonus Direct Referral: Pendaftaran @{$newUser->username} (Paket {$packageName})",
-                    'amount' => $sponsorBonus,
-                ]);
-
-                WalletTransaction::create([
-                    'user_id' => $sponsorUser->id,
-                    'type' => 'in',
-                    'category' => 'bonus_sponsor',
-                    'amount' => $sponsorBonus,
-                    'description' => "Bonus Direct Referral dari pendaftaran member baru @{$newUser->username} (Paket {$packageName})",
+                    'description' => "Alokasi Dana Founder (Rp 10.000) dari pendaftaran @{$newUser->username}",
+                    'amount' => 10000,
                 ]);
             }
 
-            if ($teamPoints > 0) {
-                $sponsorUser->increment('team_points', $teamPoints);
-            }
+            // 2. Multi-tier Generation Bonus for Generasi 1 s/d Generasi 10 Uplines
+            // Total bonus per generation = Rp 7.000 (50% Auto Save / Rp 3.500 & 50% Saldo WD / Rp 3.500)
+            $bonusPerGen = 7000;
+            $autoSaveShare = 3500;
+            $wdShare = 3500;
 
-            // 2. Multi-tier Allocation for Generasi 2 up to Generasi 15 Uplines
-            $currentUpline = $sponsorUser;
-            for ($gen = 2; $gen <= 15; $gen++) {
+            $currentUpline = $newUser;
+            for ($gen = 1; $gen <= 10; $gen++) {
                 if (!$currentUpline->parent_id) {
                     break;
                 }
@@ -187,90 +187,45 @@ class MemberActivationController extends Controller
                     break;
                 }
 
-                $genAmount = $alloc['gen_2_15'];
-                // Only distribute generation bonus if upline active tier reaches or exceeds $gen
-                if ($genAmount > 0 && $upline->getActiveTier() >= $gen) {
-                    $upline->increment('saldo', $genAmount);
-                    $upline->increment('total_bonus', $genAmount);
+                // Credit 50% Auto Save and 50% Saldo WD
+                $upline->increment('auto_save_saldo', $autoSaveShare);
+                $upline->increment('saldo', $wdShare);
+                $upline->increment('total_bonus', $bonusPerGen);
 
-                    BonusLog::create([
-                        'transaction_code' => 'T' . sprintf('%03d', BonusLog::count() + 1),
-                        'user_id' => $upline->id,
-                        'category' => 'tier',
-                        'source_user_id' => $newUser->id,
-                        'description' => "Bonus Tier Generasi {$gen}: Pendaftaran @{$newUser->username} (Paket {$packageName})",
-                        'amount' => $genAmount,
-                    ]);
+                BonusLog::create([
+                    'transaction_code' => 'G' . sprintf('%03d', BonusLog::count() + 1),
+                    'user_id' => $upline->id,
+                    'category' => 'generasi',
+                    'source_user_id' => $newUser->id,
+                    'description' => "Bonus Generasi {$gen}: Pendaftaran @{$newUser->username} (Total Rp 7.000: Auto Save Rp 3.500, Saldo WD Rp 3.500)",
+                    'amount' => $bonusPerGen,
+                ]);
 
-                    WalletTransaction::create([
-                        'user_id' => $upline->id,
-                        'type' => 'in',
-                        'category' => 'bonus_tier',
-                        'amount' => $genAmount,
-                        'description' => "Bonus Tier Generasi {$gen} dari pendaftaran member baru @{$newUser->username} (Paket {$packageName})",
-                    ]);
-                }
-
-                if ($teamPoints > 0) {
-                    $upline->increment('team_points', $teamPoints);
-                }
+                WalletTransaction::create([
+                    'user_id' => $upline->id,
+                    'type' => 'in',
+                    'category' => 'bonus_generasi',
+                    'amount' => $bonusPerGen,
+                    'description' => "Bonus Generasi {$gen} dari pendaftaran @{$newUser->username} (50% Auto Save Rp 3.500, 50% Saldo WD Rp 3.500)",
+                ]);
 
                 $currentUpline = $upline;
             }
         });
 
         return redirect()->route('admin.pohon-jaringan', ['focus_id' => $sponsorUser->id])
-            ->with('success', "Member baru @{$request->username} ({$request->name}) berhasil diautentikasi & diaktifkan di bawah Sponsor @{$sponsorUser->username}! Tier bonus & Team Poin berhasil didistribusikan.");
+            ->with('success', "Member baru @{$request->username} ({$request->name}) berhasil diaktifkan di bawah Sponsor @{$sponsorUser->username}! Bonus Generasi 1-10 (Auto Save & Saldo WD) serta alokasi Yayasan & Founder berhasil didistribusikan.");
     }
 
     /**
-     * Calculate Tier Allocation & Team Points by package name.
+     * Calculate Package Allocation placeholder.
      */
     private function calculatePackageAllocation(string $packageName): array
     {
-        $pkg = strtolower($packageName);
-
-        if (str_contains($pkg, '10.500') || str_contains($pkg, '10500') || str_contains($pkg, 'partner') || str_contains($pkg, 'ultimate')) {
-            return [
-                'gen_1' => 1500000,
-                'gen_2_15' => 100000,
-                'team_points' => 12,
-            ];
-        }
-        if (str_contains($pkg, '4.300') || str_contains($pkg, '4300') || str_contains($pkg, 'business') || str_contains($pkg, 'pro')) {
-            return [
-                'gen_1' => 600000,
-                'gen_2_15' => 30000,
-                'team_points' => 8,
-            ];
-        }
-        if (str_contains($pkg, '2.100') || str_contains($pkg, '2100') || str_contains($pkg, 'affiliate') || str_contains($pkg, 'medium')) {
-            return [
-                'gen_1' => 300000,
-                'gen_2_15' => 15000,
-                'team_points' => 4,
-            ];
-        }
-        if (str_contains($pkg, 'star') || str_contains($pkg, '550') || str_contains($pkg, 'basic')) {
-            return [
-                'gen_1' => 100000,
-                'gen_2_15' => 5000,
-                'team_points' => 1,
-            ];
-        }
-        if (str_contains($pkg, '125') || str_contains($pkg, 'seller') || str_contains($pkg, 'starter')) {
-            return [
-                'gen_1' => 20000,
-                'gen_2_15' => 0,
-                'team_points' => 0,
-            ];
-        }
-
-        // Default fallback
         return [
-            'gen_1' => 100000,
-            'gen_2_15' => 5000,
-            'team_points' => 1,
+            'gen_1' => 7000,
+            'gen_2_10' => 7000,
+            'team_points' => 0,
         ];
     }
 }

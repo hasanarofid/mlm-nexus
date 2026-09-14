@@ -16,25 +16,32 @@ class DashboardController extends Controller
     /**
      * Display the admin binary MLM dashboard home based on XSELLER PRD 2026.
      */
+    /**
+     * Display the admin & member dashboard based on TALENTA52 PRD 2026.
+     */
     public function index()
     {
         $user = auth()->user();
 
-        $bonusSponsor = (float) BonusLog::where('user_id', $user->id)
-            ->whereIn('category', ['sponsor', 'bonus_sponsor'])
-            ->sum('amount');
+        $saldoWD = (float) ($user->saldo ?? 0);
+        $autoSaveSaldo = (float) ($user->auto_save_saldo ?? 0);
+        $totalSaldo = $saldoWD + $autoSaveSaldo;
 
         $bonusGenerasi = (float) BonusLog::where('user_id', $user->id)
-            ->whereIn('category', ['generasi', 'bonus_tier', 'tier', 'po'])
+            ->whereIn('category', ['generasi', 'bonus_generasi', 'sponsor', 'tier'])
             ->sum('amount');
 
-        $bonusRO = (float) BonusLog::where('user_id', $user->id)
-            ->whereIn('category', ['ro', 'ro_matching', 'bonus_ro'])
-            ->sum('amount');
+        $directDownlines = User::where('parent_id', $user->id)->count();
 
-        $bonusTPR = (float) BonusLog::where('user_id', $user->id)
-            ->whereIn('category', ['tpr', 'bonus_tpr'])
-            ->sum('amount');
+        // Calculate total downlines up to 10 generations
+        $totalDownlines = 0;
+        $currentIds = [$user->id];
+        for ($g = 1; $g <= 10; $g++) {
+            if (empty($currentIds)) break;
+            $downlineIds = User::whereIn('parent_id', $currentIds)->pluck('id')->toArray();
+            $totalDownlines += count($downlineIds);
+            $currentIds = $downlineIds;
+        }
 
         $voucherAktif = Voucher::where('user_id', $user->id)
             ->where('status', 'active')
@@ -46,137 +53,58 @@ class DashboardController extends Controller
                 'url' => url('/register?sponsor=' . ($user ? ($user->username ?: $user->id) : 1)),
             ],
             'wallet' => [
-                'saldo' => (float) ($user->saldo ?? 0),
-                'voucher_aktif' => $voucherAktif,
-                'total_bonus_cair' => (float) ($user->total_bonus ?? 0),
-                'bonus_sponsor' => $bonusSponsor,
+                'total_saldo' => $totalSaldo,
+                'auto_save_saldo' => $autoSaveSaldo,
+                'saldo_wd' => $saldoWD,
+                'saldo' => $saldoWD,
+                'total_bonus' => (float) ($user->total_bonus ?? 0),
                 'bonus_generasi' => $bonusGenerasi,
-                'bonus_ro' => $bonusRO,
-                'bonus_tpr' => $bonusTPR,
-                'po_points' => (int) ($user->po_points ?? 0),
-                'ro_points' => (int) ($user->ro_points ?? 0),
-                'team_points' => (int) ($user->team_points ?? 0),
+                'voucher_aktif' => $voucherAktif,
+                'direct_downlines' => $directDownlines,
+                'total_downlines' => $totalDownlines,
             ],
-            'binary_legs' => [
-                'left' => [
-                    'members' => 3,
-                    'pending_points' => 1,
-                ],
-                'right' => [
-                    'members' => 2,
-                    'pending_points' => 0,
-                ],
+            'premi_info' => [
+                'min_amount' => 10000,
+                'description' => 'Pembayaran Premi bulanan (min Rp 10.000) masuk 100% full ke Total Saldo mitra.',
             ],
-            'rewards' => [
-                [
-                    'key' => 'silver',
-                    'title' => 'SILVER REWARD',
-                    'prize' => 'HP Android / Rp 1 Juta',
-                    'target_left' => 10,
-                    'target_right' => 10,
-                    'current_left' => 3,
-                    'current_right' => 2,
-                    'status' => 'MENUNGGU',
-                    'icon' => 'Sparkles'
-                ],
-                [
-                    'key' => 'gold',
-                    'title' => 'GOLD REWARD',
-                    'prize' => 'Laptop / Rp 5 Juta',
-                    'target_left' => 50,
-                    'target_right' => 50,
-                    'current_left' => 3,
-                    'current_right' => 2,
-                    'status' => 'MENUNGGU',
-                    'icon' => 'Award'
-                ],
-                [
-                    'key' => 'platinum',
-                    'title' => 'PLATINUM REWARD',
-                    'prize' => 'Motor / Rp 25 Juta',
-                    'target_left' => 250,
-                    'target_right' => 250,
-                    'current_left' => 3,
-                    'current_right' => 2,
-                    'status' => 'MENUNGGU',
-                    'icon' => 'Shield'
-                ],
-                [
-                    'key' => 'diamond',
-                    'title' => 'DIAMOND REWARD',
-                    'prize' => 'Mobil / Rp 150 Juta',
-                    'target_left' => 1000,
-                    'target_right' => 1000,
-                    'current_left' => 3,
-                    'current_right' => 2,
-                    'status' => 'MENUNGGU',
-                    'icon' => 'Trophy'
-                ],
-                [
-                    'key' => 'crown',
-                    'title' => 'CROWN REWARD',
-                    'prize' => 'Rumah Mewah / Rp 750 Juta',
-                    'target_left' => 5000,
-                    'target_right' => 5000,
-                    'current_left' => 3,
-                    'current_right' => 2,
-                    'status' => 'MENUNGGU',
-                    'icon' => 'Gift'
-                ],
-            ],
-            'packages' => [
-                [
-                    'name' => 'Seller (Steping)',
-                    'price' => 125000,
-                    'sponsor_bonus' => 20000,
-                    'team_poin' => 0,
-                    'max_tier' => 'Tier 3 (Steping s/d Tier 15)',
-                    'tpr' => 'Non-TPR',
-                    'is_current' => (str_contains(strtolower($user->package_name ?? ''), 'seller') && !str_contains(strtolower($user->package_name ?? ''), 'star')) || str_contains(strtolower($user->package_name ?? ''), 'starter') || str_contains(strtolower($user->package_name ?? ''), '125')
-                ],
-                [
-                    'name' => 'Star Seller',
-                    'price' => 550000,
-                    'sponsor_bonus' => 100000,
-                    'team_poin' => 1,
-                    'max_tier' => 'Tier 5 (Steping s/d Tier 15)',
-                    'tpr' => 'Non-TPR',
-                    'is_current' => str_contains(strtolower($user->package_name ?? ''), 'star') || str_contains(strtolower($user->package_name ?? ''), 'basic') || str_contains(strtolower($user->package_name ?? ''), '550')
-                ],
-                [
-                    'name' => 'Affiliate',
-                    'price' => 2100000,
-                    'sponsor_bonus' => 300000,
-                    'team_poin' => 4,
-                    'max_tier' => 'Tier 8 (Steping s/d Tier 15)',
-                    'tpr' => 'Non-TPR',
-                    'is_current' => str_contains(strtolower($user->package_name ?? ''), 'affiliate') || str_contains(strtolower($user->package_name ?? ''), 'medium') || str_contains(strtolower($user->package_name ?? ''), '2.100') || str_contains(strtolower($user->package_name ?? ''), '2100')
-                ],
-                [
-                    'name' => 'Business',
-                    'price' => 4300000,
-                    'sponsor_bonus' => 600000,
-                    'team_poin' => 8,
-                    'max_tier' => 'Tier 12 (Steping s/d Tier 15)',
-                    'tpr' => 'Qualified TPR',
-                    'is_current' => str_contains(strtolower($user->package_name ?? ''), 'business') || str_contains(strtolower($user->package_name ?? ''), 'pro') || str_contains(strtolower($user->package_name ?? ''), '4.300') || str_contains(strtolower($user->package_name ?? ''), '4300')
-                ],
-                [
-                    'name' => 'Partner',
-                    'price' => 10500000,
-                    'sponsor_bonus' => 1500000,
-                    'team_poin' => 12,
-                    'max_tier' => 'Tier 15 Generasi',
-                    'tpr' => 'Qualified TPR',
-                    'is_current' => str_contains(strtolower($user->package_name ?? ''), 'partner') || str_contains(strtolower($user->package_name ?? ''), 'ultimate') || str_contains(strtolower($user->package_name ?? ''), '10.500') || str_contains(strtolower($user->package_name ?? ''), '10500')
-                ],
-            ],
-            'steping_status' => [
-                'current_tier' => $user->getActiveTier(),
-                'total_referrals' => User::where('parent_id', $user->id)->count(),
-                'next_tier' => 15,
-                'required_referrals' => 32,
-            ]
         ]);
+    }
+
+    /**
+     * Process Monthly Premi payment (min Rp 10.000 - 100% full to Saldo WD).
+     */
+    public function payPremi(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:10000',
+        ]);
+
+        $user = auth()->user();
+        $amount = (float) $request->amount;
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($user, $amount) {
+            // 100% Full into user Saldo (Saldo WD)
+            $user->increment('saldo', $amount);
+            $user->increment('total_bonus', $amount);
+
+            \App\Models\BonusLog::create([
+                'transaction_code' => 'P' . sprintf('%03d', \App\Models\BonusLog::count() + 1),
+                'user_id' => $user->id,
+                'category' => 'premi',
+                'description' => 'Setoran Premi Bulanan (100% Full ke Saldo WD)',
+                'amount' => $amount,
+            ]);
+
+            \App\Models\WalletTransaction::create([
+                'user_id' => $user->id,
+                'type' => 'in',
+                'category' => 'premi_bulanan',
+                'amount' => $amount,
+                'description' => 'Pembayaran Premi Bulanan sebesar Rp ' . number_format($amount, 0, ',', '.') . ' (100% Full ke Saldo WD)',
+            ]);
+        });
+
+        return back()->with('success', 'Pembayaran Premi Bulanan sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil ditambahkan 100% ke Saldo WD Anda!');
+    }
     }
 }
