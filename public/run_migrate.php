@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Console\Kernel;
 use App\Models\Product;
+use App\Models\User;
 
 define('LARAVEL_START', microtime(true));
 
@@ -135,31 +136,28 @@ try {
         @$kernel->call('route:clear');
         @$kernel->call('view:clear');
 
-        $roCount = Product::where('type', 'ro')->count();
-        $poCount = Product::where('type', 'po')->count();
-        $allProducts = Product::orderBy('type')->get();
+        $allUsers = User::select('id', 'name', 'username', 'email')->get();
 
-        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - XSELLER</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
+        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - TALENTA52</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action} Finished!</h1>";
-        echo "<pre>" . htmlspecialchars($composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "ProductSeeder executed successfully.")) . "</pre>";
+        echo "<pre>" . htmlspecialchars($composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.")) . "</pre>";
         
-        echo "<h3 style='margin-top:1.5rem;'>Katalog Produk Aktif di Database ($roCount Produk RO, $poCount Produk PO):</h3>";
-        echo "<table><thead><tr><th>Tipe</th><th>Nama Produk</th><th>Harga</th><th>Isi/Qty</th><th>Poin</th></tr></thead><tbody>";
-        foreach ($allProducts as $p) {
-            echo "<tr><td><strong style='color:" . ($p->type === 'ro' ? '#5c3a21' : '#1653a1') . ";'>" . strtoupper($p->type) . "</strong></td><td>" . htmlspecialchars($p->name) . "</td><td>Rp " . number_format($p->price, 0, ',', '.') . "</td><td>" . $p->quantity . "</td><td>" . $p->points . " Poin</td></tr>";
+        echo "<h3 style='margin-top:1.5rem;'>Daftar User Akun Login (" . count($allUsers) . " Users):</h3>";
+        echo "<table><thead><tr><th>ID</th><th>Nama</th><th>Username</th><th>Email</th><th>Default Password</th></tr></thead><tbody>";
+        foreach ($allUsers as $u) {
+            echo "<tr><td>" . $u->id . "</td><td>" . htmlspecialchars($u->name) . "</td><td><strong>" . htmlspecialchars($u->username) . "</strong></td><td>" . htmlspecialchars($u->email) . "</td><td><code>password</code></td></tr>";
         }
         echo "</tbody></table>";
 
         echo "<div style='margin-top:20px;display:flex;gap:10px;'>";
-        echo "<a href='/admin/repeat-order' style='padding:10px 18px;background:#5c3a21;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Lihat Produk RO</a>";
-        echo "<a href='/admin/purchase-order' style='padding:10px 18px;background:#1653a1;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Lihat Produk PO</a>";
-        echo "<a href='/admin/kelola-produk' style='padding:10px 18px;background:#10b981;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Kelola Produk Admin</a>";
+        echo "<a href='/run_migrate.php?fresh=1' style='padding:10px 18px;background:#ef4444;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Reset Fresh & Seed Database</a>";
+        echo "<a href='/login' style='padding:10px 18px;background:#10b981;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Buka Halaman Login</a>";
         echo "</div>";
         echo "</div></body></html>";
     }
 } catch (\Throwable $e) {
-    echo "<!DOCTYPE html><html><head><title>Migration Error - XSELLER</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}pre{background:#1e293b;color:#f87171;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
+    echo "<!DOCTYPE html><html><head><title>Migration Error - TALENTA52</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}pre{background:#1e293b;color:#f87171;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
     echo "<div class='card'>";
     echo "<h1 style='color:#ef4444;'>✕ ERROR: Migration Failed</h1>";
     echo "<pre>" . htmlspecialchars($e->getMessage()) . "\n\n" . htmlspecialchars($e->getTraceAsString()) . "</pre>";

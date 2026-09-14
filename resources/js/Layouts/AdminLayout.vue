@@ -35,12 +35,12 @@ import {
 const page = usePage();
 const user = page.props.auth?.user || {
     name: "President Director (Admin)",
-    email: "admin@talenta52.id",
+    email: "admin@talenta52.com",
 };
 
 const isAdmin = computed(() => {
     if (!user) return false;
-    if (user.username === "admin" || user.email === "admin@talenta52.id")
+    if (user.username === "admin" || user.email === "admin@talenta52.com")
         return true;
     return (
         user.roles &&

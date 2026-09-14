@@ -95,7 +95,7 @@
 
     <div class="header">
         <div>
-            <div class="brand">talenta52.id</div>
+            <div class="brand">talenta52.com</div>
             <div class="sub-brand">DUTA SYNERGY BINARY SYSTEM</div>
         </div>
         <div style="text-align: right;">

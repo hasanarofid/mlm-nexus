@@ -1,6 +1,6 @@
-# Aturan Pengembangan & Dokumentasi Sistem - Proyek talenta52.id
+# Aturan Pengembangan & Dokumentasi Sistem - Proyek talenta52.com
 
-- **Domain Utama:** https://talenta52.id
+- **Domain Utama:** https://talenta52.com
 - **Branch Utama:** `main` / `master`
 - **Lisensi & Owner:** [@hasanarofid.site](https://hasanarofid.site)
 
@@ -10,38 +10,41 @@
 
 - **Peran AI:** Senior Full-Stack Developer spesialis Laravel 11, Vue 3 (Inertia.js), System Unilevel Matahari Multi-Tier Generasi 1-10, & Manajemen Bonus Auto Save & Saldo WD.
 - **Tech Stack Utama:**
-  - **Backend:** Laravel 11 (PHP 8.2+).
-  - **Frontend:** Vue 3 (Inertia.js), Tailwind CSS, `@lucide/vue`, Headless UI / Shadcn-Vue components.
-  - **Database:** MySQL.
-  - **Auth & Authorization:** Laravel Sanctum & Spatie Laravel Permission.
+    - **Backend:** Laravel 11 (PHP 8.2+).
+    - **Frontend:** Vue 3 (Inertia.js), Tailwind CSS, `@lucide/vue`, Headless UI / Shadcn-Vue components.
+    - **Database:** MySQL.
+    - **Auth & Authorization:** Laravel Sanctum & Spatie Laravel Permission.
 - **Aturan Istilah & Terminologi (Wajib Dipatuhi):**
-  - **Generasi:** Level jaringan Unilevel Matahari (Generasi 1 s/d Generasi 10).
-  - **Prosedur Migration Database Production:**
-    - Karena terminal SSH di server live terkadang mengalami kendala/error, cara merunning database migration di server production adalah dengan membuka URL: **`https://talenta52.id/run_migrate.php`** di browser setelah melakukan `git push origin master`.
+    - **Generasi:** Level jaringan Unilevel Matahari (Generasi 1 s/d Generasi 10).
+    - **Prosedur Migration Database Production:**
+        - Karena terminal SSH di server live terkadang mengalami kendala/error, cara merunning database migration di server production adalah dengan membuka URL: **`https://talenta52.com/run_migrate.php`** di browser setelah melakukan `git push origin master`.
 
 ---
 
 ## 2. Arsitektur Sistem Bisnis & Plan TALENTA52 (PRD 2026)
 
 ### A. Uang Pendaftaran & Bonus Generasi
+
 1. **Biaya Pendaftaran Mitra:** Rp 100.000
-   - **Alokasi Yayasan:** Rp 10.000 per pendaftaran member baru.
-   - **Alokasi Founder:** Rp 10.000 per pendaftaran member baru.
+    - **Alokasi Yayasan:** Rp 10.000 per pendaftaran member baru.
+    - **Alokasi Founder:** Rp 10.000 per pendaftaran member baru.
 2. **Bonus Rekrut Mitra (Multi-tier Generasi 1 s/d Generasi 10):**
-   - Setiap pendaftaran mitra baru memberikan bonus **Rp 7.000** untuk setiap Upline dari Generasi 1 s/d Generasi 10.
-   - Formula Pembagian Bonus Rp 7.000:
-     - **50% Auto Save:** Rp 3.500
-     - **50% Saldo WD:** Rp 3.500
-   - **Total Saldo Mitra:** Auto Save (50%) + Saldo WD (50%).
+    - Setiap pendaftaran mitra baru memberikan bonus **Rp 7.000** untuk setiap Upline dari Generasi 1 s/d Generasi 10.
+    - Formula Pembagian Bonus Rp 7.000:
+        - **50% Auto Save:** Rp 3.500
+        - **50% Saldo WD:** Rp 3.500
+    - **Total Saldo Mitra:** Auto Save (50%) + Saldo WD (50%).
 
 ---
 
 ### B. Premi Bulanan
+
 - Setiap pembayaran Premi Bulanan (minimal Rp 10.000) dialokasikan **100% Full** masuk ke Total Saldo / Saldo WD Mitra.
 
 ---
 
 ### C. Syarat Penarikan Saldo (Withdrawal / WD)
+
 - **Minimal Penarikan:** Rp 50.000
 - **Potongan Biaya Admin Bank:** Rp 10.000 per permohonan WD.
 - Penarikan diambil dari **Saldo WD** mitra.
@@ -49,14 +52,17 @@
 ---
 
 ### D. Struktur Jaringan Matahari (Unilevel Network)
+
 - Tampilan Jaringan Matahari menampilkan:
-  - Total Jumlah Mitra.
-  - Jumlah Mitra per Generasi (Generasi 1 s/d Generasi 10).
+    - Total Jumlah Mitra.
+    - Jumlah Mitra per Generasi (Generasi 1 s/d Generasi 10).
 
 ---
 
 ### E. Navigasi Member Area (Sidebar)
+
 Menu yang ditampilkan pada sidebar area Member (`client` role):
+
 1. **Dashboard**
 2. **Team Mitra**
 3. **Penarikan Saldo**

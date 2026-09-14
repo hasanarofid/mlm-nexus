@@ -21,7 +21,7 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         $user = $request->user();
-        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@talenta52.id');
+        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@talenta52.com');
         if (!$isAdmin) {
             try {
                 $isAdmin = $user->hasRole('admin');
@@ -82,7 +82,7 @@ class ProfileController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $user = $request->user();
-        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@talenta52.id');
+        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@talenta52.com');
         if (!$isAdmin) {
             try {
                 $isAdmin = $user->hasRole('admin');

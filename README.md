@@ -1,8 +1,8 @@
-# talenta52.id - Trade Promotion Program System
+# talenta52.com - Trade Promotion Program System
 
 Aplikasi Trade Promotion Program berbasis E-Commerce, Affiliasi, dan Komunitas dengan sistem **Binary 2 Kaki** dan **Multi-Tier Bonus (Generasi 1-15)** yang dibangun menggunakan **Laravel 11**, **Vue 3 (Inertia.js)**, **Tailwind CSS**, dan **Spatie Permission**.
 
-Official Website: [https://talenta52.id](https://talenta52.id)
+Official Website: [https://talenta52.com](https://talenta52.com)
 
 ---
 
@@ -68,4 +68,4 @@ php artisan serve
 ## 👨‍💻 Owner & Development Team
 
 - **Owner**: [@hasanarofid.site](https://hasanarofid.site)
-- **Website**: [https://talenta52.id](https://talenta52.id)
+- **Website**: [https://talenta52.com](https://talenta52.com)

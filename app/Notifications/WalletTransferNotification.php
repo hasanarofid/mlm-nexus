@@ -61,7 +61,7 @@ class WalletTransferNotification extends Notification
                 ->line('• **Jumlah Transfer:** ' . $amountFormatted)
                 ->line('• **Penerima:** ' . ($this->otherUser->name ?? 'Member') . ' (@' . ($this->otherUser->username ?? 'member') . ')')
                 ->action('Lihat Mutasi Rekening', $financeUrl)
-                ->line('Terima kasih telah bertransaksi di talenta52.id.');
+                ->line('Terima kasih telah bertransaksi di talenta52.com.');
         }
     }
 }

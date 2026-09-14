@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. Seed Default Users and Assign Roles
         $admin = User::updateOrCreate(
-            ['email' => 'admin@talenta52.id'],
+            ['email' => 'admin@talenta52.com'],
             [
                 'name' => 'President Director (Admin)',
                 'username' => 'admin',
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
 
         // Level 2 (Children of Admin)
         $budi = User::updateOrCreate(
-            ['email' => 'budi@talenta52.id'],
+            ['email' => 'budi@talenta52.com'],
             [
                 'name' => 'Budi Santoso',
                 'username' => 'budi',
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
         $budi->assignRole('client');
 
         $siti = User::updateOrCreate(
-            ['email' => 'siti@talenta52.id'],
+            ['email' => 'siti@talenta52.com'],
             [
                 'name' => 'Siti Rahma',
                 'username' => 'siti',
@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
 
         // Level 3 (Grandchildren)
         $dewi = User::updateOrCreate(
-            ['email' => 'dewi@talenta52.id'],
+            ['email' => 'dewi@talenta52.com'],
             [
                 'name' => 'Dewi Lestari',
                 'username' => 'dewi',
@@ -89,7 +89,7 @@ class DatabaseSeeder extends Seeder
         $dewi->assignRole('client');
 
         $eko = User::updateOrCreate(
-            ['email' => 'eko@talenta52.id'],
+            ['email' => 'eko@talenta52.com'],
             [
                 'name' => 'Eko Prasetyo',
                 'username' => 'eko',
@@ -106,7 +106,7 @@ class DatabaseSeeder extends Seeder
         $eko->assignRole('client');
 
         $fajar = User::updateOrCreate(
-            ['email' => 'fajar@talenta52.id'],
+            ['email' => 'fajar@talenta52.com'],
             [
                 'name' => 'Fajar Hidayat',
                 'username' => 'fajar',

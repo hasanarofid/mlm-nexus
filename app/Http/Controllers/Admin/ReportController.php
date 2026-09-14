@@ -18,7 +18,7 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $currentUser = auth()->user();
-        $isAdmin = $currentUser->hasRole('admin') || $currentUser->username === 'admin' || $currentUser->email === 'admin@talenta52.id';
+        $isAdmin = $currentUser->hasRole('admin') || $currentUser->username === 'admin' || $currentUser->email === 'admin@talenta52.com';
         if (!$isAdmin) {
             return redirect()->route('admin.dashboard')->with('error', 'Akses ditolak. Halaman Laporan hanya dapat diakses oleh Administrator utama.');
         }
@@ -136,7 +136,7 @@ class ReportController extends Controller
         $html .= '.number { text-align: right; font-weight: bold; }';
         $html .= '</style></head><body>';
 
-        $html .= '<div class="title">LAPORAN ' . strtoupper($type) . ' - talenta52.id (' . date('d/m/Y H:i') . ')</div>';
+        $html .= '<div class="title">LAPORAN ' . strtoupper($type) . ' - talenta52.com (' . date('d/m/Y H:i') . ')</div>';
         $html .= '<table>';
 
         if ($type === 'member') {

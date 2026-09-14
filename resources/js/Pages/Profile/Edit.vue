@@ -58,7 +58,7 @@ const form = useForm({
         "PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.",
     name: props.admin_user?.name || "President Director (Admin)",
     username: props.admin_user?.username || "admin",
-    email: props.admin_user?.email || "admin@talenta52.id",
+    email: props.admin_user?.email || "admin@talenta52.com",
     phone: props.admin_user?.phone || "081234567890",
     password: "",
     site_logo: null,

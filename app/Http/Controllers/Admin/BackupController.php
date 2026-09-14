@@ -20,7 +20,7 @@ class BackupController extends Controller
     {
         $backupData = [
             'app_info' => [
-                'name' => 'talenta52.id',
+                'name' => 'talenta52.com',
                 'version' => '2.4 Binary MLM',
                 'exported_at' => now()->toIso8601String(),
                 'exporter' => auth()->user() ? auth()->user()->username : 'admin',

@@ -77,7 +77,7 @@ class ResetSystemDataCommand extends Command
             $query->whereNotIn('username', $preservedUsernames)
                   ->orWhereNull('username');
         })
-        ->where('email', '!=', 'admin@talenta52.id')
+        ->where('email', '!=', 'admin@talenta52.com')
         ->where('id', '>', 1)
         ->delete();
 
@@ -86,7 +86,7 @@ class ResetSystemDataCommand extends Command
         // 3. Reset preserved users (Admin, Yayan, Arif)
         $preservedUsers = User::where(function($q) use ($preservedUsernames) {
             $q->whereIn('username', $preservedUsernames)
-              ->orWhere('email', 'admin@talenta52.id')
+              ->orWhere('email', 'admin@talenta52.com')
               ->orWhere('id', 1);
         })->get();
 
