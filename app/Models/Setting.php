@@ -21,12 +21,22 @@ class Setting extends Model
         try {
             return Cache::rememberForever("setting.{$key}", function () use ($key, $default) {
                 $setting = self::where('key', $key)->first();
-                return $setting ? $setting->value : $default;
+                if (!$setting) return $default;
+                return ($setting->type === 'json') ? json_decode($setting->value, true) : $setting->value;
             });
         } catch (\Throwable $e) {
             $setting = self::where('key', $key)->first();
-            return $setting ? $setting->value : $default;
+            if (!$setting) return $default;
+            return ($setting->type === 'json') ? json_decode($setting->value, true) : $setting->value;
         }
+    }
+
+    /**
+     * Alias of getValue() — shorthand: Setting::get('key')
+     */
+    public static function get(string $key, $default = null): mixed
+    {
+        return static::getValue($key, $default);
     }
 
     /**

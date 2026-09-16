@@ -44,6 +44,16 @@ try {
             'label'   => 'Update Katalog Produk RO & PO',
             'class'   => 'ProductSeeder',
         ],
+        'seed-settings' => [
+            'command' => 'db:seed',
+            'label'   => 'Update / Insert Default Settings (company_profile, banks, dsb)',
+            'class'   => 'SettingSeeder',
+        ],
+        'seed-all' => [
+            'command' => 'db:seed',
+            'label'   => 'Run All Seeders (DatabaseSeeder)',
+            'class'   => 'DatabaseSeeder',
+        ],
         'reset-data' => [
             'command' => 'reset:system-data',
             'label'   => 'Reset Total Data Member & Transaksi (Kecuali Admin, Yayan, Arif & Produk)',

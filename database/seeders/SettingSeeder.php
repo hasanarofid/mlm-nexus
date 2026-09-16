@@ -15,38 +15,59 @@ class SettingSeeder extends Seeder
         $settings = [
             [
                 'key' => 'site_name',
-                'value' => 'PT.Xseller Punya Kita',
+                'value' => 'TALENTA52',
                 'type' => 'text',
             ],
             [
                 'key' => 'company_name',
-                'value' => 'PT.Xseller Punya Kita',
+                'value' => 'PT.Talenta52 Punya Kita',
                 'type' => 'text',
             ],
             [
                 'key' => 'company_owner',
-                'value' => 'PT.Xseller Punya Kita',
+                'value' => 'PT.Talenta52 Punya Kita',
                 'type' => 'text',
             ],
             [
                 'key' => 'company_copyright',
-                'value' => 'PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
+                'value' => 'PT.Talenta52 Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
                 'type' => 'text',
             ],
             [
                 'key' => 'company_banks',
                 'value' => json_encode([
                     [
-                        'bank_name' => 'Bank BRI',
+                        'type'           => 'bank',
+                        'bank_name'      => 'Bank BRI',
                         'account_number' => '806401000095564',
-                        'account_name' => 'PT.Xseller Punya Kita',
-                    ]
+                        'account_name'   => 'PT.Talenta52 Punya Kita',
+                    ],
+                ]),
+                'type' => 'json',
+            ],
+            // company_profile: JSON tunggal yang dibaca Setting::get('company_profile')
+            // Berisi banks, whatsapp, name, owner, copyright untuk DashboardController & PremiInvoice
+            [
+                'key' => 'company_profile',
+                'value' => json_encode([
+                    'name'      => 'PT.Talenta52 Punya Kita',
+                    'owner'     => 'PT.Talenta52 Punya Kita',
+                    'copyright' => 'PT.Talenta52 Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
+                    'whatsapp'  => '6281234567890',
+                    'banks'     => [
+                        [
+                            'type'           => 'bank',
+                            'bank_name'      => 'Bank BRI',
+                            'account_number' => '806401000095564',
+                            'account_name'   => 'PT.Talenta52 Punya Kita',
+                        ],
+                    ],
                 ]),
                 'type' => 'json',
             ],
             [
                 'key' => 'site_description',
-                'value' => 'Sebuah platform e-commerce & affiliate marketing serbaguna berbasis Laravel dan Vue 3.',
+                'value' => 'Platform jaringan mitra & manajemen bonus unilevel matahari multi-tier TALENTA52.',
                 'type' => 'textarea',
             ],
             [
@@ -58,11 +79,6 @@ class SettingSeeder extends Seeder
                 'key' => 'whatsapp_number',
                 'value' => '6281234567890',
                 'type' => 'text',
-            ],
-            [
-                'key' => 'playstore_link',
-                'value' => 'https://play.google.com/store/apps/details?id=com.xseller.app',
-                'type' => 'url',
             ],
         ];
 
