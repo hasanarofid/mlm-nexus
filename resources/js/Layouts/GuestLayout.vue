@@ -10,9 +10,9 @@ import { Link } from '@inertiajs/vue3';
         <svg viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="waveGradientTop" x1="0" y1="0" x2="500" y2="350">
-                    <stop offset="0%" stop-color="#174F9D"/>
-                    <stop offset="55%" stop-color="#087BB7"/>
-                    <stop offset="100%" stop-color="#04C1B5"/>
+                    <stop offset="0%" stop-color="#0f2558"/>
+                    <stop offset="45%" stop-color="#1a3a7c"/>
+                    <stop offset="100%" stop-color="#c9a227"/>
                 </linearGradient>
             </defs>
             <g stroke="url(#waveGradientTop)" stroke-width="2" fill="none">
@@ -43,9 +43,9 @@ import { Link } from '@inertiajs/vue3';
         <svg viewBox="0 0 520 420" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="waveGradientBottom" x1="20" y1="400" x2="500" y2="0">
-                    <stop offset="0%" stop-color="#06C2B5"/>
-                    <stop offset="50%" stop-color="#078BB9"/>
-                    <stop offset="100%" stop-color="#17519E"/>
+                    <stop offset="0%" stop-color="#c9a227"/>
+                    <stop offset="50%" stop-color="#1a3a7c"/>
+                    <stop offset="100%" stop-color="#0f2558"/>
                 </linearGradient>
             </defs>
             <g stroke="url(#waveGradientBottom)" stroke-width="2" fill="none">
@@ -84,7 +84,7 @@ import { Link } from '@inertiajs/vue3';
         <div class="brand-side">
             <div class="brand-content">
                 <Link href="/" class="logo-box">
-                    <img src="/logo-x-seller.avif" alt="Talenta52 Logo">
+                    <img src="/images/talenta52.webp" alt="Talenta52 Logo">
                 </Link>
 
                 <div class="brand-badge">
@@ -109,7 +109,7 @@ import { Link } from '@inertiajs/vue3';
                 </div>
 
                 <p class="brand-note">
-                    Simple. Secure. Connected.
+                    SALING BANTU - MANFAAT BERSAMA
                 </p>
             </div>
         </div>

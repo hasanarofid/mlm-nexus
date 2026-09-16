@@ -100,7 +100,7 @@ const submit = () => {
                     <input
                         type="checkbox"
                         v-model="form.remember"
-                        class="rounded border-slate-300 text-[#04bdb2] focus:ring-[#04bdb2] accent-[#04bdb2]"
+                        class="rounded border-slate-300 text-[#1a3a7c] focus:ring-[#c9a227] accent-[#1a3a7c]"
                     />
                     <span class="ms-2 font-medium">Ingat saya</span>
                 </label>
@@ -108,7 +108,7 @@ const submit = () => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="text-xs font-bold text-[#009c94] hover:text-[#1653a1] transition-colors"
+                    class="text-xs font-bold text-[#a07c10] hover:text-[#1a3a7c] transition-colors"
                 >
                     Lupa password?
                 </Link>
@@ -127,7 +127,7 @@ const submit = () => {
 
         <div class="mt-6 text-center text-xs text-slate-500 font-medium">
             Belum punya akun?
-            <Link :href="route('register')" class="ms-1 font-bold text-[#009c94] hover:text-[#1653a1] transition-colors">
+            <Link :href="route('register')" class="ms-1 font-bold text-[#1a3a7c] hover:text-[#c9a227] transition-colors">
                 Daftar sekarang
             </Link>
         </div>

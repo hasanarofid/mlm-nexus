@@ -245,9 +245,9 @@ const logout = () => {
                         class="flex items-center h-16 px-5 border-b border-slate-100 lg:hidden justify-between shrink-0"
                     >
                         <div class="flex items-center gap-2.5">
-                            <ApplicationLogo class="h-7 w-auto" />
+                            <img src="/images/talenta52.webp" alt="Talenta52" class="h-7 w-auto" />
                             <span
-                                class="font-extrabold text-[#1653a1] text-sm tracking-tight uppercase"
+                                class="font-extrabold text-[#1a3a7c] text-sm tracking-tight uppercase"
                                 >TALENTA52</span
                             >
                         </div>
@@ -265,7 +265,7 @@ const logout = () => {
                         class="p-4 flex flex-col items-center text-center space-y-2 border-b border-slate-100 shrink-0"
                     >
                         <div
-                            class="w-14 h-14 rounded-full bg-gradient-to-tr from-[#1653a1] to-[#04bdb2] text-white font-extrabold flex items-center justify-center text-xl shadow-md border-2 border-white"
+                            class="w-14 h-14 rounded-full bg-gradient-to-tr from-[#1a3a7c] to-[#c9a227] text-white font-extrabold flex items-center justify-center text-xl shadow-md border-2 border-white"
                         >
                             {{
                                 user.name
@@ -284,18 +284,18 @@ const logout = () => {
                             </p>
                         </div>
                         <div
-                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-[#04bdb2]/40 text-[#009c94] bg-[#04bdb2]/10 text-[9px] font-extrabold uppercase tracking-wider"
+                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-[#c9a227]/40 text-[#a07c10] bg-[#c9a227]/10 text-[9px] font-extrabold uppercase tracking-wider"
                         >
-                            <Crown class="w-3 h-3 text-[#04bdb2]" />
+                            <Crown class="w-3 h-3 text-[#c9a227]" />
                             <span>{{ isAdmin ? "ADMIN" : "MEMBER" }}</span>
                         </div>
 
                         <!-- Dompet Saya Card Widget -->
                         <div
-                            class="w-full mt-2 p-3 bg-[#f0f7fb] border border-[#04bdb2]/20 rounded-2xl text-left space-y-1.5 shadow-xs"
+                            class="w-full mt-2 p-3 bg-[#f5f7fb] border border-[#1a3a7c]/15 rounded-2xl text-left space-y-1.5 shadow-xs"
                         >
                             <span
-                                class="text-[9px] font-extrabold text-[#1653a1] uppercase tracking-wider block"
+                                class="text-[9px] font-extrabold text-[#1a3a7c] uppercase tracking-wider block"
                                 >DOMPET SAYA</span
                             >
                             <p
@@ -426,9 +426,9 @@ const logout = () => {
                     'flex flex-col min-h-screen transition-all duration-300 ease-in-out',
                 ]"
             >
-                <!-- Top Bar Header (Theme: Royal Blue to Teal Gradient matching Login) -->
+                <!-- Top Bar Header (Theme: Talenta52 Navy + Gold) -->
                 <header
-                    class="flex items-center justify-between h-16 px-6 md:px-8 bg-gradient-to-r from-[#0b1f3a] via-[#103f80] to-[#1653a1] text-white sticky top-0 z-30 shadow-md border-b border-[#04bdb2]/30"
+                    class="flex items-center justify-between h-16 px-6 md:px-8 bg-gradient-to-r from-[#0f2558] via-[#1a3a7c] to-[#1e5099] text-white sticky top-0 z-30 shadow-md border-b border-[#c9a227]/30"
                 >
                     <div class="flex items-center gap-4">
                         <button
@@ -443,14 +443,12 @@ const logout = () => {
                             <div
                                 class="px-2.5 py-1.5 bg-white/95 rounded-xl shadow-md flex items-center justify-center"
                             >
-                                <ApplicationLogo
-                                    class="h-7 w-auto object-contain"
-                                />
+                                <img src="/images/talenta52.webp" alt="Talenta52" class="h-7 w-auto object-contain" />
                             </div>
                             <div>
                                 <div class="flex items-center gap-2">
                                     <h1
-                                        class="text-xs font-black tracking-wider text-[#a9fff7] uppercase"
+                                        class="text-xs font-black tracking-wider text-[#e8c44a] uppercase"
                                     >
                                         TALENTA52
                                     </h1>
@@ -462,7 +460,7 @@ const logout = () => {
                                 <p
                                     class="text-[9px] text-slate-300 font-medium tracking-tight hidden sm:block"
                                 >
-                                    Simple. Secure. Connected.
+                                    SALING BANTU - MANFAAT BERSAMA
                                 </p>
                             </div>
                         </div>
@@ -473,17 +471,17 @@ const logout = () => {
                         <!-- Notification Bell -->
                         <button
                             @click="isNotificationsOpen = !isNotificationsOpen"
-                            class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#a9fff7] transition-colors cursor-pointer"
+                            class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#e8c44a] transition-colors cursor-pointer"
                         >
                             <Bell class="w-4 h-4" />
                             <span
-                                class="absolute top-1 right-1 w-2 h-2 bg-[#04bdb2] rounded-full animate-ping"
+                                class="absolute top-1 right-1 w-2 h-2 bg-[#c9a227] rounded-full animate-ping"
                             ></span>
                         </button>
 
                         <!-- User Avatar Circle -->
                         <div
-                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#04bdb2] to-[#1653a1] border border-white/40 text-white font-extrabold flex items-center justify-center text-xs shadow-sm"
+                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#1a3a7c] to-[#c9a227] border border-white/40 text-white font-extrabold flex items-center justify-center text-xs shadow-sm"
                         >
                             {{
                                 user.name
@@ -501,7 +499,7 @@ const logout = () => {
                                 user.name
                             }}</span>
                             <span
-                                class="px-2 py-0.5 text-[9px] font-bold bg-[#04bdb2]/20 text-[#a9fff7] border border-[#04bdb2]/40 rounded-md"
+                                class="px-2 py-0.5 text-[9px] font-bold bg-[#c9a227]/20 text-[#e8c44a] border border-[#c9a227]/40 rounded-md"
                                 >{{ isAdmin ? "Admin" : "Member" }}</span
                             >
                         </div>
