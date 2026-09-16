@@ -73,7 +73,7 @@ const formatRupiah = (val) => {
 </script>
 
 <template>
-  <Head title="Fitur TPR (Trade Promotion Program) - XSELLER" />
+  <Head title="Fitur TPR (Trade Promotion Program) - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-7xl mx-auto">

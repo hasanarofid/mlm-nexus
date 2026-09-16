@@ -101,7 +101,7 @@ class VoucherWalletController extends Controller
             : [
                 'bank_name' => 'Bank BRI',
                 'account_number' => '806401000095564',
-                'account_name' => 'PT.Xseller Punya Kita',
+                'account_name' => 'PT.Talenta52 Punya Kita',
             ];
 
         // Voucher Package Catalog for Conversion

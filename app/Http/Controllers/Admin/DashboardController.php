@@ -14,7 +14,7 @@ use Inertia\Inertia;
 class DashboardController extends Controller
 {
     /**
-     * Display the admin binary MLM dashboard home based on XSELLER PRD 2026.
+     * Display the admin binary MLM dashboard home based on TALENTA52 PRD 2026.
      */
     /**
      * Display the admin & member dashboard based on TALENTA52 PRD 2026.

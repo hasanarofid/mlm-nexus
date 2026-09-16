@@ -66,7 +66,7 @@ const formatRupiah = (val) => {
 </script>
 
 <template>
-  <Head title="Purchase Order (PO) - XSELLER" />
+  <Head title="Purchase Order (PO) - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-7xl mx-auto">
@@ -407,7 +407,7 @@ const formatRupiah = (val) => {
           <div class="p-3 bg-[#f0f7fb] border border-[#1653a1]/30 rounded-2xl text-xs space-y-1">
             <span class="font-extrabold text-[#1653a1] block text-[10px] uppercase tracking-wider">Rekening Transfer Bank Perusahaan:</span>
             <p class="font-black text-slate-900">{{ company_bank?.bank_name || 'Bank BRI' }} - {{ company_bank?.account_number || '806401000095564' }}</p>
-            <p class="text-[11px] text-slate-600 font-medium">a.n {{ company_bank?.account_name || 'PT.Xseller Punya Kita' }}</p>
+            <p class="text-[11px] text-slate-600 font-medium">a.n {{ company_bank?.account_name || 'PT.Talenta52 Punya Kita' }}</p>
           </div>
 
           <div v-if="is_admin" class="space-y-3 pt-2">

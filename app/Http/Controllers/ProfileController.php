@@ -53,22 +53,22 @@ class ProfileController extends Controller
                 'phone' => $user->phone ?? '081234567890',
             ],
             'company_profile' => [
-                'name' => $settings['company_name'] ?? 'PT.Xseller Punya Kita',
-                'owner' => $settings['company_owner'] ?? 'PT.Xseller Punya Kita',
-                'copyright' => $settings['company_copyright'] ?? 'PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
+                'name' => $settings['company_name'] ?? 'PT.Talenta52 Punya Kita',
+                'owner' => $settings['company_owner'] ?? 'PT.Talenta52 Punya Kita',
+                'copyright' => $settings['company_copyright'] ?? 'PT.Talenta52 Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
                 'logo_url' => !empty($settings['site_logo']) ? (str_starts_with($settings['site_logo'], '/') ? $settings['site_logo'] : '/' . $settings['site_logo']) : null,
                 'banks' => is_array($companyBanks) && count($companyBanks) > 0 ? $companyBanks : [
                     [
                         'type' => 'bank',
                         'bank_name' => 'Bank BRI',
                         'account_number' => '806401000095564',
-                        'account_name' => 'PT.Xseller Punya Kita',
+                        'account_name' => 'PT.Talenta52 Punya Kita',
                     ],
                     [
                         'type' => 'ewallet',
                         'bank_name' => 'DANA (E-Wallet)',
                         'account_number' => '081234567890',
-                        'account_name' => 'PT.Xseller Punya Kita',
+                        'account_name' => 'PT.Talenta52 Punya Kita',
                     ]
                 ],
             ],
@@ -117,9 +117,9 @@ class ProfileController extends Controller
         $validated = $request->validate($rules);
 
         if ($isAdmin) {
-            Setting::setValue('company_name', $validated['company_name'] ?? 'PT.Xseller Punya Kita', 'text');
-            Setting::setValue('company_owner', $validated['company_owner'] ?? 'PT.Xseller Punya Kita', 'text');
-            Setting::setValue('company_copyright', $validated['company_copyright'] ?? 'PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.', 'text');
+            Setting::setValue('company_name', $validated['company_name'] ?? 'PT.Talenta52 Punya Kita', 'text');
+            Setting::setValue('company_owner', $validated['company_owner'] ?? 'PT.Talenta52 Punya Kita', 'text');
+            Setting::setValue('company_copyright', $validated['company_copyright'] ?? 'PT.Talenta52 Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.', 'text');
 
             if ($request->hasFile('site_logo')) {
                 $file = $request->file('site_logo');

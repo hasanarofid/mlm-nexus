@@ -126,7 +126,7 @@ const bankList = [
 </script>
 
 <template>
-  <Head title="Penarikan Saldo (WD) - XSELLER" />
+  <Head title="Penarikan Saldo (WD) - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6">

@@ -36,7 +36,7 @@ class BackupController extends Controller
         ];
 
         $jsonContent = json_encode($backupData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        $fileName = 'xseller_database_backup_' . date('Y-m-d_H-i-s') . '.json';
+        $fileName = 'talenta52_database_backup_' . date('Y-m-d_H-i-s') . '.json';
 
         return response($jsonContent, 200, [
             'Content-Type' => 'application/json',

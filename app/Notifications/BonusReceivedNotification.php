@@ -49,7 +49,7 @@ class BonusReceivedNotification extends Notification
             ->line('Selamat! Anda baru saja mendapatkan alokasi bonus baru ke dompet akun Anda.')
             ->line('• **Kategori Bonus:** Bonus ' . $categoryName)
             ->line('• **Nominal Bonus:** ' . $formattedAmount)
-            ->line('• **Keterangan:** ' . ($this->description ?: 'Distribusi alokasi bonus sistem XSELLER'))
+            ->line('• **Keterangan:** ' . ($this->description ?: 'Distribusi alokasi bonus sistem TALENTA52'))
             ->action('Cek Saldo & Dompet Saya', $dashboardUrl)
             ->line('Bonus ini dapat dicairkan langsung ke E-Wallet atau direkeningkan sesuai ketentuan sistem.')
             ->line('Terima kasih atas kerja keras dan perkembangan jaringan Anda di talenta52.com!');

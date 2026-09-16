@@ -47,7 +47,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <Head title="Aktivasi Member Baru - XSELLER" />
+  <Head title="Aktivasi Member Baru - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6">

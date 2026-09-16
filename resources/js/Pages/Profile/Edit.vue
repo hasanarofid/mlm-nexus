@@ -51,11 +51,11 @@ const submitMemberProfile = () => {
 
 // Form for Corporate & Admin Profile
 const form = useForm({
-    company_name: props.company_profile?.name || "PT.Xseller Punya Kita",
-    company_owner: props.company_profile?.owner || "PT.Xseller Punya Kita",
+    company_name: props.company_profile?.name || "PT.Talenta52 Punya Kita",
+    company_owner: props.company_profile?.owner || "PT.Talenta52 Punya Kita",
     company_copyright:
         props.company_profile?.copyright ||
-        "PT.Xseller Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.",
+        "PT.Talenta52 Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.",
     name: props.admin_user?.name || "President Director (Admin)",
     username: props.admin_user?.username || "admin",
     email: props.admin_user?.email || "admin@talenta52.com",
@@ -164,8 +164,8 @@ const saveBanks = () => {
     <Head
         :title="
             is_admin
-                ? 'Pengaturan Profil Instansi & Administrator - XSELLER'
-                : 'Pengaturan Profil Member - XSELLER'
+                ? 'Pengaturan Profil Instansi & Administrator - TALENTA52'
+                : 'Pengaturan Profil Member - TALENTA52'
         "
     />
 
@@ -704,7 +704,7 @@ const saveBanks = () => {
                                     </label>
                                     <input
                                         v-model="newBank.account_name"
-                                        placeholder="cth: PT.Xseller Punya Kita"
+                                        placeholder="cth: PT.Talenta52 Punya Kita"
                                         class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-emerald-500"
                                     />
                                 </div>

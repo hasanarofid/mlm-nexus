@@ -64,7 +64,7 @@ const reportTabs = [
 </script>
 
 <template>
-  <Head title="Menu Laporan - XSELLER" />
+  <Head title="Menu Laporan - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6">

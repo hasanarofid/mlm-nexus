@@ -93,7 +93,7 @@ class RepeatOrderController extends Controller
             : [
                 'bank_name' => 'Bank BRI',
                 'account_number' => '806401000095564',
-                'account_name' => 'PT.Xseller Punya Kita',
+                'account_name' => 'PT.Talenta52 Punya Kita',
             ];
 
         $roProducts = \App\Models\Product::where('type', 'ro')->where('is_active', true)->get();

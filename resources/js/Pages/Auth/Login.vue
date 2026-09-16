@@ -31,7 +31,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Login | Xseller" />
+        <Head title="Login | Talenta52" />
 
         <div class="panel-heading">
             <span class="eyebrow">MEMBER LOGIN</span>

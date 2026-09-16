@@ -46,7 +46,7 @@ const tabList = [
 </script>
 
 <template>
-  <Head title="Aktivitas & Rincian Mutasi Bonus - XSELLER" />
+  <Head title="Aktivitas & Rincian Mutasi Bonus - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6">

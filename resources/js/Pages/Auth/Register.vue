@@ -26,12 +26,12 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Daftar Akun | Xseller" />
+        <Head title="Daftar Akun | Talenta52" />
 
         <div class="panel-heading">
             <span class="eyebrow">CREATE ACCOUNT</span>
             <h2>Daftar Sekarang</h2>
-            <p>Buat akun baru untuk mulai menggunakan Xseller.</p>
+            <p>Buat akun baru untuk mulai menggunakan Talenta52.</p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-3.5">

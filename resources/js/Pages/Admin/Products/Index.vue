@@ -117,7 +117,7 @@ const filteredProducts = computed(() => {
 </script>
 
 <template>
-  <Head title="Kelola Produk (RO & PO) - XSELLER" />
+  <Head title="Kelola Produk (RO & PO) - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-7xl mx-auto">

@@ -84,22 +84,22 @@ import { Link } from '@inertiajs/vue3';
         <div class="brand-side">
             <div class="brand-content">
                 <Link href="/" class="logo-box">
-                    <img src="/logo-x-seller.avif" alt="Xseller Logo">
+                    <img src="/logo-x-seller.avif" alt="Talenta52 Logo">
                 </Link>
 
                 <div class="brand-badge">
                     <span></span>
-                    XSELLER MEMBER AREA
+                    TALENTA52 MEMBER AREA
                 </div>
 
                 <h1>
                     Welcome to
-                    <span>Xseller</span>
+                    <span>Talenta52</span>
                 </h1>
 
                 <p>
                     Masuk ke akun Anda untuk mengakses fitur, aktivitas,
-                    dan layanan Xseller dalam satu tempat.
+                    dan layanan Talenta52 dalam satu tempat.
                 </p>
 
                 <div class="brand-divider">

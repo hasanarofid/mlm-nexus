@@ -106,7 +106,7 @@ const saveRewards = () => {
 </script>
 
 <template>
-  <Head title="Pengaturan Sistem & Konfigurasi Bonus - XSELLER" />
+  <Head title="Pengaturan Sistem & Konfigurasi Bonus - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6">

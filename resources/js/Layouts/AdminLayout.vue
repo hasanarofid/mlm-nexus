@@ -554,7 +554,7 @@ const logout = () => {
                 <footer
                     class="p-4 text-center text-[11px] text-slate-500 border-t border-slate-200 bg-white"
                 >
-                    <p>Copyright@Xseller 2026 Trade Promotion Program</p>
+                    <p>Copyright@Talenta52 2026 Trade Promotion Program</p>
                 </footer>
             </div>
         </div>

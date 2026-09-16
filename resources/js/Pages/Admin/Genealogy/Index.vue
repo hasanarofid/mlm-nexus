@@ -46,7 +46,7 @@ const getBadgeColor = (pkg) => {
 </script>
 
 <template>
-  <Head title="Team Mitra - XSELLER" />
+  <Head title="Team Mitra - TALENTA52" />
 
   <AdminLayout>
     <div class="space-y-6">
