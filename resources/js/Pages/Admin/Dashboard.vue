@@ -195,11 +195,6 @@ const formatRupiah = (val) => {
               <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Total Team (Gen 1-10)</p>
               <h4 class="text-2xl font-black text-[#009c94] mt-1">{{ wallet?.total_downlines ?? 0 }} <span class="text-xs font-normal text-slate-500">Orang</span></h4>
             </div>
-
-            <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/60">
-              <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Total Bonus Generasi</p>
-              <h4 class="text-xl font-black text-slate-900 mt-1">{{ formatRupiah(wallet?.bonus_generasi ?? 0) }}</h4>
-            </div>
           </div>
         </div>
 
@@ -270,7 +265,7 @@ const formatRupiah = (val) => {
               :disabled="premiForm.processing"
               class="px-5 py-2 bg-gradient-to-r from-[#1653a1] to-[#04bdb2] hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer disabled:opacity-50"
             >
-              Confirm & Bayar 100% Full
+              Confirm & Bayar
             </button>
           </div>
         </form>

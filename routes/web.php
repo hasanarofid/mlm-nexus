@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/pay-premi', [DashboardController::class, 'payPremi'])->name('pay-premi');
+    Route::get('/premi-invoice', [DashboardController::class, 'premiInvoice'])->name('premi-invoice');
     
     // Pohon Jaringan (Genealogy Binary Tree)
     Route::get('/pohon-jaringan', [\App\Http\Controllers\Admin\GenealogyController::class, 'index'])->name('pohon-jaringan');

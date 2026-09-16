@@ -19,6 +19,8 @@
 /public/storage
 /public/revisi2926
 /public/revisi*
+/public/prd
+
 
 /storage/*.key
 /storage/pail

@@ -82,28 +82,40 @@ class DashboardController extends Controller
         $user = auth()->user();
         $amount = (float) $request->amount;
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($user, $amount) {
-            // 100% Full into user Saldo (Saldo WD)
-            $user->increment('saldo', $amount);
-            $user->increment('total_bonus', $amount);
+        // Generate unique 3 digit code
+        $uniqueCode = rand(100, 999);
+        $totalTransfer = $amount + $uniqueCode;
 
-            \App\Models\BonusLog::create([
-                'transaction_code' => 'P' . sprintf('%03d', \App\Models\BonusLog::count() + 1),
-                'user_id' => $user->id,
-                'category' => 'premi',
-                'description' => 'Setoran Premi Bulanan (100% Full ke Saldo WD)',
-                'amount' => $amount,
-            ]);
+        // Redirect to invoice page with amount data
+        return redirect()->route('admin.premi-invoice')->with([
+            'amount' => $amount,
+            'unique_code' => $uniqueCode,
+            'total_transfer' => $totalTransfer,
+            'invoice_number' => 'PRM-' . time() . '-' . auth()->id()
+        ]);
+    }
+    public function premiInvoice()
+    {
+        $amount = session('amount');
+        if (!$amount) {
+            return redirect()->route('admin.dashboard');
+        }
 
-            \App\Models\WalletTransaction::create([
-                'user_id' => $user->id,
-                'type' => 'in',
-                'category' => 'premi_bulanan',
-                'amount' => $amount,
-                'description' => 'Pembayaran Premi Bulanan sebesar Rp ' . number_format($amount, 0, ',', '.') . ' (100% Full ke Saldo WD)',
-            ]);
-        });
+        $banks = \App\Models\Setting::get('company_profile')['banks'] ?? [
+            [
+                'bank_name' => 'Bank BCA',
+                'bank_account_number' => '1234567890',
+                'bank_account_name' => 'Admin TALENTA52'
+            ]
+        ];
 
-        return back()->with('success', 'Pembayaran Premi Bulanan sebesar Rp ' . number_format($amount, 0, ',', '.') . ' berhasil ditambahkan 100% ke Saldo WD Anda!');
+        return Inertia::render('Admin/PremiInvoice', [
+            'amount' => $amount,
+            'unique_code' => session('unique_code'),
+            'total_transfer' => session('total_transfer'),
+            'invoice_number' => session('invoice_number'),
+            'banks' => $banks,
+            'whatsapp_admin' => \App\Models\Setting::get('company_profile')['whatsapp'] ?? '6281234567890'
+        ]);
     }
 }
