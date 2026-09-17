@@ -94,7 +94,8 @@ class WithdrawalController extends Controller
             return back()->with('error', 'Saldo E-Wallet Anda tidak mencukupi untuk penarikan sebesar Rp ' . number_format($request->amount, 0, ',', '.') . '!');
         }
 
-        DB::transaction(function () use ($user, $request, $fee) {
+        $withdrawal = null;
+        DB::transaction(function () use ($user, $request, $fee, &$withdrawal) {
             // Reserve money from user saldo
             $user->decrement('saldo', $request->amount);
 
@@ -125,6 +126,14 @@ class WithdrawalController extends Controller
                 'description' => 'Permohonan Penarikan Saldo (WD #' . $withdrawal->id . ') ke ' . $request->bank_name . ' (' . $request->bank_account_number . ') - Biaya Potongan: Rp ' . number_format($fee, 0, ',', '.'),
             ]);
         });
+
+        try {
+            if ($withdrawal) {
+                $user->notify(new \App\Notifications\WithdrawalStatusNotification($withdrawal));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim email permohonan penarikan saldo: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Permohonan penarikan saldo (WD) sebesar Rp ' . number_format($request->amount, 0, ',', '.') . ' berhasil dikirim! Potongan biaya admin Rp 10.000.');
     }
@@ -158,6 +167,14 @@ class WithdrawalController extends Controller
             'proof_of_transfer' => $proofPath,
             'processed_at' => now(),
         ]);
+
+        try {
+            if ($withdrawal->user) {
+                $withdrawal->user->notify(new \App\Notifications\WithdrawalStatusNotification($withdrawal));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim email persetujuan penarikan saldo: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Penarikan saldo #' . $withdrawal->id . ' sebesar Rp ' . number_format($withdrawal->amount, 0, ',', '.') . ' berhasil disetujui!');
     }
@@ -196,6 +213,14 @@ class WithdrawalController extends Controller
                 'description' => 'Pengembalian dana penarikan saldo (WD #' . $withdrawal->id . ' ditolak)',
             ]);
         });
+
+        try {
+            if ($withdrawal->user) {
+                $withdrawal->user->notify(new \App\Notifications\WithdrawalStatusNotification($withdrawal));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim email penolakan penarikan saldo: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Penarikan saldo #' . $withdrawal->id . ' ditolak dan dana telah dikembalikan ke saldo user.');
     }

@@ -184,6 +184,12 @@ class RepeatOrderController extends Controller
                     'amount' => $sponsorBonus,
                     'description' => "Bonus Repeat Order dari @{$user->username} (Tier 1)",
                 ]);
+
+                try {
+                    $sponsor->notify(new \App\Notifications\BonusReceivedNotification('Repeat Order', (float) $sponsorBonus, "Bonus Repeat Order dari @{$user->username}"));
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::error('Gagal mengirim email bonus RO sponsor: ' . $e->getMessage());
+                }
             }
 
             // 4. Create RepeatOrder record
@@ -220,6 +226,12 @@ class RepeatOrderController extends Controller
                     'description' => "Reward Konversi {$newRoPoints} Poin RO",
                 ]);
 
+                try {
+                    $user->notify(new \App\Notifications\BonusReceivedNotification('Reward RO', (float) $rewardRo, "Reward Konversi {$newRoPoints} Poin RO"));
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::error('Gagal mengirim email reward RO: ' . $e->getMessage());
+                }
+
                 // Matching Bonus RO: Rp 100.000 ke sponsor saat member capai kelipatan 35 Poin RO
                 // (20% × Rp 500.000 konversi reward per 35 poin)
                 if ($sponsor) {
@@ -244,6 +256,12 @@ class RepeatOrderController extends Controller
                         'amount' => $matchingBonus,
                         'description' => "Matching Bonus RO dari @{$user->username} (Capai {$newRoPoints} Poin RO)",
                     ]);
+
+                    try {
+                        $sponsor->notify(new \App\Notifications\BonusReceivedNotification('Matching RO', (float) $matchingBonus, "Matching Bonus RO dari @{$user->username}"));
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::error('Gagal mengirim email matching bonus RO: ' . $e->getMessage());
+                    }
                 }
             }
         });

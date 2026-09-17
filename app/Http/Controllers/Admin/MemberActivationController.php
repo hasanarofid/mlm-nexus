@@ -209,6 +209,12 @@ class MemberActivationController extends Controller
                     'description' => "Bonus Generasi {$gen} dari pendaftaran @{$newUser->username} (50% Auto Save Rp 3.500, 50% Saldo WD Rp 3.500)",
                 ]);
 
+                try {
+                    $upline->notify(new \App\Notifications\BonusReceivedNotification('generasi', (float) $bonusPerGen, "Bonus Generasi {$gen} dari pendaftaran @{$newUser->username}"));
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::error("Gagal mengirim email bonus generasi ke @{$upline->username}: " . $e->getMessage());
+                }
+
                 $currentUpline = $upline;
             }
         });

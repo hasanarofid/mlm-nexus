@@ -186,6 +186,13 @@ class FinanceController extends Controller
             ]);
         });
 
+        try {
+            $sender->notify(new \App\Notifications\WalletTransferNotification('sender', $recipient, (float) $request->amount));
+            $recipient->notify(new \App\Notifications\WalletTransferNotification('recipient', $sender, (float) $request->amount));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Gagal mengirim email transfer saldo: ' . $e->getMessage());
+        }
+
         return back()->with('success', 'Berhasil mentransfer saldo Rp ' . number_format($request->amount, 0, ',', '.') . ' ke @' . $recipient->username . '!');
     }
 }
