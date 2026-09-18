@@ -139,12 +139,12 @@ const sendWhatsAppConfirmation = () => {
                 
                 <h4 class="text-sm font-black text-[#1653a1] mb-1">{{ bank.bank_name }}</h4>
                 <div class="flex items-center gap-2 mb-2">
-                  <span class="text-2xl font-black text-slate-800 tracking-wider font-mono">{{ bank.bank_account_number }}</span>
-                  <button @click="copyToClipboard(bank.bank_account_number, 'Nomor Rekening')" class="text-slate-400 hover:text-[#04bdb2]">
+                  <span class="text-2xl font-black text-slate-800 tracking-wider font-mono">{{ bank.account_number || bank.bank_account_number }}</span>
+                  <button @click="copyToClipboard(bank.account_number || bank.bank_account_number, 'Nomor Rekening')" class="text-slate-400 hover:text-[#04bdb2]">
                     <Copy class="w-4 h-4" />
                   </button>
                 </div>
-                <p class="text-xs text-slate-500 font-medium">a.n <strong class="text-slate-800">{{ bank.bank_account_name }}</strong></p>
+                <p class="text-xs text-slate-500 font-medium">a.n <strong class="text-slate-800">{{ bank.account_name || bank.bank_account_name }}</strong></p>
               </div>
             </div>
             <p v-if="!banks || banks.length === 0" class="text-sm text-red-500 font-bold bg-red-50 p-4 rounded-xl">

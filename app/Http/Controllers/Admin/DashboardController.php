@@ -117,13 +117,19 @@ class DashboardController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        $banks = \App\Models\Setting::get('company_profile')['banks'] ?? [
-            [
-                'bank_name' => 'Bank BCA',
-                'bank_account_number' => '1234567890',
-                'bank_account_name' => 'Admin TALENTA52'
-            ]
-        ];
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $companyBanks = json_decode($settings['company_banks'] ?? '[]', true);
+        $banks = (is_array($companyBanks) && count($companyBanks) > 0)
+            ? $companyBanks
+            : [
+                [
+                    'bank_name' => 'Bank BRI',
+                    'account_number' => '806401000095564',
+                    'bank_account_number' => '806401000095564',
+                    'account_name' => 'PT.Talenta52 Punya Kita',
+                    'bank_account_name' => 'PT.Talenta52 Punya Kita',
+                ]
+            ];
 
         return Inertia::render('Admin/PremiInvoice', [
             'premi_payment' => [
