@@ -59,8 +59,11 @@ class GenealogyController extends Controller
                 ];
             });
 
-        // Calculate team breakdown by generation depth (Generasi 1 s/d Generasi 15)
+        // Calculate team breakdown by generation depth (Generasi 1 s/d Generasi 10)
         $generations = $this->calculateGenerations($focusedUser->id);
+
+        // Build nested hierarchical sponsor tree
+        $treeData = $this->buildHierarchicalTree($focusedUser, 10);
 
         // Search options for quick focus selector (Admin: all users, Member: self + downlines)
         $allUsers = $allowedUserQuery->select('id', 'name', 'username', 'email')->get()->map(function ($u) {
@@ -80,13 +83,69 @@ class GenealogyController extends Controller
                 'package_name' => $focusedUser->package_name ?? 'Partner',
                 'active_tier' => $focusedUser->getActiveTier(),
                 'total_direct' => count($directDownlines),
-                'total_team' => array_sum(array_column($generations, 'count')),
+                'total_team' => $treeData['total_downlines'] ?? array_sum(array_column($generations, 'count')),
             ],
             'is_admin' => $isAdmin,
+            'tree_data' => $treeData,
             'direct_downlines' => $directDownlines,
             'generations' => $generations,
             'all_users' => $allUsers,
         ]);
+    }
+
+    /**
+     * Recursively build hierarchical sponsor tree up to max generations.
+     */
+    private function buildHierarchicalTree(User $rootUser, int $maxGen = 10): array
+    {
+        $allUsersByParent = [];
+        $currentIds = [$rootUser->id];
+        $depth = 0;
+
+        while (!empty($currentIds) && $depth < $maxGen) {
+            $depth++;
+            $users = User::whereIn('parent_id', $currentIds)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            if ($users->isEmpty()) {
+                break;
+            }
+
+            foreach ($users as $u) {
+                $allUsersByParent[$u->parent_id][] = $u;
+            }
+
+            $currentIds = $users->pluck('id')->toArray();
+        }
+
+        $buildNode = function ($user, $gen = 0) use (&$buildNode, &$allUsersByParent, $maxGen) {
+            $childrenModels = ($gen < $maxGen) ? ($allUsersByParent[$user->id] ?? []) : [];
+            $childrenNodes = [];
+            $totalDownlines = 0;
+
+            foreach ($childrenModels as $child) {
+                $childNode = $buildNode($child, $gen + 1);
+                $totalDownlines += 1 + ($childNode['total_downlines'] ?? 0);
+                $childrenNodes[] = $childNode;
+            }
+
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'username' => $user->username ?: strtolower(explode(' ', $user->name)[0]),
+                'email' => $user->email,
+                'phone' => $user->phone ?? '-',
+                'package_name' => $user->package_name ?? 'Basic',
+                'joined_at' => $user->created_at ? $user->created_at->format('d M Y') : '-',
+                'generation' => $gen,
+                'direct_count' => count($childrenNodes),
+                'total_downlines' => $totalDownlines,
+                'children' => $childrenNodes,
+            ];
+        };
+
+        return $buildNode($rootUser, 0);
     }
 
     /**
