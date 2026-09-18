@@ -110,7 +110,7 @@ class GenealogyController extends Controller
     }
 
     /**
-     * Recursively calculate team members count up to 10 generations depth.
+     * Recursively calculate team members and fetch tree objects up to 10 generations depth.
      */
     private function calculateGenerations($rootUserId): array
     {
@@ -123,15 +123,50 @@ class GenealogyController extends Controller
                     'generation' => $gen,
                     'label' => 'Generasi ' . $gen,
                     'count' => 0,
+                    'members' => [],
                 ];
                 continue;
             }
 
-            $downlineIds = User::whereIn('parent_id', $currentIds)->pluck('id')->toArray();
+            $users = User::whereIn('parent_id', $currentIds)
+                ->with('parent')
+                ->latest()
+                ->get();
+
+            $downlineIds = $users->pluck('id')->toArray();
+
+            $membersList = $users->map(function ($u) {
+                // Get direct children of this user (G2 for this user)
+                $children = User::where('parent_id', $u->id)->get()->map(function ($child) {
+                    return [
+                        'id' => $child->id,
+                        'name' => $child->name,
+                        'username' => $child->username ? '@' . $child->username : '@' . strtolower(explode(' ', $child->name)[0]),
+                        'package_name' => $child->package_name ?? 'Basic',
+                        'joined_at' => $child->created_at->format('d M Y, H:i'),
+                        'direct_count' => User::where('parent_id', $child->id)->count(),
+                    ];
+                });
+
+                return [
+                    'id' => $u->id,
+                    'name' => $u->name,
+                    'username' => $u->username ? '@' . $u->username : '@' . strtolower(explode(' ', $u->name)[0]),
+                    'email' => $u->email,
+                    'package_name' => $u->package_name ?? 'Basic',
+                    'joined_at' => $u->created_at->format('d M Y, H:i'),
+                    'parent_id' => $u->parent_id,
+                    'parent_name' => $u->parent ? $u->parent->name : 'Sponsor Utama',
+                    'direct_count' => count($children),
+                    'children' => $children,
+                ];
+            });
+
             $result[] = [
                 'generation' => $gen,
                 'label' => 'Generasi ' . $gen,
                 'count' => count($downlineIds),
+                'members' => $membersList,
             ];
 
             $currentIds = $downlineIds;

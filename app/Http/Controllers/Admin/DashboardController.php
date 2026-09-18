@@ -72,6 +72,7 @@ class DashboardController extends Controller
 
     /**
      * Process Monthly Premi payment (min Rp 10.000 - 100% full to Saldo WD).
+     * NOTE: Per user request, unique code is removed. Amount is clean without unique code.
      */
     public function payPremi(\Illuminate\Http\Request $request)
     {
@@ -81,23 +82,38 @@ class DashboardController extends Controller
 
         $user = auth()->user();
         $amount = (float) $request->amount;
+        $invoiceNumber = 'PRM-' . time() . '-' . $user->id;
 
-        // Generate unique 3 digit code
-        $uniqueCode = rand(100, 999);
-        $totalTransfer = $amount + $uniqueCode;
-
-        // Redirect to invoice page with amount data
-        return redirect()->route('admin.premi-invoice')->with([
+        $premiPayment = \App\Models\PremiPayment::create([
+            'user_id' => $user->id,
+            'invoice_number' => $invoiceNumber,
             'amount' => $amount,
-            'unique_code' => $uniqueCode,
-            'total_transfer' => $totalTransfer,
-            'invoice_number' => 'PRM-' . time() . '-' . auth()->id()
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('admin.premi-invoice')->with([
+            'premi_payment_id' => $premiPayment->id,
+            'amount' => $amount,
+            'invoice_number' => $invoiceNumber
         ]);
     }
+
     public function premiInvoice()
     {
-        $amount = session('amount');
-        if (!$amount) {
+        $user = auth()->user();
+
+        // Find active/latest pending payment or one from session
+        $premiPaymentId = session('premi_payment_id');
+        if ($premiPaymentId) {
+            $premiPayment = \App\Models\PremiPayment::where('id', $premiPaymentId)->where('user_id', $user->id)->first();
+        } else {
+            $premiPayment = \App\Models\PremiPayment::where('user_id', $user->id)
+                ->where('status', 'pending')
+                ->latest()
+                ->first();
+        }
+
+        if (!$premiPayment) {
             return redirect()->route('admin.dashboard');
         }
 
@@ -110,12 +126,47 @@ class DashboardController extends Controller
         ];
 
         return Inertia::render('Admin/PremiInvoice', [
-            'amount' => $amount,
-            'unique_code' => session('unique_code'),
-            'total_transfer' => session('total_transfer'),
-            'invoice_number' => session('invoice_number'),
+            'premi_payment' => [
+                'id' => $premiPayment->id,
+                'invoice_number' => $premiPayment->invoice_number,
+                'amount' => (float) $premiPayment->amount,
+                'proof_of_transfer' => $premiPayment->proof_of_transfer ? asset($premiPayment->proof_of_transfer) : null,
+                'status' => $premiPayment->status,
+                'created_at' => $premiPayment->created_at->format('d M Y, H:i'),
+            ],
+            'amount' => (float) $premiPayment->amount,
+            'total_transfer' => (float) $premiPayment->amount,
+            'invoice_number' => $premiPayment->invoice_number,
             'banks' => $banks,
             'whatsapp_admin' => \App\Models\Setting::get('company_profile')['whatsapp'] ?? '6281234567890'
         ]);
+    }
+
+    /**
+     * Upload proof of transfer for Premi invoice.
+     */
+    public function uploadPremiProof(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'premi_payment_id' => 'required|exists:premi_payments,id',
+            'proof_image' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
+        ]);
+
+        $user = auth()->user();
+        $premiPayment = \App\Models\PremiPayment::where('id', $request->premi_payment_id)
+            ->where('user_id', $user->id)
+            ->firstOrFail();
+
+        if ($request->hasFile('proof_image')) {
+            $file = $request->file('proof_image');
+            $filename = 'proof_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('uploads/proofs', $filename, 'public');
+
+            $premiPayment->update([
+                'proof_of_transfer' => 'storage/' . $path,
+            ]);
+        }
+
+        return back()->with('success', 'Bukti transfer berhasil diunggah! Mohon tunggu konfirmasi dari Admin.');
     }
 }

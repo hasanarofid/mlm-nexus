@@ -1,12 +1,12 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
-import { CreditCard, Copy, Info, Check, Send, AlertCircle } from '@lucide/vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { CreditCard, Copy, Info, Check, Send, AlertCircle, UploadCloud, FileCheck, Image as ImageIcon } from '@lucide/vue';
 import { ref } from 'vue';
 
 const props = defineProps({
+  premi_payment: Object,
   amount: Number,
-  unique_code: Number,
   total_transfer: Number,
   invoice_number: String,
   banks: Array,
@@ -14,6 +14,30 @@ const props = defineProps({
 });
 
 const copySuccessMsg = ref('');
+const imagePreview = ref(props.premi_payment?.proof_of_transfer || null);
+
+const form = useForm({
+  premi_payment_id: props.premi_payment?.id,
+  proof_image: null,
+});
+
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    form.proof_image = file;
+    imagePreview.value = URL.createObjectURL(file);
+  }
+};
+
+const submitUploadProof = () => {
+  if (!form.proof_image) return;
+  form.post(route('admin.premi-invoice.upload-proof'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      // success flash handled by layout
+    },
+  });
+};
 
 const copyToClipboard = (text, type) => {
   navigator.clipboard.writeText(text);
@@ -28,7 +52,7 @@ const formatRupiah = (val) => {
 };
 
 const sendWhatsAppConfirmation = () => {
-  const text = `Halo Admin, saya ingin konfirmasi pembayaran Premi Bulanan.%0A%0A*No Invoice:* ${props.invoice_number}%0A*Nominal Premi:* ${formatRupiah(props.amount)}%0A*Kode Unik:* ${props.unique_code}%0A*Total Transfer:* ${formatRupiah(props.total_transfer)}%0A%0ASaya akan melampirkan bukti transfer di bawah ini.`;
+  const text = `Halo Admin, saya ingin konfirmasi pembayaran Premi Bulanan.%0A%0A*No Invoice:* ${props.invoice_number}%0A*Nominal Premi:* ${formatRupiah(props.amount)}%0A%0ASaya telah mengunggah bukti transfer pada sistem. Mohon untuk memverifikasi. Terima kasih!`;
   window.open(`https://wa.me/${props.whatsapp_admin}?text=${text}`, '_blank');
 };
 </script>
@@ -50,12 +74,28 @@ const sendWhatsAppConfirmation = () => {
           <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
           <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
           
-          <h2 class="text-white text-lg font-black tracking-tight relative z-10">INVOICE PEMBAYARAN PREMI</h2>
+          <h2 class="text-white text-lg font-black tracking-tight relative z-10">INVOICE PEMBAYARAN PREMI BULANAN</h2>
           <p class="text-[#a9fff7] text-xs font-medium relative z-10">No. Tagihan: <strong>{{ invoice_number }}</strong></p>
         </div>
 
         <div class="p-6 md:p-8 space-y-8">
           
+          <!-- Status Badge -->
+          <div class="flex justify-center">
+            <span v-if="premi_payment?.status === 'approved'" class="px-4 py-1.5 bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-full text-xs font-black uppercase tracking-wider flex items-center gap-2">
+              <Check class="w-4 h-4 text-emerald-600" />
+              <span>PEMBAYARAN DISETUJUI & MASUK KE SALDO</span>
+            </span>
+            <span v-else-if="premi_payment?.proof_of_transfer" class="px-4 py-1.5 bg-amber-100 text-amber-800 border border-amber-300 rounded-full text-xs font-black uppercase tracking-wider flex items-center gap-2">
+              <FileCheck class="w-4 h-4 text-amber-600" />
+              <span>BUKTI TERUNGGAH - MENUNGGU VERIFIKASI ADMIN</span>
+            </span>
+            <span v-else class="px-4 py-1.5 bg-blue-100 text-blue-800 border border-blue-300 rounded-full text-xs font-black uppercase tracking-wider flex items-center gap-2">
+              <AlertCircle class="w-4 h-4 text-blue-600" />
+              <span>MENUNGGU UNGGAH BUKTI TRANSFER</span>
+            </span>
+          </div>
+
           <!-- Jumlah Transfer -->
           <div class="text-center space-y-2">
             <p class="text-sm font-bold text-slate-500 uppercase tracking-widest">Total Yang Harus Ditransfer</p>
@@ -65,9 +105,9 @@ const sendWhatsAppConfirmation = () => {
                 <Copy class="w-5 h-5" />
               </button>
             </div>
-            <div class="flex items-center justify-center gap-2 text-xs font-bold text-slate-600 bg-amber-50 text-amber-700 py-2 px-4 rounded-xl inline-flex mt-2">
-              <AlertCircle class="w-4 h-4" />
-              <span>Pastikan transfer sesuai hingga 3 digit terakhir!</span>
+            <div class="flex items-center justify-center gap-2 text-xs font-medium text-slate-500 bg-slate-50 py-2 px-4 rounded-xl inline-flex mt-2">
+              <Info class="w-4 h-4 text-slate-400" />
+              <span>Nominal pembayaran Premi akan dialokasikan 100% full masuk ke Total Saldo mitra.</span>
             </div>
           </div>
 
@@ -76,15 +116,11 @@ const sendWhatsAppConfirmation = () => {
             <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">Rincian Tagihan</h3>
             <div class="space-y-3 text-sm">
               <div class="flex justify-between items-center">
-                <span class="text-slate-500 font-medium">Nominal Premi</span>
+                <span class="text-slate-500 font-medium">Nominal Premi Bulanan</span>
                 <span class="font-bold text-slate-800">{{ formatRupiah(amount) }}</span>
               </div>
-              <div class="flex justify-between items-center">
-                <span class="text-slate-500 font-medium">Kode Unik <span class="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded ml-1">Untuk verifikasi otomatis</span></span>
-                <span class="font-bold text-emerald-600">+ {{ unique_code }}</span>
-              </div>
               <div class="pt-3 border-t border-slate-200 flex justify-between items-center">
-                <span class="text-slate-700 font-black">Total Keseluruhan</span>
+                <span class="text-slate-700 font-black">Total Transfer</span>
                 <span class="font-black text-[#1653a1] text-lg">{{ formatRupiah(total_transfer) }}</span>
               </div>
             </div>
@@ -94,7 +130,7 @@ const sendWhatsAppConfirmation = () => {
           <div class="space-y-4">
             <h3 class="text-sm font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
               <CreditCard class="w-5 h-5 text-[#04bdb2]" />
-              Silakan Transfer ke Rekening Berikut:
+              Silakan Transfer ke Rekening Perusahaan:
             </h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -116,15 +152,59 @@ const sendWhatsAppConfirmation = () => {
             </p>
           </div>
 
+          <!-- SECTION: UPLOAD BUKTI TRANSFER -->
+          <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 md:p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+              <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-tight flex items-center gap-2">
+                <UploadCloud class="w-5 h-5 text-indigo-600" />
+                Upload Bukti Transfer
+              </h3>
+              <span v-if="premi_payment?.proof_of_transfer" class="text-[10px] font-extrabold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
+                File Terlampir
+              </span>
+            </div>
+
+            <!-- Upload Area & Preview -->
+            <div class="space-y-4">
+              <div v-if="imagePreview" class="flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-2xl space-y-3">
+                <img :src="imagePreview" alt="Pratinjau Bukti Transfer" class="max-h-64 object-contain rounded-xl shadow-sm border border-slate-100" />
+                <p class="text-xs text-slate-500 font-medium italic">Pratinjau Bukti Transfer</p>
+              </div>
+
+              <div class="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-indigo-500 transition-colors bg-white rounded-2xl p-6 text-center cursor-pointer relative">
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  @change="handleFileChange" 
+                  class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <ImageIcon class="w-10 h-10 text-slate-400 mb-2" />
+                <p class="text-xs font-bold text-slate-700">Pilih Foto Bukti Transfer / Screenshot</p>
+                <p class="text-[10px] text-slate-400 mt-1">Format: JPG, PNG, WEBP (Maksimal 5MB)</p>
+              </div>
+
+              <div class="flex justify-end">
+                <button 
+                  @click="submitUploadProof" 
+                  :disabled="!form.proof_image || form.processing"
+                  class="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold rounded-xl transition-all shadow flex items-center justify-center gap-2"
+                >
+                  <UploadCloud class="w-4 h-4" />
+                  <span>{{ form.processing ? 'Mengunggah...' : 'Unggah Bukti Transfer' }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- Konfirmasi Action -->
           <div class="pt-6 border-t border-slate-100 space-y-4">
             <div class="p-4 bg-blue-50 text-blue-800 rounded-2xl text-xs font-medium flex items-start gap-3">
               <Info class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-              <p>Setelah melakukan transfer, silakan konfirmasi ke Admin dengan menekan tombol di bawah ini sambil melampirkan foto/screenshot bukti transfer.</p>
+              <p>Setelah mengunggah bukti transfer, Anda juga dapat mengonfirmasi langsung ke Admin melalui WhatsApp.</p>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
-              <button @click="sendWhatsAppConfirmation" class="flex-1 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold rounded-2xl shadow flex items-center justify-center gap-2 transition-colors">
+              <button @click="sendWhatsAppConfirmation" class="flex-1 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold rounded-2xl shadow flex items-center justify-center gap-2 transition-colors cursor-pointer">
                 <Send class="w-4 h-4" />
                 <span>Konfirmasi via WhatsApp</span>
               </button>

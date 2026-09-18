@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(TprRequest::class, 'user_id');
     }
 
+    public function premiPayments()
+    {
+        return $this->hasMany(PremiPayment::class, 'user_id');
+    }
+
     /**
      * Get base max tier generation limit according to package.
      */

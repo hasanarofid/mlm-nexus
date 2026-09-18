@@ -43,6 +43,27 @@ class FinanceController extends Controller
             ];
         });
 
+        // Get Premi Payments requests for Admin inspection
+        $premiQuery = \App\Models\PremiPayment::with('user')->latest();
+        if (!$user->hasRole('admin')) {
+            $premiQuery->where('user_id', $user->id);
+        }
+
+        $premiRequests = $premiQuery->get()->map(function ($p) {
+            return [
+                'id' => $p->id,
+                'invoice_number' => $p->invoice_number,
+                'user_name' => $p->user ? $p->user->name : 'Mitra',
+                'user_username' => $p->user ? ('@' . $p->user->username) : '',
+                'amount' => (float) $p->amount,
+                'formatted_amount' => 'Rp ' . number_format($p->amount, 0, ',', '.'),
+                'proof_of_transfer' => $p->proof_of_transfer ? asset($p->proof_of_transfer) : null,
+                'status' => $p->status,
+                'created_at' => $p->created_at->format('d/m/Y, H:i'),
+                'approved_at' => $p->approved_at ? $p->approved_at->format('d/m/Y, H:i') : null,
+            ];
+        });
+
         return Inertia::render('Admin/Finance', [
             'wallet' => [
                 'saldo' => (float) ($user->saldo ?? 2500000),
@@ -51,8 +72,64 @@ class FinanceController extends Controller
                 'max_daily_withdrawal' => 50000000,
             ],
             'transactions' => $transactions,
+            'premi_requests' => $premiRequests,
             'is_admin' => $user->hasRole('admin'),
         ]);
+    }
+
+    /**
+     * Admin action to approve Premi payment (adds 100% full into E-Wallet balance).
+     */
+    public function approvePremi(\App\Models\PremiPayment $premiPayment)
+    {
+        $admin = auth()->user();
+        if (!$admin->hasRole('admin')) {
+            return back()->with('error', 'Hanya Admin yang berhak menyetujui pembayaran Premi.');
+        }
+
+        if ($premiPayment->status === 'approved') {
+            return back()->with('error', 'Pembayaran Premi ini sudah disetujui sebelumnya.');
+        }
+
+        DB::transaction(function () use ($premiPayment) {
+            $premiPayment->update([
+                'status' => 'approved',
+                'approved_at' => now(),
+            ]);
+
+            $targetUser = $premiPayment->user;
+            if ($targetUser) {
+                // 100% Full into Saldo / Saldo WD
+                $targetUser->increment('saldo', $premiPayment->amount);
+
+                WalletTransaction::create([
+                    'user_id' => $targetUser->id,
+                    'type' => 'in',
+                    'category' => 'premi',
+                    'amount' => $premiPayment->amount,
+                    'description' => 'Pembayaran Premi Bulanan (Invoice #' . $premiPayment->invoice_number . ') - Disetujui Admin',
+                ]);
+            }
+        });
+
+        return back()->with('success', 'Berhasil menyetujui pembayaran Premi sebesar Rp ' . number_format($premiPayment->amount, 0, ',', '.') . ' untuk ' . ($premiPayment->user ? $premiPayment->user->name : 'Mitra') . '!');
+    }
+
+    /**
+     * Admin action to reject Premi payment.
+     */
+    public function rejectPremi(\App\Models\PremiPayment $premiPayment)
+    {
+        $admin = auth()->user();
+        if (!$admin->hasRole('admin')) {
+            return back()->with('error', 'Hanya Admin yang berhak menolak pembayaran Premi.');
+        }
+
+        $premiPayment->update([
+            'status' => 'rejected',
+        ]);
+
+        return back()->with('success', 'Pembayaran Premi #' . $premiPayment->invoice_number . ' telah ditolak.');
     }
 
     /**

@@ -30,6 +30,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/pay-premi', [DashboardController::class, 'payPremi'])->name('pay-premi');
     Route::get('/premi-invoice', [DashboardController::class, 'premiInvoice'])->name('premi-invoice');
+    Route::post('/premi-invoice/upload-proof', [DashboardController::class, 'uploadPremiProof'])->name('premi-invoice.upload-proof');
     
     // Pohon Jaringan (Genealogy Binary Tree)
     Route::get('/pohon-jaringan', [\App\Http\Controllers\Admin\GenealogyController::class, 'index'])->name('pohon-jaringan');
@@ -63,6 +64,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/keuangan/topup-admin', [\App\Http\Controllers\Admin\FinanceController::class, 'topupAdmin'])->name('finance.topup-admin');
     Route::post('/keuangan/generate-saldo', [\App\Http\Controllers\Admin\FinanceController::class, 'generateSaldo'])->name('finance.generate-saldo');
     Route::post('/keuangan/transfer', [\App\Http\Controllers\Admin\FinanceController::class, 'transfer'])->name('finance.transfer');
+    Route::post('/keuangan/premi/{premiPayment}/approve', [\App\Http\Controllers\Admin\FinanceController::class, 'approvePremi'])->name('finance.approve-premi');
+    Route::post('/keuangan/premi/{premiPayment}/reject', [\App\Http\Controllers\Admin\FinanceController::class, 'rejectPremi'])->name('finance.reject-premi');
 
     // Kelola Produk (Product CRUD - Khusus Admin)
     Route::get('/kelola-produk', [\App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
