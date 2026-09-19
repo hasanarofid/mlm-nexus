@@ -1,1 +1,0 @@
-import{B as e,D as t,F as n,h as r,u as i,v as a}from"./app-DpNIpMbl.js";var o={class:`text-sm text-red-600 dark:text-red-400`},s={__name:`InputError`,props:{message:{type:String}},setup(s){return(c,l)=>n((t(),a(`div`,null,[r(`p`,o,e(s.message),1)],512)),[[i,s.message]])}};export{s as t};

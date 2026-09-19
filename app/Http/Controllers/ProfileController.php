@@ -41,6 +41,23 @@ class ProfileController extends Controller
                 'username' => $user->username ?? '',
                 'email' => $user->email ?? '',
                 'phone' => $user->phone ?? '',
+                'nik' => $user->nik ?? '',
+                'gender' => $user->gender ?? '',
+                'birth_place' => $user->birth_place ?? '',
+                'birth_date' => $user->birth_date ? (is_string($user->birth_date) ? substr($user->birth_date, 0, 10) : $user->birth_date->format('Y-m-d')) : '',
+                'religion' => $user->religion ?? '',
+                'marital_status' => $user->marital_status ?? '',
+                'last_education' => $user->last_education ?? '',
+                'occupation' => $user->occupation ?? '',
+                'address' => $user->address ?? '',
+                'province' => $user->province ?? '',
+                'city' => $user->city ?? '',
+                'district' => $user->district ?? '',
+                'village' => $user->village ?? '',
+                'postal_code' => $user->postal_code ?? '',
+                'beneficiary_name' => $user->beneficiary_name ?? '',
+                'beneficiary_relation' => $user->beneficiary_relation ?? '',
+                'beneficiary_phone' => $user->beneficiary_phone ?? '',
                 'bank_name' => $user->bank_name ?? 'Bank BRI',
                 'bank_account_number' => $user->bank_account_number ?? '',
                 'bank_account_name' => $user->bank_account_name ?? '',
@@ -109,6 +126,23 @@ class ProfileController extends Controller
             $rules['company_copyright'] = 'required|string|max:255';
             $rules['site_logo'] = 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048';
         } else {
+            $rules['nik'] = 'nullable|string|max:20';
+            $rules['gender'] = 'nullable|string|max:20';
+            $rules['birth_place'] = 'nullable|string|max:100';
+            $rules['birth_date'] = 'nullable|date';
+            $rules['religion'] = 'nullable|string|max:50';
+            $rules['marital_status'] = 'nullable|string|max:50';
+            $rules['last_education'] = 'nullable|string|max:50';
+            $rules['occupation'] = 'nullable|string|max:100';
+            $rules['address'] = 'nullable|string|max:500';
+            $rules['province'] = 'nullable|string|max:100';
+            $rules['city'] = 'nullable|string|max:100';
+            $rules['district'] = 'nullable|string|max:100';
+            $rules['village'] = 'nullable|string|max:100';
+            $rules['postal_code'] = 'nullable|string|max:10';
+            $rules['beneficiary_name'] = 'nullable|string|max:100';
+            $rules['beneficiary_relation'] = 'nullable|string|max:50';
+            $rules['beneficiary_phone'] = 'nullable|string|max:25';
             $rules['bank_name'] = 'nullable|string|max:100';
             $rules['bank_account_number'] = 'nullable|string|max:100';
             $rules['bank_account_name'] = 'nullable|string|max:100';
@@ -135,15 +169,21 @@ class ProfileController extends Controller
         if (array_key_exists('phone', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'phone')) {
             $user->phone = $validated['phone'];
         }
-        if (array_key_exists('bank_name', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'bank_name')) {
-            $user->bank_name = $validated['bank_name'];
+
+        $foundationFields = [
+            'nik', 'gender', 'birth_place', 'birth_date', 'religion',
+            'marital_status', 'last_education', 'occupation',
+            'address', 'province', 'city', 'district', 'village', 'postal_code',
+            'beneficiary_name', 'beneficiary_relation', 'beneficiary_phone',
+            'bank_name', 'bank_account_number', 'bank_account_name'
+        ];
+
+        foreach ($foundationFields as $field) {
+            if (array_key_exists($field, $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', $field)) {
+                $user->{$field} = $validated[$field];
+            }
         }
-        if (array_key_exists('bank_account_number', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'bank_account_number')) {
-            $user->bank_account_number = $validated['bank_account_number'];
-        }
-        if (array_key_exists('bank_account_name', $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', 'bank_account_name')) {
-            $user->bank_account_name = $validated['bank_account_name'];
-        }
+
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }

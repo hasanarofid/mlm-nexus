@@ -14,6 +14,10 @@ import {
     AlertCircle,
     Image as ImageIcon,
     Upload,
+    MapPin,
+    Users,
+    Shield,
+    HeartHandshake,
 } from "@lucide/vue";
 
 const props = defineProps({
@@ -28,17 +32,70 @@ const page = usePage();
 const flashSuccess = computed(() => page.props.flash?.success);
 const flashError = computed(() => page.props.flash?.error);
 
-// Form for Member Profile
+// Form for Member Profile (Foundation / Yayasan Complete Data)
 const memberForm = useForm({
     name: props.user?.name || "",
     username: props.user?.username || "",
     email: props.user?.email || "",
     phone: props.user?.phone || "",
+    nik: props.user?.nik || "",
+    gender: props.user?.gender || "Laki-laki",
+    birth_place: props.user?.birth_place || "",
+    birth_date: props.user?.birth_date || "",
+    religion: props.user?.religion || "Islam",
+    marital_status: props.user?.marital_status || "Menikah",
+    last_education: props.user?.last_education || "SMA / SMK / Sederajat",
+    occupation: props.user?.occupation || "",
+    address: props.user?.address || "",
+    province: props.user?.province || "",
+    city: props.user?.city || "",
+    district: props.user?.district || "",
+    village: props.user?.village || "",
+    postal_code: props.user?.postal_code || "",
+    beneficiary_name: props.user?.beneficiary_name || "",
+    beneficiary_relation: props.user?.beneficiary_relation || "Pasangan (Suami/Istri)",
+    beneficiary_phone: props.user?.beneficiary_phone || "",
     bank_name: props.user?.bank_name || "Bank BRI",
     bank_account_number: props.user?.bank_account_number || "",
     bank_account_name: props.user?.bank_account_name || props.user?.name || "",
     password: "",
 });
+
+const religions = [
+    "Islam",
+    "Kristen Protestan",
+    "Katolik",
+    "Hindu",
+    "Buddha",
+    "Khonghucu",
+    "Lainnya",
+];
+
+const maritalStatuses = [
+    "Belum Menikah",
+    "Menikah",
+    "Cerai Hidup",
+    "Cerai Mati",
+];
+
+const educationLevels = [
+    "SD / Sederajat",
+    "SMP / Sederajat",
+    "SMA / SMK / Sederajat",
+    "Diploma (D1 - D4)",
+    "Sarjana (S1)",
+    "Magister (S2)",
+    "Doktoral (S3)",
+    "Lainnya",
+];
+
+const beneficiaryRelations = [
+    "Pasangan (Suami/Istri)",
+    "Anak Kandung",
+    "Orang Tua (Ayah/Ibu)",
+    "Saudara Kandung",
+    "Keluarga Lainnya",
+];
 
 const submitMemberProfile = () => {
     memberForm.post(route("profile.update"), {
@@ -195,141 +252,527 @@ const saveBanks = () => {
             <!-- MEMBER PROFILE EDIT CARD (When is_admin is false) -->
             <div
                 v-if="!is_admin"
-                class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-6"
+                class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-8"
             >
                 <!-- Header -->
                 <div
-                    class="flex items-start gap-3 border-b border-slate-100 pb-5"
+                    class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6"
                 >
-                    <div
-                        class="p-2.5 bg-emerald-50 text-emerald-600 rounded-2xl shrink-0 mt-0.5"
-                    >
-                        <Settings class="w-6 h-6" />
-                    </div>
-                    <div>
-                        <h2
-                            class="text-lg md:text-xl font-black text-slate-900 tracking-tight"
+                    <div class="flex items-start gap-3">
+                        <div
+                            class="p-3 bg-emerald-50 text-emerald-600 rounded-2xl shrink-0 mt-0.5"
                         >
-                            Pengaturan Profil Member & Rekening Bank
-                        </h2>
-                        <p class="text-xs text-slate-500 font-medium mt-0.5">
-                            Kelola data diri pribadi serta nomor rekening bank
-                            atau e-wallet untuk tujuan pencairan saldo (WD)
-                            Anda.
-                        </p>
+                            <UserCheck class="w-6 h-6" />
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2
+                                    class="text-lg md:text-xl font-black text-slate-900 tracking-tight"
+                                >
+                                    Data Diri Anggota Yayasan & Rekening Bank
+                                </h2>
+                                <span
+                                    class="px-2.5 py-0.5 text-[10px] font-extrabold bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200 uppercase tracking-wider"
+                                >
+                                    Member Yayasan
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-500 font-medium mt-1">
+                                Lengkapi identitas kependudukan, alamat domisili, data ahli waris, serta rekening bank untuk tertib administrasi yayasan & pencairan saldo (WD).
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Notice Badge -->
+                    <div
+                        class="px-4 py-2.5 bg-amber-50 border border-amber-200/80 rounded-2xl text-[11px] text-amber-900 font-semibold flex items-center gap-2"
+                    >
+                        <Shield class="w-4 h-4 text-amber-600 shrink-0" />
+                        <span>Data tersimpan aman & terlindungi untuk legalitas keanggotaan yayasan.</span>
                     </div>
                 </div>
 
-                <form @submit.prevent="submitMemberProfile" class="space-y-6">
-                    <!-- Section 1: Informasi Diri -->
+                <form @submit.prevent="submitMemberProfile" class="space-y-8">
+                    <!-- SECTION 1: IDENTITAS KEPENDUDUKAN & PRIBADI -->
                     <div
-                        class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4"
+                        class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-5 md:p-6 space-y-5"
                     >
                         <div
-                            class="flex items-center gap-2 border-b border-slate-200/60 pb-3"
+                            class="flex items-center justify-between border-b border-slate-200/70 pb-3"
                         >
-                            <UserCheck class="w-4 h-4 text-emerald-600" />
-                            <h3
-                                class="text-xs font-black text-slate-900 uppercase tracking-tight"
-                            >
-                                INFORMASI DIRI MEMBER
-                            </h3>
+                            <div class="flex items-center gap-2">
+                                <UserCheck class="w-4 h-4 text-emerald-600" />
+                                <h3
+                                    class="text-xs font-black text-slate-900 uppercase tracking-tight"
+                                >
+                                    1. INFORMASI IDENTITAS KEPENDUDUKAN & PRIBADI
+                                </h3>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-400">
+                                Sesuai KTP / KK
+                            </span>
                         </div>
 
                         <div
                             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
                         >
+                            <!-- NIK -->
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
-                                    NAMA LENGKAP
+                                    NIK (KTP - 16 DIGIT) <span class="text-rose-500">*</span>
+                                </label>
+                                <input
+                                    v-model="memberForm.nik"
+                                    type="text"
+                                    maxlength="20"
+                                    placeholder="cth: 3201234567890001"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                />
+                                <p
+                                    v-if="memberForm.errors.nik"
+                                    class="text-[10px] text-rose-600 font-bold mt-1"
+                                >
+                                    {{ memberForm.errors.nik }}
+                                </p>
+                            </div>
+
+                            <!-- NAMA LENGKAP -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    NAMA LENGKAP (SESUAI KTP) <span class="text-rose-500">*</span>
                                 </label>
                                 <input
                                     v-model="memberForm.name"
                                     type="text"
                                     required
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                    placeholder="Masukkan nama lengkap Anda"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
+                                <p
+                                    v-if="memberForm.errors.name"
+                                    class="text-[10px] text-rose-600 font-bold mt-1"
+                                >
+                                    {{ memberForm.errors.name }}
+                                </p>
                             </div>
 
+                            <!-- USERNAME -->
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
-                                    USERNAME
+                                    USERNAME (ID LOGIN) <span class="text-rose-500">*</span>
                                 </label>
                                 <input
                                     v-model="memberForm.username"
                                     type="text"
                                     required
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                    placeholder="Username akun"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
+                                <p
+                                    v-if="memberForm.errors.username"
+                                    class="text-[10px] text-rose-600 font-bold mt-1"
+                                >
+                                    {{ memberForm.errors.username }}
+                                </p>
                             </div>
 
+                            <!-- EMAIL -->
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
-                                    ALAMAT EMAIL
+                                    ALAMAT EMAIL <span class="text-rose-500">*</span>
                                 </label>
                                 <input
                                     v-model="memberForm.email"
                                     type="email"
                                     required
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                    placeholder="alamat.email@contoh.com"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
+                                <p
+                                    v-if="memberForm.errors.email"
+                                    class="text-[10px] text-rose-600 font-bold mt-1"
+                                >
+                                    {{ memberForm.errors.email }}
+                                </p>
                             </div>
 
+                            <!-- NO HP / WA -->
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
-                                    NO HP / WHATSAPP
+                                    NO HP / WHATSAPP AKTIF
                                 </label>
                                 <input
                                     v-model="memberForm.phone"
                                     type="text"
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                    placeholder="cth: 081234567890"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                />
+                            </div>
+
+                            <!-- JENIS KELAMIN -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    JENIS KELAMIN
+                                </label>
+                                <select
+                                    v-model="memberForm.gender"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                >
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+
+                            <!-- TEMPAT LAHIR -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    TEMPAT LAHIR
+                                </label>
+                                <input
+                                    v-model="memberForm.birth_place"
+                                    type="text"
+                                    placeholder="cth: Jakarta / Surabaya"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                />
+                            </div>
+
+                            <!-- TANGGAL LAHIR -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    TANGGAL LAHIR
+                                </label>
+                                <input
+                                    v-model="memberForm.birth_date"
+                                    type="date"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                />
+                            </div>
+
+                            <!-- AGAMA -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    AGAMA
+                                </label>
+                                <select
+                                    v-model="memberForm.religion"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                >
+                                    <option
+                                        v-for="rel in religions"
+                                        :key="rel"
+                                        :value="rel"
+                                    >
+                                        {{ rel }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- STATUS PERNIKAHAN -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    STATUS PERNIKAHAN
+                                </label>
+                                <select
+                                    v-model="memberForm.marital_status"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                >
+                                    <option
+                                        v-for="ms in maritalStatuses"
+                                        :key="ms"
+                                        :value="ms"
+                                    >
+                                        {{ ms }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- PENDIDIKAN TERAKHIR -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    PENDIDIKAN TERAKHIR
+                                </label>
+                                <select
+                                    v-model="memberForm.last_education"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                >
+                                    <option
+                                        v-for="edu in educationLevels"
+                                        :key="edu"
+                                        :value="edu"
+                                    >
+                                        {{ edu }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- PEKERJAAN -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    PEKERJAAN / PROFESI
+                                </label>
+                                <input
+                                    v-model="memberForm.occupation"
+                                    type="text"
+                                    placeholder="cth: Wiraswasta / Karyawan / PNS"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <!-- Section 2: Rekening Bank Penarikan Saldo -->
+                    <!-- SECTION 2: ALAMAT DOMISILI LENGKAP -->
                     <div
-                        class="bg-emerald-50/40 border border-emerald-200/60 rounded-2xl p-5 space-y-4"
+                        class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-5 md:p-6 space-y-5"
                     >
                         <div
-                            class="flex items-center gap-2 border-b border-emerald-200/60 pb-3"
+                            class="flex items-center justify-between border-b border-slate-200/70 pb-3"
                         >
-                            <CreditCard class="w-4 h-4 text-emerald-600" />
-                            <h3
-                                class="text-xs font-black text-emerald-900 uppercase tracking-tight"
+                            <div class="flex items-center gap-2">
+                                <MapPin class="w-4 h-4 text-emerald-600" />
+                                <h3
+                                    class="text-xs font-black text-slate-900 uppercase tracking-tight"
+                                >
+                                    2. ALAMAT DOMISILI LENGKAP (TEMPAT TINGGAL)
+                                </h3>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-400">
+                                Wilayah Domisili
+                            </span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- ALAMAT JALAN / RT RW -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    ALAMAT LENGKAP (JALAN, NO. RUMAH, RT/RW, DUSUN/KOMPLEK)
+                                </label>
+                                <textarea
+                                    v-model="memberForm.address"
+                                    rows="2"
+                                    placeholder="cth: Jl. Merdeka No. 45 RT 02 / RW 05, Kelurahan Mulyaharja"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-medium focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+                                ></textarea>
+                            </div>
+
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
                             >
-                                INFORMASI REKENING BANK & VIRTUAL WALLET UNTUK
-                                PENARIKAN SALDO (WD)
-                            </h3>
+                                <!-- PROVINSI -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                    >
+                                        PROVINSI
+                                    </label>
+                                    <input
+                                        v-model="memberForm.province"
+                                        type="text"
+                                        placeholder="cth: Jawa Barat"
+                                        class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                    />
+                                </div>
+
+                                <!-- KOTA / KABUPATEN -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                    >
+                                        KOTA / KABUPATEN
+                                    </label>
+                                    <input
+                                        v-model="memberForm.city"
+                                        type="text"
+                                        placeholder="cth: Kota Bogor"
+                                        class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                    />
+                                </div>
+
+                                <!-- KECAMATAN -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                    >
+                                        KECAMATAN
+                                    </label>
+                                    <input
+                                        v-model="memberForm.district"
+                                        type="text"
+                                        placeholder="cth: Bogor Selatan"
+                                        class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                    />
+                                </div>
+
+                                <!-- KELURAHAN / DESA -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                    >
+                                        KELURAHAN / DESA
+                                    </label>
+                                    <input
+                                        v-model="memberForm.village"
+                                        type="text"
+                                        placeholder="cth: Mulyaharja"
+                                        class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                    />
+                                </div>
+
+                                <!-- KODE POS -->
+                                <div>
+                                    <label
+                                        class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                    >
+                                        KODE POS
+                                    </label>
+                                    <input
+                                        v-model="memberForm.postal_code"
+                                        type="text"
+                                        placeholder="cth: 16135"
+                                        class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: DATA AHLI WARIS / KONTAK DARURAT YAYASAN -->
+                    <div
+                        class="bg-indigo-50/40 border border-indigo-200/70 rounded-2xl p-5 md:p-6 space-y-5"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-indigo-200/70 pb-3"
+                        >
+                            <div class="flex items-center gap-2">
+                                <Users class="w-4 h-4 text-indigo-600" />
+                                <h3
+                                    class="text-xs font-black text-indigo-950 uppercase tracking-tight"
+                                >
+                                    3. DATA AHLI WARIS & KONTAK DARURAT (YAYASAN)
+                                </h3>
+                            </div>
+                            <span class="text-[10px] font-bold text-indigo-500">
+                                Penerima Manfaat / Santunan
+                            </span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- NAMA AHLI WARIS -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    NAMA LENGKAP AHLI WARIS
+                                </label>
+                                <input
+                                    v-model="memberForm.beneficiary_name"
+                                    type="text"
+                                    placeholder="cth: Siti Aminah"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-indigo-500 transition-colors"
+                                />
+                            </div>
+
+                            <!-- HUBUNGAN AHLI WARIS -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    HUBUNGAN KELUARGA
+                                </label>
+                                <select
+                                    v-model="memberForm.beneficiary_relation"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-indigo-500 transition-colors"
+                                >
+                                    <option
+                                        v-for="rel in beneficiaryRelations"
+                                        :key="rel"
+                                        :value="rel"
+                                    >
+                                        {{ rel }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- NO HP AHLI WARIS -->
+                            <div>
+                                <label
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
+                                >
+                                    NO HP / WA AHLI WARIS
+                                </label>
+                                <input
+                                    v-model="memberForm.beneficiary_phone"
+                                    type="text"
+                                    placeholder="cth: 081987654321"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-indigo-500 transition-colors"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: REKENING BANK & VIRTUAL WALLET PENARIKAN SALDO -->
+                    <div
+                        class="bg-emerald-50/50 border border-emerald-200/80 rounded-2xl p-5 md:p-6 space-y-5"
+                    >
+                        <div
+                            class="flex items-center justify-between border-b border-emerald-200/70 pb-3"
+                        >
+                            <div class="flex items-center gap-2">
+                                <CreditCard class="w-4 h-4 text-emerald-600" />
+                                <h3
+                                    class="text-xs font-black text-emerald-950 uppercase tracking-tight"
+                                >
+                                    4. INFORMASI REKENING BANK & VIRTUAL WALLET (PENARIKAN SALDO / WD)
+                                </h3>
+                            </div>
+                            <span class="text-[10px] font-bold text-emerald-600">
+                                Rekening Penerima WD
+                            </span>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
                                     NAMA BANK / PROVIDER E-WALLET
                                 </label>
                                 <input
                                     v-model="memberForm.bank_name"
                                     type="text"
-                                    placeholder="cth: Bank Mandiri / DANA"
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                    placeholder="cth: Bank Mandiri / BRI / DANA"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
                             </div>
 
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
                                     NOMOR REKENING / NO. HP E-WALLET
                                 </label>
@@ -337,13 +780,13 @@ const saveBanks = () => {
                                     v-model="memberForm.bank_account_number"
                                     type="text"
                                     placeholder="cth: 1234567890"
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono font-bold focus:outline-none focus:border-emerald-500"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-mono font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
                             </div>
 
                             <div>
                                 <label
-                                    class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                    class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
                                     ATAS NAMA (PEMILIK REKENING)
                                 </label>
@@ -351,30 +794,30 @@ const saveBanks = () => {
                                     v-model="memberForm.bank_account_name"
                                     type="text"
                                     placeholder="cth: Nama Anda"
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <!-- Section 3: Ubah Password -->
+                    <!-- SECTION 5: UBAH PASSWORD LOGIN -->
                     <div
-                        class="bg-slate-50/50 border border-slate-100 rounded-2xl p-5 space-y-4"
+                        class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-5 md:p-6 space-y-4"
                     >
                         <div
-                            class="flex items-center gap-2 border-b border-slate-200/60 pb-3"
+                            class="flex items-center gap-2 border-b border-slate-200/70 pb-3"
                         >
                             <Settings class="w-4 h-4 text-slate-600" />
                             <h3
-                                class="text-xs font-black text-slate-900 uppercase tracking-tight"
+                                    class="text-xs font-black text-slate-900 uppercase tracking-tight"
                             >
-                                UBAH PASSWORD (OPSIONAL)
+                                5. UBAH PASSWORD LOGIN (OPSIONAL)
                             </h3>
                         </div>
 
                         <div class="max-w-md">
                             <label
-                                class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1"
+                                class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                             >
                                 PASSWORD BARU
                             </label>
@@ -382,7 +825,7 @@ const saveBanks = () => {
                                 v-model="memberForm.password"
                                 type="password"
                                 placeholder="Kosongkan jika tidak ingin mengubah password"
-                                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                             />
                             <p
                                 v-if="memberForm.errors.password"
@@ -394,17 +837,91 @@ const saveBanks = () => {
                     </div>
 
                     <!-- Bottom Submit Button -->
-                    <div class="flex justify-end pt-2">
+                    <div class="flex items-center justify-between flex-wrap gap-4 pt-2">
+                        <span class="text-xs text-slate-400 font-medium italic">
+                            * Pastikan seluruh data diri Anda telah benar sebelum menekan tombol simpan.
+                        </span>
                         <button
                             type="submit"
                             :disabled="memberForm.processing"
-                            class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                            class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                         >
                             <Check class="w-4 h-4 stroke-[3]" />
-                            <span>Simpan Profil Saya</span>
+                            <span>Simpan Data Profil Yayasan</span>
                         </button>
                     </div>
                 </form>
+
+                <!-- TABEL DATA DIRI & STATUS KEANGGOTAAN YAYASAN (TABLE SUMMARY) -->
+                <div class="border-t border-slate-100 pt-8 space-y-4">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <HeartHandshake class="w-5 h-5 text-emerald-600" />
+                            <h3 class="text-sm font-black text-slate-900 uppercase tracking-tight">
+                                TABEL RINGKASAN DATA ANGGOTA YAYASAN TERDAFTAR
+                            </h3>
+                        </div>
+                        <span class="text-xs font-bold text-slate-400">
+                            ID Member #{{ user?.id }}
+                        </span>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-200 rounded-2xl bg-white shadow-2xs">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <tbody>
+                                <tr class="border-b border-slate-100 bg-slate-50/50">
+                                    <td class="py-3 px-4 font-bold text-slate-500 w-1/4">NIK (KTP)</td>
+                                    <td class="py-3 px-4 font-mono font-bold text-slate-900 w-1/4">{{ user?.nik || '-' }}</td>
+                                    <td class="py-3 px-4 font-bold text-slate-500 w-1/4">Nama Anggota</td>
+                                    <td class="py-3 px-4 font-bold text-slate-900 w-1/4">{{ user?.name || '-' }}</td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-3 px-4 font-bold text-slate-500">Username & Email</td>
+                                    <td class="py-3 px-4 text-slate-800">{{ user?.username }} / {{ user?.email }}</td>
+                                    <td class="py-3 px-4 font-bold text-slate-500">No. WhatsApp / HP</td>
+                                    <td class="py-3 px-4 font-bold text-slate-800">{{ user?.phone || '-' }}</td>
+                                </tr>
+                                <tr class="border-b border-slate-100 bg-slate-50/50">
+                                    <td class="py-3 px-4 font-bold text-slate-500">Jenis Kelamin</td>
+                                    <td class="py-3 px-4 text-slate-800">{{ user?.gender || '-' }}</td>
+                                    <td class="py-3 px-4 font-bold text-slate-500">Tempat & Tanggal Lahir</td>
+                                    <td class="py-3 px-4 text-slate-800">
+                                        {{ user?.birth_place ? user.birth_place + ', ' : '' }}{{ user?.birth_date || '-' }}
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-3 px-4 font-bold text-slate-500">Agama / Pernikahan</td>
+                                    <td class="py-3 px-4 text-slate-800">{{ user?.religion || '-' }} / {{ user?.marital_status || '-' }}</td>
+                                    <td class="py-3 px-4 font-bold text-slate-500">Pendidikan & Pekerjaan</td>
+                                    <td class="py-3 px-4 text-slate-800">{{ user?.last_education || '-' }} - {{ user?.occupation || '-' }}</td>
+                                </tr>
+                                <tr class="border-b border-slate-100 bg-slate-50/50">
+                                    <td class="py-3 px-4 font-bold text-slate-500">Alamat Domisili</td>
+                                    <td class="py-3 px-4 text-slate-800" colspan="3">
+                                        {{ user?.address || '-' }}
+                                        <span v-if="user?.village || user?.district || user?.city || user?.province || user?.postal_code" class="text-slate-500 text-[11px] block mt-0.5">
+                                            Kel. {{ user?.village || '-' }}, Kec. {{ user?.district || '-' }}, {{ user?.city || '-' }}, {{ user?.province || '-' }} {{ user?.postal_code ? '(' + user.postal_code + ')' : '' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="py-3 px-4 font-bold text-indigo-900 bg-indigo-50/30">Ahli Waris / Hubungan</td>
+                                    <td class="py-3 px-4 font-bold text-indigo-950 bg-indigo-50/30">
+                                        {{ user?.beneficiary_name || '-' }} ({{ user?.beneficiary_relation || '-' }})
+                                    </td>
+                                    <td class="py-3 px-4 font-bold text-indigo-900 bg-indigo-50/30">Kontak Ahli Waris</td>
+                                    <td class="py-3 px-4 font-bold text-indigo-950 bg-indigo-50/30">{{ user?.beneficiary_phone || '-' }}</td>
+                                </tr>
+                                <tr class="bg-emerald-50/30">
+                                    <td class="py-3 px-4 font-bold text-emerald-900">Rekening Pencairan (WD)</td>
+                                    <td class="py-3 px-4 font-bold text-emerald-950" colspan="3">
+                                        {{ user?.bank_name || '-' }} - No. Rek: <span class="font-mono">{{ user?.bank_account_number || '-' }}</span> (a.n {{ user?.bank_account_name || '-' }})
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- ADMIN CORPORATE PROFILE EDIT CARD (When is_admin is true) -->
