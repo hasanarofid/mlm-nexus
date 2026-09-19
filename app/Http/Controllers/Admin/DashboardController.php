@@ -54,6 +54,8 @@ class DashboardController extends Controller
                 ];
             });
 
+        $voucherAktif = $activeVouchers->count();
+
         $isAdmin = ($user->username === 'admin' || $user->email === 'admin@talenta52.com' || (method_exists($user, 'hasRole') && $user->hasRole('admin')));
 
         $allSponsors = $isAdmin ? User::select('id', 'name', 'username')->get()->map(function ($u) {
