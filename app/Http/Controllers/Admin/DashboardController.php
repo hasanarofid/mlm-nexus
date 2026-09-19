@@ -66,10 +66,26 @@ class DashboardController extends Controller
             ];
         }) : [];
 
+        $settings = Setting::all()->pluck('value', 'key');
+        $companyBanks = json_decode($settings['company_banks'] ?? '[]', true);
+        $banks = (is_array($companyBanks) && count($companyBanks) > 0)
+            ? $companyBanks
+            : [
+                [
+                    'bank_name' => 'Bank BRI',
+                    'bank_account_number' => '806401000095564',
+                    'account_number' => '806401000095564',
+                    'bank_account_name' => 'PT.Talenta52 Punya Kita',
+                    'account_name' => 'PT.Talenta52 Punya Kita',
+                ]
+            ];
+
         return Inertia::render('Admin/Dashboard', [
             'is_admin' => $isAdmin,
             'current_user_username' => $user->username ?: 'user_' . $user->id,
             'vouchers' => $activeVouchers,
+            'banks' => $banks,
+            'registration_fee' => 100000,
             'all_sponsors' => $allSponsors,
             'referral_links' => [
                 'default' => url('/register?sponsor=' . ($user ? ($user->username ?: $user->id) : 1)),

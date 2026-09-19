@@ -14,16 +14,21 @@ import {
   Send, 
   HelpCircle,
   UserPlus,
-  Wand2,
   KeyRound,
   ShieldCheck,
-  User
+  User,
+  Upload,
+  Image as ImageIcon,
+  Trash2,
+  Building2
 } from '@lucide/vue';
 
 const props = defineProps({
   is_admin: Boolean,
   current_user_username: String,
   vouchers: Array,
+  banks: Array,
+  registration_fee: Number,
   all_sponsors: Array,
   referral_links: Object,
   wallet: Object,
@@ -33,6 +38,7 @@ const props = defineProps({
 const copySuccessMsg = ref('');
 const isPremiModalOpen = ref(false);
 const isAddMitraModalOpen = ref(false);
+const transferProofPreview = ref(null);
 
 const premiForm = useForm({
   amount: 10000,
@@ -54,17 +60,36 @@ const addMitraForm = useForm({
   phone: '',
   nik: '',
   sponsor_username: props.current_user_username || 'admin',
-  voucher_code: props.vouchers && props.vouchers.length > 0 ? props.vouchers[0].code : '',
   password: '',
+  transfer_proof: null,
   source: 'dashboard',
 });
+
+const handleTransferProofChange = (e) => {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    addMitraForm.transfer_proof = file;
+    if (file.type.startsWith('image/')) {
+      transferProofPreview.value = URL.createObjectURL(file);
+    } else {
+      transferProofPreview.value = null;
+    }
+  }
+};
+
+const removeTransferProof = () => {
+  addMitraForm.transfer_proof = null;
+  transferProofPreview.value = null;
+};
 
 const submitAddMitra = () => {
   addMitraForm.post(route('admin.activation.store'), {
     preserveScroll: true,
+    forceFormData: true,
     onSuccess: () => {
       isAddMitraModalOpen.value = false;
       addMitraForm.reset();
+      removeTransferProof();
       addMitraForm.sponsor_username = props.current_user_username || 'admin';
       addMitraForm.password = '';
       addMitraForm.source = 'dashboard';
@@ -75,6 +100,14 @@ const submitAddMitra = () => {
 const copyToClipboard = (text, type) => {
   navigator.clipboard.writeText(text);
   copySuccessMsg.value = `Link Referral ${type} berhasil disalin!`;
+  setTimeout(() => {
+    copySuccessMsg.value = '';
+  }, 3000);
+};
+
+const copyBankNumber = (accNo) => {
+  navigator.clipboard.writeText(accNo);
+  copySuccessMsg.value = `Nomor rekening ${accNo} berhasil disalin!`;
   setTimeout(() => {
     copySuccessMsg.value = '';
   }, 3000);
@@ -454,25 +487,98 @@ const formatRupiah = (val) => {
             <p class="text-[10px] text-indigo-700 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
           </div>
 
-          <!-- Voucher / PIN (Optional) -->
-          <div v-if="vouchers && vouchers.length > 0" class="p-3.5 bg-emerald-50/50 border border-emerald-200/80 rounded-2xl space-y-1.5">
-            <label class="block text-[10px] font-extrabold text-emerald-950 uppercase tracking-wider">
-              PILIH VOUCHER AKTIVASI (PIN)
-            </label>
-            <select 
-              v-model="addMitraForm.voucher_code"
-              class="w-full bg-white border border-emerald-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-950 focus:outline-none focus:border-emerald-500"
-            >
-              <option value="">Aktivasi Langsung (Standard Rp 100.000)</option>
-              <option 
-                v-for="v in vouchers" 
-                :key="v.code" 
-                :value="v.code"
+          <!-- Informasi Rekening Transfer Yayasan -->
+          <div class="p-3.5 bg-gradient-to-br from-emerald-50/80 to-teal-50/80 border border-emerald-200/90 rounded-2xl space-y-3 shadow-2xs">
+            <div class="flex items-center justify-between border-b border-emerald-200/70 pb-2">
+              <div class="flex items-center gap-2">
+                <Building2 class="w-4 h-4 text-emerald-700" />
+                <h4 class="text-[11px] font-extrabold text-emerald-950 uppercase tracking-tight">Rekening Tujuan Transfer Pendaftaran</h4>
+              </div>
+              <span class="px-2 py-0.5 text-[9px] font-extrabold bg-emerald-600 text-white rounded-md shadow-2xs">
+                Biaya: Rp 100.000
+              </span>
+            </div>
+
+            <div v-if="banks && banks.length > 0" class="space-y-2">
+              <div 
+                v-for="(b, idx) in banks" 
+                :key="idx"
+                class="p-2.5 bg-white border border-emerald-100 rounded-xl flex items-center justify-between gap-3 shadow-2xs"
               >
-                {{ v.label }}
-              </option>
-            </select>
-            <p class="text-[10px] text-emerald-700 font-medium">Stok voucher aktif Anda: {{ vouchers.length }} Voucher</p>
+                <div class="space-y-0.5 min-w-0">
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-[10px] font-black text-emerald-800 uppercase px-1.5 py-0.5 bg-emerald-100/70 rounded">
+                      {{ b.bank_name }}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-xs font-black text-slate-900 font-mono tracking-wide">
+                      {{ b.bank_account_number || b.account_number }}
+                    </span>
+                    <span class="text-[10px] text-slate-500 font-medium truncate">
+                      a.n {{ b.bank_account_name || b.account_name }}
+                    </span>
+                  </div>
+                </div>
+
+                <button 
+                  type="button"
+                  @click="copyBankNumber(b.bank_account_number || b.account_number)"
+                  class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-[10px] font-bold rounded-lg transition-colors shrink-0 flex items-center gap-1 cursor-pointer"
+                  title="Salin Nomor Rekening"
+                >
+                  <Copy class="w-3 h-3" />
+                  <span>Salin Rek</span>
+                </button>
+              </div>
+            </div>
+
+            <p class="text-[10px] text-emerald-800/90 font-medium leading-relaxed">
+              💡 Silakan transfer biaya registrasi sebesar <strong>Rp 100.000</strong> ke rekening resmi di atas, kemudian lampirkan foto / bukti transfer pada kolom berikut:
+            </p>
+          </div>
+
+          <!-- Upload Bukti Transfer -->
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-[10px] font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Upload class="w-3.5 h-3.5 text-slate-600" />
+                <span>UPLOAD BUKTI TRANSFER PEMBAYARAN</span>
+              </label>
+              <span v-if="transferProofPreview" class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                File Terpilih
+              </span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <!-- Preview Thumbnail if Image -->
+              <div 
+                v-if="transferProofPreview" 
+                class="w-20 h-16 rounded-xl bg-slate-200 border border-slate-300 overflow-hidden relative group shrink-0"
+              >
+                <img :src="transferProofPreview" alt="Bukti Transfer" class="w-full h-full object-cover" />
+                <button 
+                  type="button" 
+                  @click="removeTransferProof"
+                  class="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[10px] font-bold"
+                >
+                  <Trash2 class="w-4 h-4" />
+                </button>
+              </div>
+
+              <div class="flex-1 w-full space-y-1">
+                <input 
+                  type="file" 
+                  @change="handleTransferProofChange" 
+                  accept="image/*,application/pdf"
+                  class="w-full text-xs text-slate-600 file:mr-2.5 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 file:cursor-pointer bg-white border border-slate-200 rounded-xl p-1"
+                />
+                <p class="text-[10px] text-slate-400 font-medium">Format: JPG, PNG, WEBP, atau PDF (Maks. 5MB).</p>
+              </div>
+            </div>
+            <p v-if="addMitraForm.errors.transfer_proof" class="text-[10px] text-rose-500 font-bold mt-1">
+              {{ addMitraForm.errors.transfer_proof }}
+            </p>
           </div>
 
           <!-- Modal Actions -->

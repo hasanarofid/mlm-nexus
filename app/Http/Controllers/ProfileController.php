@@ -44,6 +44,8 @@ class ProfileController extends Controller
                 'nik' => $user->nik ?? '',
                 'ktp_image' => $user->ktp_image ?? null,
                 'ktp_image_url' => !empty($user->ktp_image) ? (str_starts_with($user->ktp_image, '/') ? $user->ktp_image : '/' . $user->ktp_image) : null,
+                'transfer_proof' => $user->transfer_proof ?? null,
+                'transfer_proof_url' => !empty($user->transfer_proof) ? (str_starts_with($user->transfer_proof, '/') ? $user->transfer_proof : '/' . $user->transfer_proof) : null,
                 'gender' => $user->gender ?? '',
                 'birth_place' => $user->birth_place ?? '',
                 'birth_date' => $user->birth_date ? (is_string($user->birth_date) ? substr($user->birth_date, 0, 10) : $user->birth_date->format('Y-m-d')) : '',

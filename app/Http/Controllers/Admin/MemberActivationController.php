@@ -76,9 +76,26 @@ class MemberActivationController extends Controller
             ];
         });
 
+        // Company Banks for Direct Transfer Payment
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $companyBanks = json_decode($settings['company_banks'] ?? '[]', true);
+        $banks = (is_array($companyBanks) && count($companyBanks) > 0)
+            ? $companyBanks
+            : [
+                [
+                    'bank_name' => 'Bank BRI',
+                    'bank_account_number' => '806401000095564',
+                    'account_number' => '806401000095564',
+                    'bank_account_name' => 'PT.Talenta52 Punya Kita',
+                    'account_name' => 'PT.Talenta52 Punya Kita',
+                ]
+            ];
+
         return Inertia::render('Admin/Activation/Index', [
             'vouchers' => $vouchers,
             'voucher_stocks' => $voucherStocks,
+            'banks' => $banks,
+            'registration_fee' => 100000,
             'users' => $allUsers,
             'default_sponsor' => $currentUser->username ?: 'admin',
         ]);
@@ -97,6 +114,7 @@ class MemberActivationController extends Controller
             'nik' => 'nullable|string|max:25',
             'password' => 'nullable|string|min:6',
             'sponsor_username' => 'required|string|exists:users,username',
+            'transfer_proof' => 'nullable|file|mimes:jpeg,jpg,png,webp,pdf|max:5120',
             'voucher_code' => 'nullable|string',
         ]);
 
@@ -126,10 +144,23 @@ class MemberActivationController extends Controller
             ]);
         }
 
+        // Upload Transfer Proof if provided
+        $transferProofPath = null;
+        if ($request->hasFile('transfer_proof')) {
+            $file = $request->file('transfer_proof');
+            $destinationPath = public_path('images/transfer_proofs');
+            if (!file_exists($destinationPath)) {
+                @mkdir($destinationPath, 0755, true);
+            }
+            $filename = 'proof_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($destinationPath, $filename);
+            $transferProofPath = '/images/transfer_proofs/' . $filename;
+        }
+
         $packageName = $voucher ? ($voucher->package_name ?: 'Standard (Rp 100.000)') : 'Standard (Rp 100.000)';
         $plainPassword = $request->password ?: 'password';
 
-        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName, $plainPassword) {
+        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName, $plainPassword, $transferProofPath) {
             // Create new member in Matahari system (parent_id = sponsor_id)
             $newUser = User::create([
                 'name' => $request->name,
@@ -140,6 +171,7 @@ class MemberActivationController extends Controller
                 'password' => bcrypt($plainPassword),
                 'parent_id' => $sponsorUser->id,
                 'package_name' => $packageName,
+                'transfer_proof' => $transferProofPath,
             ]);
             $newUser->assignRole('client');
 
