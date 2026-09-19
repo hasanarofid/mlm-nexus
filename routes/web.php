@@ -12,6 +12,9 @@ use Inertia\Inertia;
 use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/artikel/{slug}', [HomeController::class, 'postDetail'])->name('posts.detail');
+Route::get('/news/{slug}', [HomeController::class, 'postDetail'])->name('news.detail');
+Route::get('/katalog/{product}', [HomeController::class, 'catalogDetail'])->name('catalog.detail');
 
 
 Route::get('/dashboard', function () {

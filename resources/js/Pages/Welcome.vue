@@ -274,9 +274,9 @@ const testimonialsSection = getSection('testimonials');
       <div class="max-w-7xl mx-auto px-6">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
           <div class="space-y-3">
-            <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Artikel & Berita</span>
+            <span class="text-xs font-bold text-[#04bdb2] uppercase tracking-widest">Artikel & Berita</span>
             <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Kabar Terbaru</h2>
-            <p class="text-sm text-slate-450">Dapatkan wawasan seputar dunia bisnis kuliner dan pengembangan teknologi terbaru.</p>
+            <p class="text-sm text-slate-400">Dapatkan wawasan seputar program kemitraan, strategi bisnis, dan informasi terkini TALENTA52.</p>
           </div>
         </div>
 
@@ -284,9 +284,9 @@ const testimonialsSection = getSection('testimonials');
           <div 
             v-for="post in posts" 
             :key="post.id"
-            class="bg-slate-950 border border-slate-900 rounded-3xl overflow-hidden group hover:border-indigo-500/35 transition-all duration-300 flex flex-col justify-between"
+            class="bg-slate-950 border border-slate-900 rounded-3xl overflow-hidden group hover:border-[#04bdb2]/50 transition-all duration-300 flex flex-col justify-between"
           >
-            <div>
+            <Link :href="route('posts.detail', post.slug)" class="block">
               <!-- Cover image wrapper -->
               <div class="h-48 bg-slate-900 relative overflow-hidden">
                 <img 
@@ -299,29 +299,29 @@ const testimonialsSection = getSection('testimonials');
                   <Layers class="w-12 h-12" />
                 </div>
                 <!-- Category badge -->
-                <span class="absolute top-4 left-4 text-xxs font-bold text-indigo-400 px-2.5 py-1 bg-slate-950/80 border border-slate-800 backdrop-blur rounded-full uppercase tracking-wider">
+                <span class="absolute top-4 left-4 text-[10px] font-bold text-[#a9fff7] px-2.5 py-1 bg-slate-950/80 border border-slate-800 backdrop-blur rounded-full uppercase tracking-wider">
                   {{ post.category?.name || 'Umum' }}
                 </span>
               </div>
 
               <!-- Post body -->
               <div class="p-6 space-y-3 text-left">
-                <p class="text-xxs text-slate-500 font-semibold">
-                  {{ new Date(post.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+                <p class="text-[11px] text-slate-400 font-semibold">
+                  {{ post.created_at ? new Date(post.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-' }}
                 </p>
-                <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors line-clamp-2">
+                <h3 class="text-lg font-bold text-white group-hover:text-[#04bdb2] transition-colors line-clamp-2">
                   {{ post.title }}
                 </h3>
-                <p class="text-xs text-slate-450 line-clamp-3 font-medium">
+                <p class="text-xs text-slate-400 line-clamp-3 font-medium leading-relaxed">
                   {{ post.content }}
                 </p>
               </div>
-            </div>
+            </Link>
 
             <div class="p-6 pt-0 text-left">
-              <span class="text-xs font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 cursor-pointer">
+              <Link :href="route('posts.detail', post.slug)" class="text-xs font-bold text-[#04bdb2] hover:text-[#a9fff7] inline-flex items-center gap-1 cursor-pointer">
                 Baca Selengkapnya <ChevronRight class="w-4 h-4" />
-              </span>
+              </Link>
             </div>
           </div>
         </div>
@@ -335,12 +335,13 @@ const testimonialsSection = getSection('testimonials');
           <!-- Column 1: Info -->
           <div class="md:col-span-2 space-y-4">
             <span class="font-extrabold text-lg text-white tracking-tight">
-              {{ settings.site_name || 'CMS Boilerplate' }}
+              {{ settings.site_name || 'TALENTA52' }}
             </span>
-            <p class="text-xs text-slate-450 leading-relaxed max-w-sm">
-              {{ settings.site_description || 'Boilerplate CMS premium berbasis Laravel 11, Vue 3, Inertia.js, dan Tailwind CSS.' }}
+            <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+              {{ settings.site_description || 'Platform kemitraan multi-tier generasi unilevel, Auto Save & Saldo WD terintegrasi. Saling Bantu, Manfaat Bersama.' }}
             </p>
           </div>
+
 
           <!-- Column 2: Tautan Halaman -->
           <div class="space-y-4">

@@ -44,6 +44,11 @@ try {
             'label'   => 'Update Katalog Produk RO & PO',
             'class'   => 'ProductSeeder',
         ],
+        'seed-posts' => [
+            'command' => 'db:seed',
+            'label'   => 'Update / Seed Berita & Panduan Artikel (PostSeeder)',
+            'class'   => 'PostSeeder',
+        ],
         'seed-settings' => [
             'command' => 'db:seed',
             'label'   => 'Update / Insert Default Settings (company_profile, banks, dsb)',

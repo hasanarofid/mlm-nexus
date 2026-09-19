@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Save, ChevronLeft, Layout, Edit, Eye, Plus, Trash2 } from '@lucide/vue';
+import { Save, ChevronLeft, Layout, Edit, Eye, Plus, Trash2, Layers, Sparkles } from '@lucide/vue';
 
 const props = defineProps({
   page: {
@@ -67,138 +67,154 @@ const removeTestimonialItem = (index) => {
 </script>
 
 <template>
-  <Head :title="`Edit Halaman: ${page.title}`" />
+  <Head :title="`Edit Halaman: ${page.title} - TALENTA52`" />
 
   <AdminLayout>
-    <div class="space-y-8 max-w-6xl">
-      <!-- Header -->
-      <div class="flex items-center gap-4">
-        <Link :href="route('admin.pages.index')" class="p-2 bg-slate-950 border border-slate-800 hover:bg-slate-900 rounded-xl text-slate-400 hover:text-slate-200 transition-colors">
-          <ChevronLeft class="w-5 h-5" />
-        </Link>
-        <div>
-          <div class="flex items-center gap-2">
-            <h2 class="text-3xl font-extrabold tracking-tight text-white">{{ page.title }}</h2>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold" :class="page.is_active ? 'bg-emerald-500/10 text-emerald-450 border border-emerald-500/20' : 'bg-slate-800 text-slate-500 border border-slate-700'">
-              {{ page.is_active ? 'Aktif' : 'Non-aktif' }}
-            </span>
+    <div class="space-y-6 max-w-7xl mx-auto">
+      <!-- Header Banner -->
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <Link 
+            :href="route('admin.pages.index')" 
+            class="p-2.5 bg-white border border-slate-200 hover:bg-slate-50 rounded-2xl text-slate-600 hover:text-slate-900 transition-colors shadow-xs"
+          >
+            <ChevronLeft class="w-5 h-5" />
+          </Link>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-2xl font-black tracking-tight text-slate-900">{{ page.title }}</h1>
+              <span 
+                class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase border"
+                :class="page.is_active ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200'"
+              >
+                {{ page.is_active ? 'Aktif' : 'Nonaktif' }}
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">Kelola parameter SEO dan tata letak bagian (section) konten.</p>
           </div>
-          <p class="text-sm text-slate-400 mt-1">Kelola detail SEO halaman dan susunan section content.</p>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- SEO Details Panel -->
-        <div class="lg:col-span-1 space-y-6">
-          <form @submit.prevent="updatePage" class="bg-slate-950 border border-slate-800 rounded-2xl p-6 shadow-xl shadow-slate-950/20 space-y-4">
-            <h3 class="text-base font-bold text-white pb-3 border-b border-slate-800">Detail Halaman (SEO)</h3>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- SEO Details Panel (Left) -->
+        <div class="lg:col-span-4 space-y-6">
+          <form @submit.prevent="updatePage" class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4">
+            <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight pb-3 border-b border-slate-100 flex items-center gap-2">
+              <Sparkles class="w-4 h-4 text-[#1653a1]" />
+              Metadata SEO Halaman
+            </h3>
             
             <div class="space-y-1">
-              <label for="title" class="text-xs font-bold text-slate-450 uppercase tracking-wider">Judul Halaman</label>
+              <label for="title" class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Judul Halaman</label>
               <input 
                 id="title"
                 v-model="pageForm.title"
                 type="text" 
                 required
-                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-650 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
               />
             </div>
 
             <div class="space-y-1">
-              <label for="slug" class="text-xs font-bold text-slate-450 uppercase tracking-wider">Slug (URL)</label>
+              <label for="slug" class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Slug (URL)</label>
               <input 
                 id="slug"
                 v-model="pageForm.slug"
                 type="text" 
                 required
-                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-650 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
               />
             </div>
 
             <div class="space-y-1">
-              <label for="meta_description" class="text-xs font-bold text-slate-450 uppercase tracking-wider">Meta Description SEO</label>
+              <label for="meta_description" class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Meta Description SEO</label>
               <textarea 
                 id="meta_description"
                 v-model="pageForm.meta_description"
-                rows="4"
-                class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-650 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250 resize-none"
+                rows="3"
+                class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2] resize-none"
               ></textarea>
             </div>
 
-            <div class="flex items-center gap-2 py-2">
+            <div class="flex items-center gap-2 py-1">
               <input 
                 id="page_active"
                 v-model="pageForm.is_active"
                 type="checkbox" 
-                class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-600 bg-slate-900 border-slate-800"
+                class="w-4 h-4 rounded text-[#04bdb2] focus:ring-[#04bdb2] border-slate-300"
               />
-              <label for="page_active" class="text-sm font-semibold text-slate-300">Aktifkan Halaman Ini</label>
+              <label for="page_active" class="text-xs font-bold text-slate-700 cursor-pointer">Aktifkan Halaman Ini</label>
             </div>
 
             <button 
               type="submit" 
               :disabled="pageForm.processing"
-              class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-sm font-semibold text-white rounded-xl shadow-lg shadow-indigo-600/20 transition-all cursor-pointer"
+              class="w-full py-2.5 px-4 bg-[#1653a1] hover:bg-[#103f80] disabled:opacity-50 text-xs font-black uppercase tracking-wider text-white rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
             >
-              <Save class="w-4 h-4 mr-1.5" />
-              Simpan Metadata
+              <Save class="w-4 h-4" />
+              <span>Simpan Metadata</span>
             </button>
           </form>
 
           <!-- List of Sections -->
-          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 shadow-xl shadow-slate-950/20 space-y-4">
-            <h3 class="text-base font-bold text-white pb-3 border-b border-slate-800">Daftar Bagian Halaman</h3>
+          <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4">
+            <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight pb-3 border-b border-slate-100 flex items-center gap-2">
+              <Layers class="w-4 h-4 text-[#04bdb2]" />
+              Daftar Bagian (Sections)
+            </h3>
+            
             <div class="space-y-2">
               <button 
                 v-for="section in page.sections" 
                 :key="section.id"
+                type="button"
                 @click="selectSection(section)"
                 :class="[
                   activeSectionId === section.id 
-                    ? 'bg-indigo-600/10 border-indigo-500/50 text-indigo-400' 
-                    : 'bg-slate-900 border-slate-850 text-slate-350 hover:bg-slate-850',
-                  'w-full text-left px-4 py-3 rounded-xl border flex items-center justify-between transition-all'
+                    ? 'bg-[#1653a1]/10 border-[#1653a1]/40 text-[#1653a1] font-black' 
+                    : 'bg-slate-50/80 border-slate-200/80 text-slate-700 hover:bg-slate-100 font-bold',
+                  'w-full text-left px-4 py-3 rounded-2xl border flex items-center justify-between transition-all cursor-pointer'
                 ]"
               >
                 <div class="flex items-center gap-2">
                   <Layout class="w-4 h-4" />
-                  <span class="text-sm font-semibold">{{ section.title }}</span>
+                  <span class="text-xs">{{ section.title }}</span>
                 </div>
-                <span class="text-xxs px-2 py-0.5 bg-slate-850 text-slate-500 rounded border border-slate-800 uppercase tracking-wider font-bold">
+                <span class="text-[9px] px-2 py-0.5 bg-slate-200/60 text-slate-600 rounded-md uppercase font-mono">
                   {{ section.key }}
                 </span>
               </button>
-              <div v-if="page.sections.length === 0" class="text-center py-6 text-slate-500 text-sm">
+              <div v-if="page.sections.length === 0" class="text-center py-6 text-slate-400 text-xs font-medium">
                 Belum ada section di halaman ini.
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Section Content Editor Panel -->
-        <div class="lg:col-span-2">
-          <div v-if="activeSectionId" class="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden shadow-xl shadow-slate-950/20">
+        <!-- Section Content Editor Panel (Right) -->
+        <div class="lg:col-span-8">
+          <div v-if="activeSectionId" class="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-sm space-y-6 p-6 md:p-8">
             <!-- Header Editor -->
-            <div class="px-6 py-4 bg-slate-900/40 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
               <div>
-                <h3 class="text-base font-bold text-white">Edit Konten Bagian</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Sesuaikan parameter konten untuk section di bawah.</p>
+                <h3 class="text-base font-black text-slate-900">Edit Bagian Konten</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Sesuaikan teks headline, poin keunggulan, atau testimoni.</p>
               </div>
-              <span class="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-450 border border-emerald-500/20 rounded-full text-xs font-semibold" v-if="sectionForm.is_active">
+              <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[10px] font-extrabold uppercase" v-if="sectionForm.is_active">
                 Aktif
               </span>
             </div>
 
             <!-- Content Form Editor -->
-            <form @submit.prevent="updateSection(activeSectionId)" class="p-6 md:p-8 space-y-6">
+            <form @submit.prevent="updateSection(activeSectionId)" class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="space-y-1">
-                  <label class="text-xs font-bold text-slate-450 uppercase tracking-wider">Judul Section (Internal)</label>
+                  <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Judul Bagian (Internal)</label>
                   <input 
                     v-model="sectionForm.title"
                     type="text" 
                     required
-                    class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
                   />
                 </div>
                 <div class="flex items-center gap-2 md:pt-6">
@@ -206,105 +222,103 @@ const removeTestimonialItem = (index) => {
                     id="section_active"
                     v-model="sectionForm.is_active"
                     type="checkbox" 
-                    class="w-4 h-4 rounded text-indigo-605 bg-slate-900 border-slate-800 focus:ring-indigo-650 focus:ring-offset-slate-950"
+                    class="w-4 h-4 rounded text-[#04bdb2] focus:ring-[#04bdb2] border-slate-300"
                   />
-                  <label for="section_active" class="text-sm font-semibold text-slate-350">Tampilkan Bagian Ini di Web</label>
+                  <label for="section_active" class="text-xs font-bold text-slate-700 cursor-pointer">Tampilkan Bagian Ini di Website</label>
                 </div>
               </div>
 
               <!-- Dynamic form fields depending on the key -->
-              <div class="border-t border-slate-800 pt-6 space-y-4">
-                <h4 class="text-sm font-bold text-slate-200">Konten Layout (JSON Fields)</h4>
-
+              <div class="border-t border-slate-100 pt-6 space-y-4">
                 <!-- Hero Section Editor -->
                 <div v-if="page.sections.find(s => s.id === activeSectionId)?.key === 'hero'" class="space-y-4">
                   <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500">Headline Utama</label>
+                    <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Headline Utama</label>
                     <input 
                       v-model="sectionForm.content.headline"
                       type="text" 
-                      class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                      class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
                     />
                   </div>
                   <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500">Sub-headline</label>
+                    <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Sub-headline</label>
                     <textarea 
                       v-model="sectionForm.content.subheadline"
                       rows="3"
-                      class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250 resize-none"
+                      class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2] resize-none"
                     ></textarea>
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-1">
-                      <label class="text-xs font-bold text-slate-500">Teks Tombol (CTA)</label>
+                      <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Teks Tombol (CTA)</label>
                       <input 
                         v-model="sectionForm.content.cta_text"
                         type="text" 
-                        class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
                       />
                     </div>
                     <div class="space-y-1">
-                      <label class="text-xs font-bold text-slate-500">Link Tombol (URL CTA)</label>
+                      <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Link Tombol (URL CTA)</label>
                       <input 
                         v-model="sectionForm.content.cta_url"
                         type="text" 
-                        class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                        class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
                       />
                     </div>
                   </div>
                 </div>
 
                 <!-- Features Section Editor -->
-                <div v-else-if="page.sections.find(s => s.id === activeSectionId)?.key === 'features'" class="space-y-6">
+                <div v-else-if="page.sections.find(s => s.id === activeSectionId)?.key === 'features'" class="space-y-4">
                   <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500">Judul Blok Fitur</label>
+                    <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Judul Blok Keunggulan</label>
                     <input 
                       v-model="sectionForm.content.title"
                       type="text" 
-                      class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                      class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
                     />
                   </div>
 
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                      <label class="text-xs font-bold text-slate-450 uppercase tracking-wider">Item Fitur</label>
+                      <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Item Keunggulan</label>
                       <button 
                         type="button" 
                         @click="addFeatureItem"
-                        class="inline-flex items-center text-xs text-indigo-400 hover:text-indigo-300 font-semibold"
+                        class="text-xs font-extrabold text-[#04bdb2] hover:text-[#009c94] flex items-center gap-1 cursor-pointer"
                       >
-                        <Plus class="w-4 h-4 mr-1" /> Tambah Fitur
+                        <Plus class="w-3.5 h-3.5" /> Tambah Item
                       </button>
                     </div>
 
                     <div 
                       v-for="(item, idx) in sectionForm.content.items" 
                       :key="idx"
-                      class="p-4 bg-slate-900 rounded-xl border border-slate-850/80 space-y-3 relative group"
+                      class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 relative group"
                     >
                       <button 
                         type="button" 
                         @click="removeFeatureItem(idx)"
-                        class="absolute top-2 right-2 p-1.5 text-slate-550 hover:text-rose-450 hover:bg-rose-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        class="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                         title="Hapus item"
                       >
-                        <Trash2 class="w-4.5 h-4.5" />
+                        <Trash2 class="w-4 h-4" />
                       </button>
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pr-8">
                         <div class="space-y-1">
-                          <label class="text-xxs font-bold text-slate-555 block mb-1">Nama Fitur</label>
+                          <label class="text-[10px] font-extrabold text-slate-500 uppercase block">Nama Keunggulan</label>
                           <input 
                             v-model="item.title"
                             type="text" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#04bdb2]"
                           />
                         </div>
                         <div class="space-y-1">
-                          <label class="text-xxs font-bold text-slate-555 block mb-1">Keterangan/Deskripsi</label>
+                          <label class="text-[10px] font-extrabold text-slate-500 uppercase block">Keterangan / Deskripsi</label>
                           <input 
                             v-model="item.description"
                             type="text" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-[#04bdb2]"
                           />
                         </div>
                       </div>
@@ -313,109 +327,106 @@ const removeTestimonialItem = (index) => {
                 </div>
 
                 <!-- Testimonials Section Editor -->
-                <div v-else-if="page.sections.find(s => s.id === activeSectionId)?.key === 'testimonials'" class="space-y-6">
+                <div v-else-if="page.sections.find(s => s.id === activeSectionId)?.key === 'testimonials'" class="space-y-4">
                   <div class="space-y-1">
-                    <label class="text-xs font-bold text-slate-500">Judul Blok Testimoni</label>
+                    <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Judul Blok Testimoni</label>
                     <input 
                       v-model="sectionForm.content.title"
                       type="text" 
-                      class="w-full bg-slate-900 border border-slate-850 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                      class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
                     />
                   </div>
 
                   <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                      <label class="text-xs font-bold text-slate-450 uppercase tracking-wider">Item Testimoni</label>
+                      <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Item Testimoni</label>
                       <button 
                         type="button" 
                         @click="addTestimonialItem"
-                        class="inline-flex items-center text-xs text-indigo-400 hover:text-indigo-300 font-semibold"
+                        class="text-xs font-extrabold text-[#04bdb2] hover:text-[#009c94] flex items-center gap-1 cursor-pointer"
                       >
-                        <Plus class="w-4 h-4 mr-1" /> Tambah Testimoni
+                        <Plus class="w-3.5 h-3.5" /> Tambah Testimoni
                       </button>
                     </div>
 
                     <div 
                       v-for="(item, idx) in sectionForm.content.items" 
                       :key="idx"
-                      class="p-4 bg-slate-900 rounded-xl border border-slate-855/80 space-y-3 relative group"
+                      class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 relative group"
                     >
                       <button 
                         type="button" 
                         @click="removeTestimonialItem(idx)"
-                        class="absolute top-2 right-2 p-1.5 text-slate-550 hover:text-rose-450 hover:bg-rose-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                        class="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
                         title="Hapus item"
                       >
-                        <Trash2 class="w-4.5 h-4.5" />
+                        <Trash2 class="w-4 h-4" />
                       </button>
-                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pr-8">
                         <div class="space-y-1">
-                          <label class="text-xxs font-bold text-slate-555 block mb-1">Nama Pengirim</label>
+                          <label class="text-[10px] font-extrabold text-slate-500 uppercase block">Nama Pengirim</label>
                           <input 
                             v-model="item.name"
                             type="text" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#04bdb2]"
                           />
                         </div>
                         <div class="space-y-1">
-                          <label class="text-xxs font-bold text-slate-555 block mb-1">Jabatan / Perusahaan</label>
+                          <label class="text-[10px] font-extrabold text-slate-500 uppercase block">Profesi / Domisili</label>
                           <input 
                             v-model="item.role"
                             type="text" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250"
+                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-[#04bdb2]"
                           />
                         </div>
                       </div>
                       <div class="space-y-1">
-                        <label class="text-xxs font-bold text-slate-555 block mb-1">Komentar / Ulasan</label>
+                        <label class="text-[10px] font-extrabold text-slate-500 uppercase block">Ulasan / Komentar Testimoni</label>
                         <textarea 
                           v-model="item.comment"
                           rows="2"
-                          class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-250 resize-none"
+                          class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-900 focus:outline-none focus:border-[#04bdb2] resize-none"
                         ></textarea>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Generic JSON Editor for other keys -->
+                <!-- Generic JSON Editor -->
                 <div v-else class="space-y-2">
-                  <label class="text-xs font-bold text-slate-500">Objek Data Konten (Generic JSON)</label>
-                  <p class="text-xs text-slate-500">Masukkan parameter data dalam format key-value JSON valid.</p>
+                  <label class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Parameter JSON Data Konten</label>
                   <textarea 
                     :value="JSON.stringify(sectionForm.content, null, 2)"
                     @input="e => {
                       try {
                         sectionForm.content = JSON.parse(e.target.value);
-                      } catch (err) {
-                        // ignore syntax errors during typing
-                      }
+                      } catch (err) {}
                     }"
                     rows="8"
-                    class="w-full bg-slate-900 border border-slate-855 rounded-xl px-4 py-2.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-indigo-500"
+                    class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#04bdb2]"
                   ></textarea>
                 </div>
               </div>
 
               <!-- Action Footer -->
-              <div class="pt-6 border-t border-slate-800 flex justify-end">
+              <div class="pt-4 border-t border-slate-100 flex justify-end">
                 <button 
                   type="submit" 
                   :disabled="sectionForm.processing"
-                  class="inline-flex items-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-sm font-semibold text-white rounded-xl shadow-lg shadow-indigo-600/20 transition-all cursor-pointer"
+                  class="px-5 py-2.5 bg-[#1653a1] hover:bg-[#103f80] disabled:opacity-50 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-1.5"
                 >
-                  <Save class="w-4.5 h-4.5 mr-1.5" />
-                  Simpan Bagian
+                  <Save class="w-4 h-4" />
+                  <span>Simpan Bagian Ini</span>
                 </button>
               </div>
             </form>
           </div>
 
           <!-- Empty Editor State -->
-          <div v-else class="h-full bg-slate-955 border border-slate-850 border-dashed rounded-2xl flex flex-col items-center justify-center p-12 text-center text-slate-550">
-            <Layout class="w-12 h-12 mb-3 text-slate-700" />
-            <h3 class="text-sm font-bold text-slate-400">Pilih Bagian Halaman</h3>
-            <p class="text-xs text-slate-550 mt-1 max-w-xs">Silakan pilih salah satu bagian di menu sebelah kiri untuk mengedit isinya secara visual.</p>
+          <div v-else class="h-full min-h-[300px] bg-white border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center p-12 text-center text-slate-400">
+            <Layout class="w-12 h-12 mb-3 text-slate-300" />
+            <h3 class="text-sm font-bold text-slate-700">Pilih Bagian Halaman</h3>
+            <p class="text-xs text-slate-400 mt-1 max-w-xs">Silakan pilih salah satu bagian di menu sebelah kiri untuk mengedit isinya secara visual.</p>
           </div>
         </div>
       </div>
