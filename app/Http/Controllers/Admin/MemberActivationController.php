@@ -112,9 +112,11 @@ class MemberActivationController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email',
             'phone' => 'nullable|string|max:25',
             'nik' => 'nullable|string|max:25',
+            'bank_name' => 'nullable|string|max:100',
+            'bank_account_number' => 'nullable|string|max:100',
+            'bank_account_name' => 'nullable|string|max:255',
             'password' => 'nullable|string|min:6',
             'sponsor_username' => 'required|string|exists:users,username',
-            'transfer_proof' => 'nullable|file|mimes:jpeg,jpg,png,webp,pdf|max:5120',
             'voucher_code' => 'nullable|string',
         ]);
 
@@ -144,23 +146,10 @@ class MemberActivationController extends Controller
             ]);
         }
 
-        // Upload Transfer Proof if provided
-        $transferProofPath = null;
-        if ($request->hasFile('transfer_proof')) {
-            $file = $request->file('transfer_proof');
-            $destinationPath = public_path('images/transfer_proofs');
-            if (!file_exists($destinationPath)) {
-                @mkdir($destinationPath, 0755, true);
-            }
-            $filename = 'proof_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move($destinationPath, $filename);
-            $transferProofPath = '/images/transfer_proofs/' . $filename;
-        }
-
         $packageName = $voucher ? ($voucher->package_name ?: 'Standard (Rp 100.000)') : 'Standard (Rp 100.000)';
         $plainPassword = $request->password ?: 'password';
 
-        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName, $plainPassword, $transferProofPath) {
+        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName, $plainPassword) {
             // Create new member in Matahari system (parent_id = sponsor_id)
             $newUser = User::create([
                 'name' => $request->name,
@@ -168,10 +157,12 @@ class MemberActivationController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone ?? null,
                 'nik' => $request->nik ?? null,
+                'bank_name' => $request->bank_name ?: 'Bank BRI',
+                'bank_account_number' => $request->bank_account_number ?? null,
+                'bank_account_name' => $request->bank_account_name ?: $request->name,
                 'password' => bcrypt($plainPassword),
                 'parent_id' => $sponsorUser->id,
                 'package_name' => $packageName,
-                'transfer_proof' => $transferProofPath,
             ]);
             $newUser->assignRole('client');
 

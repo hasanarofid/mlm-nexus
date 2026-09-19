@@ -38,7 +38,6 @@ const props = defineProps({
 const copySuccessMsg = ref('');
 const isPremiModalOpen = ref(false);
 const isAddMitraModalOpen = ref(false);
-const transferProofPreview = ref(null);
 
 const premiForm = useForm({
   amount: 10000,
@@ -59,37 +58,21 @@ const addMitraForm = useForm({
   email: '',
   phone: '',
   nik: '',
+  bank_name: 'Bank BRI',
+  bank_account_number: '',
+  bank_account_name: '',
   sponsor_username: props.current_user_username || 'admin',
   password: '',
-  transfer_proof: null,
   source: 'dashboard',
 });
-
-const handleTransferProofChange = (e) => {
-  if (e.target.files && e.target.files[0]) {
-    const file = e.target.files[0];
-    addMitraForm.transfer_proof = file;
-    if (file.type.startsWith('image/')) {
-      transferProofPreview.value = URL.createObjectURL(file);
-    } else {
-      transferProofPreview.value = null;
-    }
-  }
-};
-
-const removeTransferProof = () => {
-  addMitraForm.transfer_proof = null;
-  transferProofPreview.value = null;
-};
 
 const submitAddMitra = () => {
   addMitraForm.post(route('admin.activation.store'), {
     preserveScroll: true,
-    forceFormData: true,
     onSuccess: () => {
       isAddMitraModalOpen.value = false;
       addMitraForm.reset();
-      removeTransferProof();
+      addMitraForm.bank_name = 'Bank BRI';
       addMitraForm.sponsor_username = props.current_user_username || 'admin';
       addMitraForm.password = '';
       addMitraForm.source = 'dashboard';
@@ -487,97 +470,71 @@ const formatRupiah = (val) => {
             <p class="text-[10px] text-indigo-700 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
           </div>
 
-          <!-- Informasi Rekening Transfer Yayasan -->
-          <div class="p-3.5 bg-gradient-to-br from-emerald-50/80 to-teal-50/80 border border-emerald-200/90 rounded-2xl space-y-3 shadow-2xs">
+          <!-- Data Rekening Bank Mitra Baru -->
+          <div class="p-3.5 bg-emerald-50/60 border border-emerald-200/80 rounded-2xl space-y-3">
             <div class="flex items-center justify-between border-b border-emerald-200/70 pb-2">
               <div class="flex items-center gap-2">
-                <Building2 class="w-4 h-4 text-emerald-700" />
-                <h4 class="text-[11px] font-extrabold text-emerald-950 uppercase tracking-tight">Rekening Tujuan Transfer Pendaftaran</h4>
+                <CreditCard class="w-4 h-4 text-emerald-700" />
+                <h4 class="text-[11px] font-extrabold text-emerald-950 uppercase tracking-tight">Data Rekening Bank Mitra (Penerima WD / Bonus)</h4>
               </div>
-              <span class="px-2 py-0.5 text-[9px] font-extrabold bg-emerald-600 text-white rounded-md shadow-2xs">
-                Biaya: Rp 100.000
+              <span class="text-[9px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded">
+                Untuk Pencairan
               </span>
             </div>
 
-            <div v-if="banks && banks.length > 0" class="space-y-2">
-              <div 
-                v-for="(b, idx) in banks" 
-                :key="idx"
-                class="p-2.5 bg-white border border-emerald-100 rounded-xl flex items-center justify-between gap-3 shadow-2xs"
-              >
-                <div class="space-y-0.5 min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-[10px] font-black text-emerald-800 uppercase px-1.5 py-0.5 bg-emerald-100/70 rounded">
-                      {{ b.bank_name }}
-                    </span>
-                  </div>
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <span class="text-xs font-black text-slate-900 font-mono tracking-wide">
-                      {{ b.bank_account_number || b.account_number }}
-                    </span>
-                    <span class="text-[10px] text-slate-500 font-medium truncate">
-                      a.n {{ b.bank_account_name || b.account_name }}
-                    </span>
-                  </div>
-                </div>
-
-                <button 
-                  type="button"
-                  @click="copyBankNumber(b.bank_account_number || b.account_number)"
-                  class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-[10px] font-bold rounded-lg transition-colors shrink-0 flex items-center gap-1 cursor-pointer"
-                  title="Salin Nomor Rekening"
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- Bank Name -->
+              <div>
+                <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                  NAMA BANK / E-WALLET <span class="text-rose-500">*</span>
+                </label>
+                <select 
+                  v-model="addMitraForm.bank_name"
+                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 transition-all"
                 >
-                  <Copy class="w-3 h-3" />
-                  <span>Salin Rek</span>
-                </button>
-              </div>
-            </div>
-
-            <p class="text-[10px] text-emerald-800/90 font-medium leading-relaxed">
-              💡 Silakan transfer biaya registrasi sebesar <strong>Rp 100.000</strong> ke rekening resmi di atas, kemudian lampirkan foto / bukti transfer pada kolom berikut:
-            </p>
-          </div>
-
-          <!-- Upload Bukti Transfer -->
-          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
-            <div class="flex items-center justify-between">
-              <label class="block text-[10px] font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Upload class="w-3.5 h-3.5 text-slate-600" />
-                <span>UPLOAD BUKTI TRANSFER PEMBAYARAN</span>
-              </label>
-              <span v-if="transferProofPreview" class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                File Terpilih
-              </span>
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-              <!-- Preview Thumbnail if Image -->
-              <div 
-                v-if="transferProofPreview" 
-                class="w-20 h-16 rounded-xl bg-slate-200 border border-slate-300 overflow-hidden relative group shrink-0"
-              >
-                <img :src="transferProofPreview" alt="Bukti Transfer" class="w-full h-full object-cover" />
-                <button 
-                  type="button" 
-                  @click="removeTransferProof"
-                  class="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-[10px] font-bold"
-                >
-                  <Trash2 class="w-4 h-4" />
-                </button>
+                  <option value="Bank BRI">Bank BRI</option>
+                  <option value="Bank Mandiri">Bank Mandiri</option>
+                  <option value="Bank Central Asia (BCA)">BCA</option>
+                  <option value="Bank Negara Indonesia (BNI)">BNI</option>
+                  <option value="Bank Syariah Indonesia (BSI)">BSI</option>
+                  <option value="CIMB Niaga">CIMB Niaga</option>
+                  <option value="Bank Permata">Permata</option>
+                  <option value="Bank Danamon">Danamon</option>
+                  <option value="DANA">DANA (E-Wallet)</option>
+                  <option value="OVO">OVO (E-Wallet)</option>
+                  <option value="GoPay">GoPay (E-Wallet)</option>
+                  <option value="Bank Lainnya">Bank Lainnya</option>
+                </select>
               </div>
 
-              <div class="flex-1 w-full space-y-1">
+              <!-- Nomor Rekening -->
+              <div>
+                <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                  NO REKENING <span class="text-rose-500">*</span>
+                </label>
                 <input 
-                  type="file" 
-                  @change="handleTransferProofChange" 
-                  accept="image/*,application/pdf"
-                  class="w-full text-xs text-slate-600 file:mr-2.5 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-600 file:text-white hover:file:bg-emerald-700 file:cursor-pointer bg-white border border-slate-200 rounded-xl p-1"
+                  v-model="addMitraForm.bank_account_number"
+                  type="text"
+                  placeholder="cth: 1234567890"
+                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-emerald-500 transition-all"
                 />
-                <p class="text-[10px] text-slate-400 font-medium">Format: JPG, PNG, WEBP, atau PDF (Maks. 5MB).</p>
+              </div>
+
+              <!-- Nama Pemilik Rekening -->
+              <div>
+                <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                  ATAS NAMA (A.N)
+                </label>
+                <input 
+                  v-model="addMitraForm.bank_account_name"
+                  type="text"
+                  :placeholder="addMitraForm.name || 'Sesuai KTP Mitra'"
+                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 transition-all"
+                />
               </div>
             </div>
-            <p v-if="addMitraForm.errors.transfer_proof" class="text-[10px] text-rose-500 font-bold mt-1">
-              {{ addMitraForm.errors.transfer_proof }}
+            <p class="text-[10px] text-emerald-800/80 font-medium">
+              💡 Rekening ini digunakan admin untuk menyalurkan pembayaran pencairan saldo (WD) & bonus mitra sesuai nama lengkap dan NIK-nya.
             </p>
           </div>
 
