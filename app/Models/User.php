@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable([
     'name', 'email', 'password', 'username', 'phone', 
-    'nik', 'gender', 'birth_place', 'birth_date', 'religion', 'marital_status', 'last_education', 'occupation',
+    'nik', 'ktp_image', 'gender', 'birth_place', 'birth_date', 'religion', 'marital_status', 'last_education', 'occupation',
     'address', 'province', 'city', 'district', 'village', 'postal_code',
     'beneficiary_name', 'beneficiary_relation', 'beneficiary_phone',
     'parent_id', 'position', 'left_count', 'right_count', 'left_points', 'right_points', 

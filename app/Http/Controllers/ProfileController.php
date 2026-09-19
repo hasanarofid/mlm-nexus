@@ -42,6 +42,8 @@ class ProfileController extends Controller
                 'email' => $user->email ?? '',
                 'phone' => $user->phone ?? '',
                 'nik' => $user->nik ?? '',
+                'ktp_image' => $user->ktp_image ?? null,
+                'ktp_image_url' => !empty($user->ktp_image) ? (str_starts_with($user->ktp_image, '/') ? $user->ktp_image : '/' . $user->ktp_image) : null,
                 'gender' => $user->gender ?? '',
                 'birth_place' => $user->birth_place ?? '',
                 'birth_date' => $user->birth_date ? (is_string($user->birth_date) ? substr($user->birth_date, 0, 10) : $user->birth_date->format('Y-m-d')) : '',
@@ -112,6 +114,10 @@ class ProfileController extends Controller
             $request->request->remove('site_logo');
         }
 
+        if ($request->has('ktp_image') && !($request->file('ktp_image') instanceof \Illuminate\Http\UploadedFile)) {
+            $request->request->remove('ktp_image');
+        }
+
         $rules = [
             'name' => 'required|string|max:100',
             'username' => 'required|string|max:50|unique:users,username,' . $user->id,
@@ -127,6 +133,7 @@ class ProfileController extends Controller
             $rules['site_logo'] = 'nullable|image|mimes:png,jpg,jpeg,svg,webp|max:2048';
         } else {
             $rules['nik'] = 'nullable|string|max:20';
+            $rules['ktp_image'] = 'nullable|file|mimes:png,jpg,jpeg,webp|max:5120';
             $rules['gender'] = 'nullable|string|max:20';
             $rules['birth_place'] = 'nullable|string|max:100';
             $rules['birth_date'] = 'nullable|date';
@@ -182,6 +189,17 @@ class ProfileController extends Controller
             if (array_key_exists($field, $validated) && \Illuminate\Support\Facades\Schema::hasColumn('users', $field)) {
                 $user->{$field} = $validated[$field];
             }
+        }
+
+        if ($request->hasFile('ktp_image') && \Illuminate\Support\Facades\Schema::hasColumn('users', 'ktp_image')) {
+            $file = $request->file('ktp_image');
+            $filename = 'ktp_' . $user->id . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $destination = public_path('images/ktp');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
+            $file->move($destination, $filename);
+            $user->ktp_image = '/images/ktp/' . $filename;
         }
 
         if (!empty($validated['password'])) {
