@@ -55,23 +55,9 @@ const addMitraForm = useForm({
   nik: '',
   sponsor_username: props.current_user_username || 'admin',
   voucher_code: props.vouchers && props.vouchers.length > 0 ? props.vouchers[0].code : '',
-  password: 'password',
+  password: '',
   source: 'dashboard',
 });
-
-const fillDemoMitra = () => {
-  const randomId = Math.floor(100 + Math.random() * 900);
-  addMitraForm.username = `mitra_${randomId}`;
-  addMitraForm.name = `Mitra Baru ${randomId}`;
-  addMitraForm.email = `mitra${randomId}@gmail.com`;
-  addMitraForm.phone = `0812${randomId}56789`;
-  addMitraForm.nik = `3201${randomId}000001`;
-  addMitraForm.sponsor_username = props.current_user_username || 'admin';
-  addMitraForm.password = 'password';
-  if (props.vouchers && props.vouchers.length > 0) {
-    addMitraForm.voucher_code = props.vouchers[0].code;
-  }
-};
 
 const submitAddMitra = () => {
   addMitraForm.post(route('admin.activation.store'), {
@@ -80,7 +66,7 @@ const submitAddMitra = () => {
       isAddMitraModalOpen.value = false;
       addMitraForm.reset();
       addMitraForm.sponsor_username = props.current_user_username || 'admin';
-      addMitraForm.password = 'password';
+      addMitraForm.password = '';
       addMitraForm.source = 'dashboard';
     }
   });
@@ -345,22 +331,6 @@ const formatRupiah = (val) => {
             </div>
           </div>
           <button @click="isAddMitraModalOpen = false" class="text-slate-400 hover:text-slate-700 text-lg font-bold cursor-pointer">✕</button>
-        </div>
-
-        <!-- Demo Autofill Bar -->
-        <div class="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200/70 rounded-2xl">
-          <span class="text-[11px] text-slate-500 font-semibold flex items-center gap-1.5 pl-1">
-            <ShieldCheck class="w-4 h-4 text-emerald-600" />
-            Isi formulir pendaftaran mitra:
-          </span>
-          <button 
-            type="button" 
-            @click="fillDemoMitra"
-            class="px-3 py-1 bg-white hover:bg-emerald-50 border border-emerald-300 text-emerald-700 text-[11px] font-bold rounded-xl shadow-2xs flex items-center gap-1 cursor-pointer transition-colors"
-          >
-            <Wand2 class="w-3 h-3 text-emerald-600" />
-            <span>Isi Demo</span>
-          </button>
         </div>
 
         <!-- Add Mitra Form -->

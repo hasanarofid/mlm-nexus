@@ -28,17 +28,6 @@ const form = useForm({
   voucher_code: props.vouchers.length > 0 ? props.vouchers[0].code : '',
 });
 
-const fillDemoData = () => {
-  const randomId = Math.floor(100 + Math.random() * 900);
-  form.username = `hendra_${randomId}`;
-  form.name = `Hendra Setiawan ${randomId}`;
-  form.email = `hendra${randomId}@gmail.com`;
-  form.sponsor_username = props.default_sponsor || 'admin';
-  if (props.vouchers.length > 0) {
-    form.voucher_code = props.vouchers[0].code;
-  }
-};
-
 const submitForm = () => {
   form.post(route('admin.activation.store'), {
     preserveScroll: true,
@@ -64,16 +53,6 @@ const submitForm = () => {
             </div>
             <p class="text-xs text-slate-500">Daftarkan mitra baru ke dalam jaringan Anda menggunakan VOUCHER Activation.</p>
           </div>
-
-          <!-- Auto Fill Demo Data Button -->
-          <button 
-            type="button"
-            @click="fillDemoData"
-            class="px-3.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-xs font-bold rounded-full transition-all flex items-center gap-1.5 self-start sm:self-auto cursor-pointer shadow-sm"
-          >
-            <Wand2 class="w-3.5 h-3.5 text-emerald-600" />
-            <span>Isi Data Demo Otomatis</span>
-          </button>
         </div>
 
         <!-- Voucher Stock Summary Bar -->
