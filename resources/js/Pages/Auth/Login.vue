@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { Mail, Lock, Eye, EyeOff, ArrowRight } from '@lucide/vue';
+import { User, Lock, Eye, EyeOff, ArrowRight } from '@lucide/vue';
 
 defineProps({
     canResetPassword: {
@@ -36,7 +36,7 @@ const submit = () => {
         <div class="panel-heading">
             <span class="eyebrow">MEMBER LOGIN</span>
             <h2>Masuk ke Akun</h2>
-            <p>Silakan masukkan email dan password Anda.</p>
+            <p>Silakan masukkan username atau email dan password Anda.</p>
         </div>
 
         <div v-if="status" class="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-600">
@@ -44,21 +44,21 @@ const submit = () => {
         </div>
 
         <form @submit.prevent="submit" class="space-y-4">
-            <!-- Email Field -->
+            <!-- Username / Email Field -->
             <div class="form-group">
-                <label for="email" class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Email</label>
+                <label for="email" class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Username / Email</label>
                 <div class="auth-input-wrap">
                     <span class="auth-input-icon">
-                        <Mail class="w-4.5 h-4.5" />
+                        <User class="w-4.5 h-4.5" />
                     </span>
                     <input
                         id="email"
-                        type="email"
+                        type="text"
                         v-model="form.email"
                         required
                         autofocus
-                        autocomplete="email"
-                        placeholder="nama@email.com"
+                        autocomplete="username"
+                        placeholder="Username atau email Anda"
                         class="w-full"
                     />
                 </div>
