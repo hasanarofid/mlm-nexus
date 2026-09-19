@@ -9,13 +9,22 @@ import {
   Users, 
   ArrowUpRight, 
   Check, 
-  PiggyBank,
-  CreditCard,
-  Send,
-  HelpCircle
+  PiggyBank, 
+  CreditCard, 
+  Send, 
+  HelpCircle,
+  UserPlus,
+  Wand2,
+  KeyRound,
+  ShieldCheck,
+  User
 } from '@lucide/vue';
 
 const props = defineProps({
+  is_admin: Boolean,
+  current_user_username: String,
+  vouchers: Array,
+  all_sponsors: Array,
   referral_links: Object,
   wallet: Object,
   premi_info: Object
@@ -23,6 +32,7 @@ const props = defineProps({
 
 const copySuccessMsg = ref('');
 const isPremiModalOpen = ref(false);
+const isAddMitraModalOpen = ref(false);
 
 const premiForm = useForm({
   amount: 10000,
@@ -33,6 +43,45 @@ const submitPremi = () => {
     onSuccess: () => {
       isPremiModalOpen.value = false;
       premiForm.reset();
+    }
+  });
+};
+
+const addMitraForm = useForm({
+  username: '',
+  name: '',
+  email: '',
+  phone: '',
+  nik: '',
+  sponsor_username: props.current_user_username || 'admin',
+  voucher_code: props.vouchers && props.vouchers.length > 0 ? props.vouchers[0].code : '',
+  password: 'password',
+  source: 'dashboard',
+});
+
+const fillDemoMitra = () => {
+  const randomId = Math.floor(100 + Math.random() * 900);
+  addMitraForm.username = `mitra_${randomId}`;
+  addMitraForm.name = `Mitra Baru ${randomId}`;
+  addMitraForm.email = `mitra${randomId}@gmail.com`;
+  addMitraForm.phone = `0812${randomId}56789`;
+  addMitraForm.nik = `3201${randomId}000001`;
+  addMitraForm.sponsor_username = props.current_user_username || 'admin';
+  addMitraForm.password = 'password';
+  if (props.vouchers && props.vouchers.length > 0) {
+    addMitraForm.voucher_code = props.vouchers[0].code;
+  }
+};
+
+const submitAddMitra = () => {
+  addMitraForm.post(route('admin.activation.store'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      isAddMitraModalOpen.value = false;
+      addMitraForm.reset();
+      addMitraForm.sponsor_username = props.current_user_username || 'admin';
+      addMitraForm.password = 'password';
+      addMitraForm.source = 'dashboard';
     }
   });
 };
@@ -61,25 +110,33 @@ const formatRupiah = (val) => {
         <span>{{ copySuccessMsg }}</span>
       </div>
 
-      <!-- 1. Link Referral Banner Card -->
-      <div class="bg-gradient-to-r from-[#f0f7fb] to-[#e6f9f8] border border-[#04bdb2]/30 rounded-3xl p-5 md:p-6 shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <!-- 1. Link Referral & Quick Add Mitra Banner Card -->
+      <div class="bg-gradient-to-r from-[#f0f7fb] via-[#e6f9f8] to-[#f4fbfc] border border-[#04bdb2]/30 rounded-3xl p-5 md:p-6 shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex items-start gap-4">
           <div class="p-3 bg-[#04bdb2]/10 text-[#009c94] rounded-2xl shrink-0 hidden sm:block">
             <span class="text-xl font-bold">🔗</span>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-sm font-extrabold text-[#1653a1] tracking-tight">Link Referral Anda</h3>
-              <span class="px-2 py-0.5 text-[9px] font-bold bg-[#04bdb2]/20 text-[#009c94] rounded-md">Referral Kemitraan</span>
+              <h3 class="text-sm font-extrabold text-[#1653a1] tracking-tight">Kemitraan & Referral Jaringan</h3>
+              <span class="px-2 py-0.5 text-[9px] font-bold bg-[#04bdb2]/20 text-[#009c94] rounded-md">Pendaftaran Mitra</span>
             </div>
-            <p class="text-xs text-slate-600 mt-1 font-medium">Bagikan link ini untuk mendaftarkan mitra baru secara langsung ke jaringan Unilevel Matahari Anda.</p>
+            <p class="text-xs text-slate-600 mt-1 font-medium">Daftarkan mitra baru secara langsung dari dashboard atau bagikan link referral Anda.</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center flex-wrap gap-2.5 shrink-0">
+          <button 
+            @click="isAddMitraModalOpen = true"
+            class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
+          >
+            <UserPlus class="w-4 h-4 stroke-[2.5]" />
+            <span>+ Tambah Mitra Baru</span>
+          </button>
+
           <button 
             @click="copyToClipboard(referral_links?.default || referral_links?.url, 'Referral')"
-            class="px-4 py-2 bg-gradient-to-r from-[#1653a1] to-[#04bdb2] hover:opacity-95 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+            class="px-4 py-2.5 bg-gradient-to-r from-[#1653a1] to-[#04bdb2] hover:opacity-95 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
           >
             <Copy class="w-3.5 h-3.5" />
             <span>Copy Link Referral</span>
@@ -230,7 +287,7 @@ const formatRupiah = (val) => {
       <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 border border-slate-100">
         <div class="flex items-center justify-between border-b border-slate-100 pb-3">
           <h3 class="text-base font-extrabold text-slate-900">Setor Premi Bulanan</h3>
-          <button @click="isPremiModalOpen = false" class="text-slate-400 hover:text-slate-700 text-lg font-bold">✕</button>
+          <button @click="isPremiModalOpen = false" class="text-slate-400 hover:text-slate-700 text-lg font-bold cursor-pointer">✕</button>
         </div>
 
         <p class="text-xs text-slate-500 font-medium">
@@ -256,7 +313,7 @@ const formatRupiah = (val) => {
             <button 
               type="button" 
               @click="isPremiModalOpen = false" 
-              class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl"
+              class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer"
             >
               Batal
             </button>
@@ -268,6 +325,205 @@ const formatRupiah = (val) => {
               Confirm & Bayar
             </button>
           </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Form Tambah Mitra Baru (Quick Add Mitra from Dashboard) -->
+    <div v-if="isAddMitraModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
+      <div class="bg-white rounded-3xl p-6 md:p-7 max-w-lg w-full shadow-2xl space-y-5 border border-slate-100 my-8">
+        
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+              <UserPlus class="w-5 h-5" />
+            </div>
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">Tambah Mitra Baru</h3>
+              <p class="text-[11px] text-slate-500 font-medium">Registrasi langsung anggota/mitra ke jaringan Anda.</p>
+            </div>
+          </div>
+          <button @click="isAddMitraModalOpen = false" class="text-slate-400 hover:text-slate-700 text-lg font-bold cursor-pointer">✕</button>
+        </div>
+
+        <!-- Demo Autofill Bar -->
+        <div class="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200/70 rounded-2xl">
+          <span class="text-[11px] text-slate-500 font-semibold flex items-center gap-1.5 pl-1">
+            <ShieldCheck class="w-4 h-4 text-emerald-600" />
+            Isi formulir pendaftaran mitra:
+          </span>
+          <button 
+            type="button" 
+            @click="fillDemoMitra"
+            class="px-3 py-1 bg-white hover:bg-emerald-50 border border-emerald-300 text-emerald-700 text-[11px] font-bold rounded-xl shadow-2xs flex items-center gap-1 cursor-pointer transition-colors"
+          >
+            <Wand2 class="w-3 h-3 text-emerald-600" />
+            <span>Isi Demo</span>
+          </button>
+        </div>
+
+        <!-- Add Mitra Form -->
+        <form @submit.prevent="submitAddMitra" class="space-y-4">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            
+            <!-- Username Mitra -->
+            <div>
+              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                USERNAME MITRA <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 font-bold text-xs">@</span>
+                <input 
+                  v-model="addMitraForm.username"
+                  type="text"
+                  required
+                  placeholder="cth: andipratama"
+                  class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
+                />
+              </div>
+              <p v-if="addMitraForm.errors.username" class="text-[10px] text-rose-500 font-bold mt-1">{{ addMitraForm.errors.username }}</p>
+            </div>
+
+            <!-- Nama Lengkap -->
+            <div>
+              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                NAMA LENGKAP <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                v-model="addMitraForm.name"
+                type="text"
+                required
+                placeholder="cth: Andi Pratama"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
+              />
+              <p v-if="addMitraForm.errors.name" class="text-[10px] text-rose-500 font-bold mt-1">{{ addMitraForm.errors.name }}</p>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                ALAMAT EMAIL <span class="text-rose-500">*</span>
+              </label>
+              <input 
+                v-model="addMitraForm.email"
+                type="email"
+                required
+                placeholder="cth: andi@gmail.com"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
+              />
+              <p v-if="addMitraForm.errors.email" class="text-[10px] text-rose-500 font-bold mt-1">{{ addMitraForm.errors.email }}</p>
+            </div>
+
+            <!-- No HP / WA -->
+            <div>
+              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                NO HP / WHATSAPP
+              </label>
+              <input 
+                v-model="addMitraForm.phone"
+                type="text"
+                placeholder="cth: 081234567890"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
+              />
+            </div>
+
+            <!-- NIK (Opsional) -->
+            <div>
+              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                NIK (KTP - OPSIONAL)
+              </label>
+              <input 
+                v-model="addMitraForm.nik"
+                type="text"
+                maxlength="20"
+                placeholder="cth: 3201234567890001"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
+              />
+            </div>
+
+            <!-- Password Awal -->
+            <div>
+              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
+                PASSWORD AWAL
+              </label>
+              <input 
+                v-model="addMitraForm.password"
+                type="text"
+                placeholder="Default: password"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
+              />
+            </div>
+
+          </div>
+
+          <!-- Sponsor Selection -->
+          <div class="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-1.5">
+            <label class="block text-[10px] font-extrabold text-indigo-950 uppercase tracking-wider">
+              SPONSOR LANGSUNG
+            </label>
+            <div v-if="is_admin && all_sponsors && all_sponsors.length > 0">
+              <select 
+                v-model="addMitraForm.sponsor_username"
+                class="w-full bg-white border border-indigo-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-950 focus:outline-none focus:border-indigo-500"
+              >
+                <option 
+                  v-for="s in all_sponsors" 
+                  :key="s.username" 
+                  :value="s.username"
+                >
+                  {{ s.label }}
+                </option>
+              </select>
+            </div>
+            <div v-else class="flex items-center justify-between bg-white px-3 py-2 border border-indigo-100 rounded-xl">
+              <span class="text-xs font-extrabold text-indigo-950">@{{ addMitraForm.sponsor_username }}</span>
+              <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Sponsor Anda</span>
+            </div>
+            <p class="text-[10px] text-indigo-700 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
+          </div>
+
+          <!-- Voucher / PIN (Optional) -->
+          <div v-if="vouchers && vouchers.length > 0" class="p-3.5 bg-emerald-50/50 border border-emerald-200/80 rounded-2xl space-y-1.5">
+            <label class="block text-[10px] font-extrabold text-emerald-950 uppercase tracking-wider">
+              PILIH VOUCHER AKTIVASI (PIN)
+            </label>
+            <select 
+              v-model="addMitraForm.voucher_code"
+              class="w-full bg-white border border-emerald-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-950 focus:outline-none focus:border-emerald-500"
+            >
+              <option value="">Aktivasi Langsung (Standard Rp 100.000)</option>
+              <option 
+                v-for="v in vouchers" 
+                :key="v.code" 
+                :value="v.code"
+              >
+                {{ v.label }}
+              </option>
+            </select>
+            <p class="text-[10px] text-emerald-700 font-medium">Stok voucher aktif Anda: {{ vouchers.length }} Voucher</p>
+          </div>
+
+          <!-- Modal Actions -->
+          <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+            <button 
+              type="button" 
+              @click="isAddMitraModalOpen = false" 
+              class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer"
+            >
+              Batal
+            </button>
+            <button 
+              type="submit" 
+              :disabled="addMitraForm.processing"
+              class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+            >
+              <Check class="w-4 h-4 stroke-[3]" />
+              <span>Daftarkan Mitra Sekarang</span>
+            </button>
+          </div>
+
         </form>
       </div>
     </div>

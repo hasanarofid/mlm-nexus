@@ -43,11 +43,32 @@ class DashboardController extends Controller
             $currentIds = $downlineIds;
         }
 
-        $voucherAktif = Voucher::where('user_id', $user->id)
+        $activeVouchers = Voucher::where('user_id', $user->id)
             ->where('status', 'active')
-            ->count();
+            ->get()
+            ->map(function ($v) {
+                return [
+                    'code' => $v->code,
+                    'package_name' => $v->package_name ?: 'Standard (Rp 100.000)',
+                    'label' => $v->code . ' (' . ($v->package_name ?: 'Standard') . ')',
+                ];
+            });
+
+        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@talenta52.com' || (method_exists($user, 'hasRole') && $user->hasRole('admin')));
+
+        $allSponsors = $isAdmin ? User::select('id', 'name', 'username')->get()->map(function ($u) {
+            return [
+                'username' => $u->username ?: ('user_' . $u->id),
+                'name' => $u->name,
+                'label' => '@' . ($u->username ?: ('user_' . $u->id)) . ' (' . $u->name . ')',
+            ];
+        }) : [];
 
         return Inertia::render('Admin/Dashboard', [
+            'is_admin' => $isAdmin,
+            'current_user_username' => $user->username ?: 'user_' . $user->id,
+            'vouchers' => $activeVouchers,
+            'all_sponsors' => $allSponsors,
             'referral_links' => [
                 'default' => url('/register?sponsor=' . ($user ? ($user->username ?: $user->id) : 1)),
                 'url' => url('/register?sponsor=' . ($user ? ($user->username ?: $user->id) : 1)),

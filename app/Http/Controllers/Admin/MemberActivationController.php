@@ -93,22 +93,30 @@ class MemberActivationController extends Controller
             'username' => 'required|string|alpha_dash|max:50|unique:users,username',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
+            'phone' => 'nullable|string|max:25',
+            'nik' => 'nullable|string|max:25',
+            'password' => 'nullable|string|min:6',
             'sponsor_username' => 'required|string|exists:users,username',
-            'voucher_code' => 'required|string|exists:vouchers,code',
+            'voucher_code' => 'nullable|string',
         ]);
 
         $currentUser = auth()->user() ?: User::first();
+        $isAdmin = ($currentUser->username === 'admin' || $currentUser->email === 'admin@talenta52.com' || (method_exists($currentUser, 'hasRole') && $currentUser->hasRole('admin')));
 
-        // Verify voucher / PIN
-        $voucher = Voucher::where('code', $request->voucher_code)
-            ->where('user_id', $currentUser->id)
-            ->where('status', 'active')
-            ->first();
+        // Verify voucher / PIN if provided
+        $voucher = null;
+        if (!empty($request->voucher_code)) {
+            $voucherQuery = Voucher::where('code', $request->voucher_code)->where('status', 'active');
+            if (!$isAdmin) {
+                $voucherQuery->where('user_id', $currentUser->id);
+            }
+            $voucher = $voucherQuery->first();
 
-        if (!$voucher) {
-            throw ValidationException::withMessages([
-                'voucher_code' => 'Voucher Activation (PIN) tidak valid, telah digunakan, atau bukan milik Anda.',
-            ]);
+            if (!$voucher) {
+                throw ValidationException::withMessages([
+                    'voucher_code' => 'Voucher Activation (PIN) tidak valid, telah digunakan, atau bukan milik Anda.',
+                ]);
+            }
         }
 
         $sponsorUser = User::where('username', $request->sponsor_username)->first();
@@ -118,35 +126,37 @@ class MemberActivationController extends Controller
             ]);
         }
 
-        $packageName = $voucher->package_name ?: 'Basic';
-        $alloc = $this->calculatePackageAllocation($packageName);
-        $sponsorBonus = $alloc['gen_1'];
-        $teamPoints = $alloc['team_points'];
+        $packageName = $voucher ? ($voucher->package_name ?: 'Standard (Rp 100.000)') : 'Standard (Rp 100.000)';
+        $plainPassword = $request->password ?: 'password';
 
-        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName) {
+        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName, $plainPassword) {
             // Create new member in Matahari system (parent_id = sponsor_id)
             $newUser = User::create([
                 'name' => $request->name,
                 'username' => strtolower($request->username),
                 'email' => $request->email,
-                'password' => bcrypt('password'),
+                'phone' => $request->phone ?? null,
+                'nik' => $request->nik ?? null,
+                'password' => bcrypt($plainPassword),
                 'parent_id' => $sponsorUser->id,
-                'package_name' => $packageName ?: 'Standard (Rp 100.000)',
+                'package_name' => $packageName,
             ]);
             $newUser->assignRole('client');
 
             try {
-                $newUser->notify(new \App\Notifications\WelcomeRegisterNotification($newUser, 'password'));
+                $newUser->notify(new \App\Notifications\WelcomeRegisterNotification($newUser, $plainPassword));
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::error('Gagal mengirim email aktivasi member: ' . $e->getMessage());
             }
 
-            // Mark voucher as used
-            $voucher->update([
-                'status' => 'used',
-                'used_by_id' => $newUser->id,
-                'used_at' => now(),
-            ]);
+            // Mark voucher as used if provided
+            if ($voucher) {
+                $voucher->update([
+                    'status' => 'used',
+                    'used_by_id' => $newUser->id,
+                    'used_at' => now(),
+                ]);
+            }
 
             // 1. Allocation for Yayasan (Rp 10.000) & Founder (Rp 10.000) from Rp 100.000 registration fee
             $adminUser = User::where('username', 'admin')->first() ?: User::first();
@@ -219,8 +229,14 @@ class MemberActivationController extends Controller
             }
         });
 
+        $successMsg = "Mitra baru @{$request->username} ({$request->name}) berhasil didaftarkan di bawah Sponsor @{$sponsorUser->username}! Bonus Generasi 1-10 berhasil didistribusikan.";
+
+        if ($request->input('source') === 'dashboard') {
+            return redirect()->route('admin.dashboard')->with('success', $successMsg);
+        }
+
         return redirect()->route('admin.pohon-jaringan', ['focus_id' => $sponsorUser->id])
-            ->with('success', "Member baru @{$request->username} ({$request->name}) berhasil diaktifkan di bawah Sponsor @{$sponsorUser->username}! Bonus Generasi 1-10 (Auto Save & Saldo WD) serta alokasi Yayasan & Founder berhasil didistribusikan.");
+            ->with('success', $successMsg);
     }
 
     /**
