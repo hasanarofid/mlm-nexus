@@ -97,7 +97,7 @@ const readingTime = Math.max(1, Math.ceil((props.post.content || '').split(' ').
         <!-- Logo -->
         <Link href="/" class="flex items-center gap-3 group">
           <div class="h-9 w-auto flex items-center">
-            <img src="/logo-x-seller.png" alt="TALENTA52 Logo" class="h-8 object-contain" />
+            <img src="/images/logo-nexus.png" alt="NEXUS Logo" class="h-8 object-contain" />
           </div>
           <div class="flex flex-col">
             <span class="font-black text-lg tracking-tight text-[#0b1f3a] group-hover:text-[#1653a1] transition-colors">

@@ -84,7 +84,7 @@ import { Link } from '@inertiajs/vue3';
         <div class="brand-side">
             <div class="brand-content">
                 <Link href="/" class="logo-box">
-                    <img src="/images/talenta52.webp" alt="Talenta52 Logo">
+                    <img src="/images/logo-nexus.png" alt="NEXUS Logo">
                 </Link>
 
                 <div class="brand-badge">

@@ -251,10 +251,10 @@ const logout = () => {
                         class="flex items-center h-16 px-5 border-b border-slate-100 lg:hidden justify-between shrink-0"
                     >
                         <div class="flex items-center gap-2.5">
-                            <img src="/images/talenta52.webp" alt="Talenta52" class="h-7 w-auto" />
+                            <img src="/images/logo-nexus.png" alt="NEXUS" class="h-7 w-auto object-contain" />
                             <span
                                 class="font-extrabold text-[#1a3a7c] text-sm tracking-tight uppercase"
-                                >TALENTA52</span
+                                >NEXUS</span
                             >
                         </div>
                         <button
@@ -449,18 +449,18 @@ const logout = () => {
                             <div
                                 class="px-2.5 py-1.5 bg-white/95 rounded-xl shadow-md flex items-center justify-center"
                             >
-                                <img src="/images/talenta52.webp" alt="Talenta52" class="h-7 w-auto object-contain" />
+                                <img src="/images/logo-nexus.png" alt="NEXUS" class="h-7 w-auto object-contain" />
                             </div>
                             <div>
                                 <div class="flex items-center gap-2">
                                     <h1
                                         class="text-xs font-black tracking-wider text-[#e8c44a] uppercase"
                                     >
-                                        TALENTA52
+                                        NEXUS
                                     </h1>
                                     <span
                                         class="px-1.5 py-0.2 text-[9px] font-bold bg-white/10 text-slate-200 border border-white/20 rounded"
-                                        >v2.4 Member Area</span
+                                        >Member Area</span
                                     >
                                 </div>
                                 <p
