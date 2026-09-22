@@ -1,86 +1,145 @@
-# Aturan Pengembangan & Dokumentasi Sistem - Proyek talenta52.com
+# Aturan Pengembangan & Dokumentasi Sistem - Proyek MLM NEXUS (PT. Nexus Komunitas Bersama)
 
-- **Domain Utama:** https://talenta52.com
+- **Repository:** `git@github.com:hasanarofid/mlm-nexus.git`
 - **Branch Utama:** `main` / `master`
 - **Lisensi & Owner:** [@hasanarofid.site](https://hasanarofid.site)
+- **Tema Visual / Brand Identity:**
+    - **Tema Warna:** Luxury Gold Theme (Emas `#D4AF37` / `#E5C07B`, Dark Slate/Obsidian `#0F172A` / `#18181B`, Pure White `#FFFFFF`, Neutral Accent).
+    - **Aset Ikon/Logo:** Inspirasi Piramida Emas Bergaris Simetris (Kemewahan, Pertumbuhan Jaringan, dan Kepercayaan).
 
 ---
 
 ## 1. Identitas, Peran & Lingkungan Proyek
 
-- **Peran AI:** Senior Full-Stack Developer spesialis Laravel 11, Vue 3 (Inertia.js), System Unilevel Matahari Multi-Tier Generasi 1-10, & Manajemen Bonus Auto Save & Saldo WD.
+- **Peran AI:** Senior Full-Stack Developer spesialis Laravel 11, Vue 3 (Inertia.js), Unilevel Network Multi-Tier Generasi 1-10, Manajemen Wallet/Withdrawal, & Sistem Upgrade Tier Membership.
 - **Tech Stack Utama:**
     - **Backend:** Laravel 11 (PHP 8.2+).
     - **Frontend:** Vue 3 (Inertia.js), Tailwind CSS, `@lucide/vue`, Headless UI / Shadcn-Vue components.
     - **Database:** MySQL.
     - **Auth & Authorization:** Laravel Sanctum & Spatie Laravel Permission.
 - **Aturan Istilah & Terminologi (Wajib Dipatuhi):**
-    - **Generasi:** Level jaringan Unilevel Matahari (Generasi 1 s/d Generasi 10).
-    - **Prosedur Migration Database Production:**
-        - Karena terminal SSH di server live terkadang mengalami kendala/error, cara merunning database migration di server production adalah dengan membuka URL: **`https://talenta52.com/run_migrate.php`** di browser setelah melakukan `git push origin master`.
+    - **Generasi (Gen 1 s/d Gen 10):** Tingkatan level kedalaman dalam sistem jaringan Unilevel.
+    - **Member Biasa (Regular):** Member dengan biaya aktivasi/tahunan Rp 500.000.
+    - **Member Premium:** Member yang telah mencapai 1.000 downline tim dan mengupgrade akun dengan biaya Rp 5.000.000 / tahun.
 
 ---
 
-## 2. Arsitektur Sistem Bisnis & Plan TALENTA52 (PRD 2026)
+## 2. Formulir Pendaftaran Member Baru (Registration Form)
 
-### A. Uang Pendaftaran & Bonus Generasi
+Pendaftaran member baru mewajibkan pengisian data lengkap dengan validasi ketat:
 
-1. **Biaya Pendaftaran Mitra:** Rp 100.000
-    - **Alokasi Yayasan:** Rp 10.000 per pendaftaran member baru.
-    - **Alokasi Founder:** Rp 10.000 per pendaftaran member baru.
-2. **Bonus Rekrut Mitra (Multi-tier Generasi 1 s/d Generasi 10):**
-    - Setiap pendaftaran mitra baru memberikan bonus **Rp 7.000** untuk setiap Upline dari Generasi 1 s/d Generasi 10.
-    - Formula Pembagian Bonus Rp 7.000:
-        - **50% Auto Save:** Rp 3.500
-        - **50% Saldo WD:** Rp 3.500
-    - **Total Saldo Mitra:** Auto Save (50%) + Saldo WD (50%).
+### A. Data Pribadi & Preferensi
+1. **Nama Lengkap:** *(Wajib)*
+2. **Nomor WhatsApp:** *(Wajib, format nomor valid)*
+3. **Email:** *(Wajib, format email valid)*
+4. **Apakah Anda dominan tangan kiri (Kidal)?:** *(Wajib, Pilihan: `Ya` / `Tidak`)*
 
----
+### B. Data Ahli Waris, Kontak Darurat & Rekening
+5. **Nama Ahli Waris:** *(Wajib)*
+6. **Tanggal Lahir Ahli Waris:** *(Wajib, format date)*
+7. **Hubungan dengan Ahli Waris:** *(Wajib)*
+8. **Nomor WhatsApp Kontak Darurat:** *(Wajib)*
+9. **Bank & Nomor Rekening:** *(Wajib, digunakan untuk pencairan bonus referral & withdrawal)*
 
-### B. Premi Bulanan
+### C. Dokumen & Bukti Pembayaran
+10. **Upload ID KTP:** *(Wajib, format JPG/PNG/PDF, maks. 10MB)*
+11. **Upload Bukti Transfer Member Rp 500.000,-:** *(Wajib, format JPG/PNG/PDF, maks. 10MB)*
+    - **Rekening Tujuan Transfer Perusahaan:**
+      > **Bank:** BCA  
+      > **Nomor Rekening:** 172-666-2020  
+      > **Atas Nama:** PT. NEXUS KOMUNITAS BERSAMA  
 
-- Setiap pembayaran Premi Bulanan (minimal Rp 10.000) dialokasikan **100% Full** masuk ke Total Saldo / Saldo WD Mitra.
-
----
-
-### C. Syarat Penarikan Saldo (Withdrawal / WD)
-
-- **Minimal Penarikan:** Rp 50.000
-- **Potongan Biaya Admin Bank:** Rp 10.000 per permohonan WD.
-- Penarikan diambil dari **Saldo WD** mitra.
-
----
-
-### D. Struktur Jaringan Matahari (Unilevel Network)
-
-- Tampilan Jaringan Matahari menampilkan:
-    - Total Jumlah Mitra.
-    - Jumlah Mitra per Generasi (Generasi 1 s/d Generasi 10).
+*(Catatan: Kode referral didapatkan secara otomatis melalui URL affiliate referral link downline).*
 
 ---
 
-### E. Navigasi Member Area (Sidebar)
+## 3. Arsitektur Sistem Bisnis & Plan MLM NEXUS (PRD 2026)
 
-Menu yang ditampilkan pada sidebar area Member (`client` role):
+### A. Biaya Pendaftaran & Komisi Rekrut (Pendaftaran Awal Rp 500.000)
 
-1. **Dashboard**
-2. **Team Mitra**
-3. **Penarikan Saldo**
-4. **Laporan**
+1. **Biaya Pendaftaran / Iuran Tahunan:** Rp 500.000 / tahun.
+2. **Bonus Sponsor Langsung (Generasi 1):**
+    - Sponsor langsung mendapatkan bonus **Rp 250.000** per member baru yang mendaftar.
+3. **Bonus Jaringan / Tim (Generasi 2 s/d Generasi 10):**
+    - Upline Generasi 2 sampai Generasi 10 masing-masing mendapatkan **Rp 25.000** per member baru.
+    - Rincian Payout Komisi Registrasi:
+        - Gen 1 (Sponsor Langsung): Rp 250.000
+        - Gen 2: Rp 25.000
+        - Gen 3: Rp 25.000
+        - Gen 4: Rp 25.000
+        - Gen 5: Rp 25.000
+        - Gen 6: Rp 25.000
+        - Gen 7: Rp 25.000
+        - Gen 8: Rp 25.000
+        - Gen 9: Rp 25.000
+        - Gen 10: Rp 25.000
+        *(Total Alokasi Bonus: Rp 475.000, Sisa Rp 25.000 masuk kas perusahaan/sistem).*
 
 ---
 
-## 3. Kualitas Kode & Standar Pemrograman
+### B. Kualifikasi & Bonus Upgrade Akun Premium
 
-1. **Clean & Maintainable:** DRY (Don't Repeat Yourself) dan KISS (Keep It Simple, Stupid).
-2. **Strict DB Transactions:** Semua logika kalkulasi bonus, alokasi 50% Auto Save & 50% Saldo WD, alokasi Yayasan & Founder, serta mutasi wallet WAJIB dibungkus `DB::transaction()` untuk menjamin keutuhan data.
-3. **Optimasi Unilevel Query:** Gunakan query pohon generasi unilevel yang presisi dan cepat hingga kedalaman 10 generasi.
-4. **Validasi & Integritas Data:** Selalu gunakan Form Request & DTO/Service layer terpisah dari Controller.
+1. **Syarat Kualifikasi Upgrade Premium:**
+    - Memiliki akumulasi minimal **1.000 Member** di seluruh tim jaringan (Generasi 1 s/d Generasi 10).
+    - Tombol Upgrade Premium di dashboard member berstatus **Disabled / Terkunci** jika total tim belum mencapai 1.000 member.
+2. **Biaya Upgrade & Perpanjangan Member Premium:**
+    - Biaya Upgrade / Renewal: **Rp 5.000.000 / tahun**.
+    - Metode Pembayaran: Dapat memotong **Saldo Wallet** atau **Transfer Bank**.
+    - Nilai proteksi asuransi member otomatis ditingkatkan menjadi Rp 5.000.000 (dikelola internal).
+3. **Bonus Generasi Upgrade Premium (Multi-Tier 10 Level Upline):**
+    - Setiap ada member downline yang melakukan upgrade/perpanjangan Premium (Rp 5.000.000), sebanyak **10 Level Upline ke atas masing-masing mendapatkan bonus Rp 250.000**.
+    - Simulasi:
+        - Downline Upgrade Premium -> Upline Level 1 menerima Rp 250.000, Upline Level 2 menerima Rp 250.000, ..., Upline Level 10 menerima Rp 250.000.
+        - Total alokasi bonus: 10 level x Rp 250.000 = Rp 2.500.000.
+    - **Aturan Sisa Upline:** Jika level upline kurang dari 10 (misalnya member pucuk), sisa bonus yang tidak memiliki upline **menjadi hak profit perusahaan** (tidak dibagikan ke pihak lain).
 
 ---
 
-## 4. Gaya Komunikasi AI
+### C. Masa Berlaku & Perpanjangan Tahunan (Annual Renewal)
 
-- Jawab secara singkat, padat, dan langsung ke poin solusi teknis.
-- Tampilkan hanya snippet / diff kode yang berubah.
+1. Masa aktif keanggotaan adalah **1 tahun (365 hari)** sejak tanggal aktivasi.
+2. **Perpanjangan Member Biasa:** Rp 500.000 / tahun (bisa potong saldo wallet atau transfer).
+3. **Perpanjangan Member Premium:** Rp 5.000.000 / tahun (bisa potong saldo wallet atau transfer).
+
+---
+
+### D. Syarat & Ketentuan Penarikan Saldo (Withdrawal / WD)
+
+1. **Minimal Penarikan:** Rp 250.000 per transaksi.
+2. **Waktu Pencairan Dana:** **H+1 Hari Kerja** (Senin - Jumat, tidak termasuk hari libur nasional dan akhir pekan).
+3. **Rekening Tujuan:** Otomatis diarahkan ke data Bank & Nomor Rekening yang didaftarkan member.
+
+---
+
+### E. Navigasi & Struktur Member Area
+
+1. **Dashboard:**
+    - Card Status Member (Badge: `Regular Member` / `Premium Member`).
+    - Card Saldo Wallet & Tombol Cepat Penarikan Dana.
+    - Card Statistik Jaringan (Total Member Gen 1-10) & Progress Tracker pencapaian 1.000 member.
+    - Tombol Upgrade Premium (Aktif jika $\ge 1000$ member, disabled dengan tooltip jika $< 1000$).
+    - Link & QR Code Referral Member.
+2. **Team Mitra (Jaringan):**
+    - Visualisasi hierarki & filter rincian member per Generasi (Gen 1 s/d Gen 10).
+3. **Penarikan Saldo (Withdrawal):**
+    - Form penarikan (validasi min. Rp 250.000), estimasi pencairan (H+1 hari kerja), dan tabel riwayat status penarikan (Pending, Approved, Rejected).
+4. **Laporan & Riwayat Mutasi:**
+    - Rincian riwayat Bonus Sponsor Langsung, Bonus Tim Gen 2-10, Bonus Upgrade Premium, dan mutasi saldo.
+
+---
+
+## 4. Kualitas Kode & Standar Pemrograman
+
+1. **Clean & Maintainable:** Terapkan prinsip DRY (Don't Repeat Yourself) dan KISS (Keep It Simple, Stupid).
+2. **Strict DB Transactions:** Semua perhitungan komisi (Bonus Sponsor, Bonus Tim Gen 2-10, Bonus Upgrade Premium), mutasi wallet, perpanjangan tahunan, dan pengajuan withdrawal **WAJIB dibungkus dalam `DB::transaction()`**.
+3. **Unilevel Tree Performance:** Optimalkan query pembacaan jaringan dan rekursi upline 10 level menggunakan index database dan query builder yang efisien.
+4. **Form Request & DTO Pattern:** Selalu pisahkan validasi form ke Dedicated Form Request dan logika bisnis ke Service layer.
+5. **UI Consistency:** Gunakan Tailwind CSS dengan palet gold/dark slate yang konsisten, komponen dialog/modal yang responsif, dan feedback interaksi yang jelas.
+
+---
+
+## 5. Gaya Komunikasi AI
+
+- Jawab secara singkat, padat, dan langsung ke inti penyelesaian masalah.
+- Tampilkan hanya snippet / diff kode yang berubah tanpa mengulang seluruh file.
 - Gunakan Bahasa Indonesia yang profesional dan santai.
