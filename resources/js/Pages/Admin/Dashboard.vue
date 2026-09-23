@@ -120,7 +120,7 @@ const formatRupiah = (val) => {
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-sm font-extrabold text-[#0F172A] tracking-tight">Kemitraan & Referral Jaringan</h3>
+              <h3 class="text-sm font-extrabold text-[#0F172A] tracking-tight">Komunitas Mitra</h3>
               <span class="px-2 py-0.5 text-[9px] font-bold bg-[#D4AF37]/20 text-[#B8922E] border border-[#D4AF37]/30 rounded-md">Pendaftaran Mitra</span>
             </div>
             <p class="text-xs text-slate-600 mt-1 font-medium">Daftarkan mitra baru secara langsung dari dashboard atau bagikan link referral Anda.</p>
@@ -184,7 +184,7 @@ const formatRupiah = (val) => {
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <div class="flex items-center gap-2">
               <Users class="w-5 h-5 text-[#0F172A]" />
-              <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Ringkasan Jaringan Matahari</h3>
+              <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Ringkasan Mitra Saya</h3>
             </div>
             <Link :href="route('admin.pohon-jaringan')" class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] hover:underline flex items-center gap-1 transition-colors">
               <span>Lihat Tree Network</span>
