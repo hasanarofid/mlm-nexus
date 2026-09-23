@@ -12,10 +12,10 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable([
-    'name', 'email', 'password', 'username', 'phone', 
+    'name', 'email', 'password', 'username', 'phone', 'is_left_handed',
     'nik', 'ktp_image', 'transfer_proof', 'gender', 'birth_place', 'birth_date', 'religion', 'marital_status', 'last_education', 'occupation',
     'address', 'province', 'city', 'district', 'village', 'postal_code',
-    'beneficiary_name', 'beneficiary_relation', 'beneficiary_phone',
+    'beneficiary_name', 'beneficiary_birth_date', 'beneficiary_relation', 'beneficiary_phone', 'emergency_phone',
     'parent_id', 'position', 'left_count', 'right_count', 'left_points', 'right_points', 
     'team_points', 'ro_points', 'po_points', 'package_name', 'saldo', 'auto_save_saldo', 
     'total_bonus', 'security_pin', 'bonus_uncashed', 'bank_name', 'bank_account_number', 'bank_account_name'
