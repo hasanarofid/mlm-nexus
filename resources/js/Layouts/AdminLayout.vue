@@ -202,18 +202,18 @@ const logout = () => {
                     @click="closeAllToasts"
                     class="px-3 py-1 bg-white/90 border border-slate-200 hover:bg-slate-50 text-slate-700 text-[11px] font-semibold rounded-full shadow-md backdrop-blur flex items-center gap-1.5 transition-all cursor-pointer"
                 >
-                    <CheckCircle2 class="w-3.5 h-3.5 text-[#04bdb2]" />
+                    <CheckCircle2 class="w-3.5 h-3.5 text-[#B8922E]" />
                     <span>Tutup Semua</span>
                 </button>
 
                 <div
                     v-for="toast in toastStack"
                     :key="toast.id"
-                    class="w-full p-3 bg-[#e6f9f8] border border-[#04bdb2]/40 text-[#009c94] rounded-2xl shadow-lg backdrop-blur-md flex items-center justify-between gap-3 text-xs font-bold animate-fade-in transition-all"
+                    class="w-full p-3 bg-[#fdfbf7] border border-[#D4AF37]/40 text-[#B8922E] rounded-2xl shadow-lg backdrop-blur-md flex items-center justify-between gap-3 text-xs font-bold animate-fade-in transition-all"
                 >
                     <div class="flex items-center gap-2">
                         <div
-                            class="w-5 h-5 rounded-full bg-[#04bdb2] text-white flex items-center justify-center shrink-0"
+                            class="w-5 h-5 rounded-full bg-[#D4AF37] text-slate-900 flex items-center justify-center shrink-0"
                         >
                             <CheckCircle2 class="w-3.5 h-3.5" />
                         </div>
@@ -221,7 +221,7 @@ const logout = () => {
                     </div>
                     <button
                         @click="closeToast(toast.id)"
-                        class="text-[#04bdb2] hover:text-[#1653a1] p-0.5 cursor-pointer"
+                        class="text-[#B8922E] hover:text-[#0F172A] p-0.5 cursor-pointer"
                     >
                         <X class="w-3.5 h-3.5" />
                     </button>
@@ -298,10 +298,10 @@ const logout = () => {
 
                         <!-- Dompet Saya Card Widget -->
                         <div
-                            class="w-full mt-2 p-3 bg-[#f5f7fb] border border-[#1a3a7c]/15 rounded-2xl text-left space-y-1.5 shadow-xs"
+                            class="w-full mt-2 p-3 bg-[#fdfbf7] border border-[#D4AF37]/30 rounded-2xl text-left space-y-1.5 shadow-xs"
                         >
                             <span
-                                class="text-[9px] font-extrabold text-[#1a3a7c] uppercase tracking-wider block"
+                                class="text-[9px] font-extrabold text-[#0F172A] uppercase tracking-wider block"
                                 >DOMPET SAYA</span
                             >
                             <p
@@ -315,7 +315,7 @@ const logout = () => {
                                 <span class="text-slate-400 font-medium block"
                                     >TOTAL BONUS:</span
                                 >
-                                <span class="font-bold text-[#009c94]">{{
+                                <span class="font-bold text-[#B8922E]">{{
                                     formatRupiah(user.total_bonus ?? 0)
                                 }}</span>
                             </div>
@@ -333,7 +333,7 @@ const logout = () => {
                                 @click="isSidebarOpen = false"
                                 :class="[
                                     item.special === 'blue'
-                                        ? 'bg-[#f0f7fb] border border-[#1653a1]/30 text-[#1653a1] font-bold hover:bg-[#e2f1fc]'
+                                        ? 'bg-[#faf6eb] border border-[#D4AF37]/40 text-[#B8922E] font-bold hover:bg-[#f4ebd0]'
                                         : 'text-slate-600 hover:bg-slate-100 font-medium',
                                     isSidebarCollapsed
                                         ? 'lg:justify-center lg:px-0'
@@ -346,7 +346,7 @@ const logout = () => {
                                     :is="item.icon"
                                     :class="[
                                         item.special === 'blue'
-                                            ? 'text-[#1653a1]'
+                                            ? 'text-[#B8922E]'
                                             : 'text-slate-400',
                                         isSidebarCollapsed ? 'lg:mr-0' : 'mr-3',
                                         'w-4 h-4 flex-shrink-0 transition-transform duration-200 group-hover:scale-110',
@@ -371,10 +371,10 @@ const logout = () => {
                                     item.current
                                         ? item.special === 'amber'
                                             ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white font-black shadow-sm'
-                                            : 'bg-gradient-to-r from-[#1653a1] to-[#04bdb2] text-white font-bold shadow-md shadow-[#1653a1]/20'
+                                            : 'bg-gradient-to-r from-[#0F172A] to-[#1E293B] text-[#D4AF37] font-bold shadow-md shadow-slate-900/20'
                                         : item.special === 'amber'
                                           ? 'bg-amber-50/60 border border-amber-300/80 text-amber-900 font-bold hover:bg-amber-100'
-                                          : 'text-slate-600 hover:bg-[#f0f7fb] hover:text-[#1653a1] font-medium',
+                                          : 'text-slate-600 hover:bg-[#faf6eb] hover:text-[#B8922E] font-medium',
                                     isSidebarCollapsed
                                         ? 'lg:justify-center lg:px-0'
                                         : 'px-3.5',
@@ -386,10 +386,10 @@ const logout = () => {
                                     :is="item.icon"
                                     :class="[
                                         item.current
-                                            ? 'text-white'
+                                            ? 'text-[#D4AF37]'
                                             : item.special === 'amber'
                                               ? 'text-amber-600'
-                                              : 'text-slate-400 group-hover:text-[#1653a1]',
+                                              : 'text-slate-400 group-hover:text-[#B8922E]',
                                         isSidebarCollapsed ? 'lg:mr-0' : 'mr-3',
                                         'w-4 h-4 flex-shrink-0 transition-transform duration-200 group-hover:scale-110',
                                     ]"
@@ -434,7 +434,7 @@ const logout = () => {
             >
                 <!-- Top Bar Header (Theme: Nexus Community Navy + Gold) -->
                 <header
-                    class="flex items-center justify-between h-16 px-6 md:px-8 bg-gradient-to-r from-[#0f2558] via-[#1a3a7c] to-[#1e5099] text-white sticky top-0 z-30 shadow-md border-b border-[#c9a227]/30"
+                    class="flex items-center justify-between h-16 px-6 md:px-8 bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white sticky top-0 z-30 shadow-md border-b border-[#D4AF37]/30"
                 >
                     <div class="flex items-center gap-4">
                         <button
@@ -454,7 +454,7 @@ const logout = () => {
                             <div>
                                 <div class="flex items-center gap-2">
                                     <h1
-                                        class="text-xs font-black tracking-wider text-[#e8c44a] uppercase"
+                                        class="text-xs font-black tracking-wider text-[#D4AF37] uppercase"
                                     >
                                         NEXUS
                                     </h1>
@@ -477,17 +477,17 @@ const logout = () => {
                         <!-- Notification Bell -->
                         <button
                             @click="isNotificationsOpen = !isNotificationsOpen"
-                            class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#e8c44a] transition-colors cursor-pointer"
+                            class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#D4AF37] transition-colors cursor-pointer"
                         >
                             <Bell class="w-4 h-4" />
                             <span
-                                class="absolute top-1 right-1 w-2 h-2 bg-[#c9a227] rounded-full animate-ping"
+                                class="absolute top-1 right-1 w-2 h-2 bg-[#D4AF37] rounded-full animate-ping"
                             ></span>
                         </button>
 
                         <!-- User Avatar Circle -->
                         <div
-                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#1a3a7c] to-[#c9a227] border border-white/40 text-white font-extrabold flex items-center justify-center text-xs shadow-sm"
+                            class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0F172A] to-[#D4AF37] border border-white/40 text-white font-extrabold flex items-center justify-center text-xs shadow-sm"
                         >
                             {{
                                 user.name
@@ -505,7 +505,7 @@ const logout = () => {
                                 user.name
                             }}</span>
                             <span
-                                class="px-2 py-0.5 text-[9px] font-bold bg-[#c9a227]/20 text-[#e8c44a] border border-[#c9a227]/40 rounded-md"
+                                class="px-2 py-0.5 text-[9px] font-bold bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40 rounded-md"
                                 >{{ isAdmin ? "Admin" : "Member" }}</span
                             >
                         </div>
@@ -516,7 +516,7 @@ const logout = () => {
                                 @click="isUserMenuOpen = !isUserMenuOpen"
                                 class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
                             >
-                                <Users class="w-3.5 h-3.5 text-[#a9fff7]" />
+                                <Users class="w-3.5 h-3.5 text-[#D4AF37]" />
                                 <span>Akun Saya</span>
                                 <ChevronDown
                                     class="w-3.5 h-3.5 text-slate-300"
@@ -534,7 +534,7 @@ const logout = () => {
                             >
                                 <Link
                                     :href="route('profile.edit')"
-                                    class="block px-4 py-2 text-xs font-semibold hover:bg-[#f0f7fb]"
+                                    class="block px-4 py-2 text-xs font-semibold hover:bg-[#faf6eb]"
                                 >
                                     Pengaturan Profil
                                 </Link>

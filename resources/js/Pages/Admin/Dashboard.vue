@@ -113,15 +113,15 @@ const formatRupiah = (val) => {
       </div>
 
       <!-- 1. Link Referral & Quick Add Mitra Banner Card -->
-      <div class="bg-gradient-to-r from-[#f0f7fb] via-[#e6f9f8] to-[#f4fbfc] border border-[#04bdb2]/30 rounded-3xl p-5 md:p-6 shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="bg-gradient-to-r from-[#fdfbf7] via-[#faf6eb] to-[#f7f3e8] border border-[#D4AF37]/40 rounded-3xl p-5 md:p-6 shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex items-start gap-4">
-          <div class="p-3 bg-[#04bdb2]/10 text-[#009c94] rounded-2xl shrink-0 hidden sm:block">
+          <div class="p-3 bg-[#D4AF37]/15 text-[#B8922E] rounded-2xl shrink-0 hidden sm:block">
             <span class="text-xl font-bold">🔗</span>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 class="text-sm font-extrabold text-[#1653a1] tracking-tight">Kemitraan & Referral Jaringan</h3>
-              <span class="px-2 py-0.5 text-[9px] font-bold bg-[#04bdb2]/20 text-[#009c94] rounded-md">Pendaftaran Mitra</span>
+              <h3 class="text-sm font-extrabold text-[#0F172A] tracking-tight">Kemitraan & Referral Jaringan</h3>
+              <span class="px-2 py-0.5 text-[9px] font-bold bg-[#D4AF37]/20 text-[#B8922E] border border-[#D4AF37]/30 rounded-md">Pendaftaran Mitra</span>
             </div>
             <p class="text-xs text-slate-600 mt-1 font-medium">Daftarkan mitra baru secara langsung dari dashboard atau bagikan link referral Anda.</p>
           </div>
@@ -130,7 +130,7 @@ const formatRupiah = (val) => {
         <div class="flex items-center flex-wrap gap-2.5 shrink-0">
           <button 
             @click="isAddMitraModalOpen = true"
-            class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
+            class="px-4 py-2.5 bg-[#0F172A] hover:bg-[#1E293B] text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-black rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
           >
             <UserPlus class="w-4 h-4 stroke-[2.5]" />
             <span>+ Tambah Mitra Baru</span>
@@ -138,7 +138,7 @@ const formatRupiah = (val) => {
 
           <button 
             @click="copyToClipboard(referral_links?.default || referral_links?.url, 'Referral')"
-            class="px-4 py-2.5 bg-gradient-to-r from-[#1653a1] to-[#04bdb2] hover:opacity-95 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+            class="px-4 py-2.5 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
           >
             <Copy class="w-3.5 h-3.5" />
             <span>Copy Link Referral</span>
@@ -150,11 +150,11 @@ const formatRupiah = (val) => {
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         <!-- Total Saldo Card (Combined 50% AutoSave + 50% Saldo WD) -->
-        <div class="bg-gradient-to-br from-[#0b1f3a] via-[#103f80] to-[#1653a1] text-white rounded-3xl p-6 relative overflow-hidden shadow-lg space-y-4 border border-[#04bdb2]/30 lg:col-span-1 flex flex-col justify-between">
+        <div class="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white rounded-3xl p-6 relative overflow-hidden shadow-xl space-y-4 border border-[#D4AF37]/40 lg:col-span-1 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between">
-              <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#a9fff7] flex items-center gap-1.5">
-                <Wallet class="w-3.5 h-3.5 text-[#04bdb2]" />
+              <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5">
+                <Wallet class="w-3.5 h-3.5 text-[#D4AF37]" />
                 TOTAL SALDO MITRA
               </span>
             </div>
@@ -167,11 +167,11 @@ const formatRupiah = (val) => {
           <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
             <div class="text-[11px]">
               <span class="text-slate-300 block font-medium">Status Wallet</span>
-              <span class="font-bold text-[#a9fff7]">Terverifikasi</span>
+              <span class="font-bold text-[#D4AF37]">Terverifikasi</span>
             </div>
             <Link 
               :href="route('admin.withdrawals.index')" 
-              class="px-3.5 py-1.5 bg-[#04bdb2] hover:bg-[#009c94] text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer"
+              class="px-3.5 py-1.5 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-black rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <span>Penarikan (WD)</span>
               <ArrowUpRight class="w-4 h-4" />
@@ -180,13 +180,13 @@ const formatRupiah = (val) => {
         </div>
 
         <!-- 50% Auto Save Card -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
-              <PiggyBank class="w-4 h-4 text-emerald-500" />
+              <PiggyBank class="w-4 h-4 text-[#B8922E]" />
               AUTO SAVE (50%)
             </span>
-            <span class="px-2 py-0.5 text-[9px] font-bold bg-emerald-50 text-emerald-600 rounded-md">Alokasi 50%</span>
+            <span class="px-2 py-0.5 text-[9px] font-bold bg-[#faf6eb] text-[#B8922E] border border-[#D4AF37]/30 rounded-md">Alokasi 50%</span>
           </div>
 
           <div>
@@ -200,13 +200,13 @@ const formatRupiah = (val) => {
         </div>
 
         <!-- 50% Saldo WD Card -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
-              <CreditCard class="w-4 h-4 text-[#1653a1]" />
+              <CreditCard class="w-4 h-4 text-[#0F172A]" />
               SALDO WD (50%)
             </span>
-            <span class="px-2 py-0.5 text-[9px] font-bold bg-blue-50 text-[#1653a1] rounded-md">Bisa Ditarik</span>
+            <span class="px-2 py-0.5 text-[9px] font-bold bg-slate-100 text-[#0F172A] rounded-md">Bisa Ditarik</span>
           </div>
 
           <div>
@@ -218,7 +218,7 @@ const formatRupiah = (val) => {
             <span class="text-[11px] text-slate-500 font-medium">Siap ditarik kapan saja</span>
             <Link 
               :href="route('admin.withdrawals.index')" 
-              class="text-xs font-extrabold text-[#1653a1] hover:underline flex items-center gap-1"
+              class="text-xs font-extrabold text-[#B8922E] hover:text-[#0F172A] hover:underline flex items-center gap-1 transition-colors"
             >
               <span>Tarik Saldo</span>
               <ArrowUpRight class="w-3.5 h-3.5" />
@@ -232,39 +232,39 @@ const formatRupiah = (val) => {
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         <!-- Network Summary -->
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm lg:col-span-2 space-y-4">
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm lg:col-span-2 space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <div class="flex items-center gap-2">
-              <Users class="w-5 h-5 text-[#1653a1]" />
+              <Users class="w-5 h-5 text-[#0F172A]" />
               <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Ringkasan Jaringan Matahari</h3>
             </div>
-            <Link :href="route('admin.pohon-jaringan')" class="text-xs font-bold text-[#1653a1] hover:underline flex items-center gap-1">
+            <Link :href="route('admin.pohon-jaringan')" class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] hover:underline flex items-center gap-1 transition-colors">
               <span>Lihat Tree Network</span>
               <ArrowUpRight class="w-3.5 h-3.5" />
             </Link>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
-            <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/60">
+            <div class="p-4 rounded-2xl border border-slate-100 bg-[#fdfbf7]">
               <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Mitra Direct (Gen 1)</p>
-              <h4 class="text-2xl font-black text-[#1653a1] mt-1">{{ wallet?.direct_downlines ?? 0 }} <span class="text-xs font-normal text-slate-500">Orang</span></h4>
+              <h4 class="text-2xl font-black text-[#0F172A] mt-1">{{ wallet?.direct_downlines ?? 0 }} <span class="text-xs font-normal text-slate-500">Orang</span></h4>
             </div>
 
-            <div class="p-4 rounded-2xl border border-slate-100 bg-slate-50/60">
-              <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Total Team (Gen 1-10)</p>
-              <h4 class="text-2xl font-black text-[#009c94] mt-1">{{ wallet?.total_downlines ?? 0 }} <span class="text-xs font-normal text-slate-500">Orang</span></h4>
+            <div class="p-4 rounded-2xl border border-slate-100 bg-[#faf6eb]">
+              <p class="text-[10px] font-extrabold text-[#B8922E] uppercase tracking-wider">Total Team (Gen 1-10)</p>
+              <h4 class="text-2xl font-black text-[#B8922E] mt-1">{{ wallet?.total_downlines ?? 0 }} <span class="text-xs font-normal text-slate-500">Orang</span></h4>
             </div>
           </div>
         </div>
 
         <!-- Monthly Premi Action Box -->
-        <div class="bg-gradient-to-br from-[#e6f9f8] to-[#f0f7fb] border border-[#04bdb2]/30 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+        <div class="bg-gradient-to-br from-[#fdfbf7] to-[#f8f5ee] border border-[#D4AF37]/40 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
           <div>
             <div class="flex items-center gap-2">
-              <div class="p-2 bg-[#04bdb2]/20 text-[#009c94] rounded-xl">
+              <div class="p-2 bg-[#D4AF37]/15 text-[#B8922E] rounded-xl">
                 <CreditCard class="w-4 h-4" />
               </div>
-              <h3 class="text-sm font-extrabold text-[#1653a1] tracking-tight">Bayar Premi Bulanan</h3>
+              <h3 class="text-sm font-extrabold text-[#0F172A] tracking-tight">Bayar Premi Bulanan</h3>
             </div>
             <p class="text-xs text-slate-600 mt-2 font-medium">
               Setoran Premi bulanan (min. Rp 10.000) masuk <strong>100% Full</strong> ke Total Saldo mitra.
@@ -273,7 +273,7 @@ const formatRupiah = (val) => {
 
           <button 
             @click="isPremiModalOpen = true" 
-            class="w-full py-3 bg-gradient-to-r from-[#1653a1] to-[#04bdb2] hover:opacity-95 text-white text-xs font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+            class="w-full py-3 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-black rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <Send class="w-4 h-4" />
             <span>Bayar Premi (Min. Rp 10.000)</span>
@@ -304,7 +304,7 @@ const formatRupiah = (val) => {
               type="number" 
               min="10000" 
               step="5000" 
-              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-[#04bdb2] focus:outline-none" 
+              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-[#D4AF37] focus:outline-none" 
               placeholder="10000"
               required 
             />
@@ -322,7 +322,7 @@ const formatRupiah = (val) => {
             <button 
               type="submit" 
               :disabled="premiForm.processing"
-              class="px-5 py-2 bg-gradient-to-r from-[#1653a1] to-[#04bdb2] hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer disabled:opacity-50"
+              class="px-5 py-2 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-bold rounded-xl shadow-md cursor-pointer disabled:opacity-50"
             >
               Confirm & Bayar
             </button>
@@ -445,14 +445,14 @@ const formatRupiah = (val) => {
           </div>
 
           <!-- Sponsor Selection -->
-          <div class="p-3.5 bg-indigo-50/50 border border-indigo-200/80 rounded-2xl space-y-1.5">
-            <label class="block text-[10px] font-extrabold text-indigo-950 uppercase tracking-wider">
+          <div class="p-3.5 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-2xl space-y-1.5">
+            <label class="block text-[10px] font-extrabold text-[#0F172A] uppercase tracking-wider">
               SPONSOR LANGSUNG
             </label>
             <div v-if="is_admin && all_sponsors && all_sponsors.length > 0">
               <select 
                 v-model="addMitraForm.sponsor_username"
-                class="w-full bg-white border border-indigo-200 rounded-xl px-3 py-2 text-xs font-bold text-indigo-950 focus:outline-none focus:border-indigo-500"
+                class="w-full bg-white border border-[#D4AF37]/40 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#D4AF37]"
               >
                 <option 
                   v-for="s in all_sponsors" 
@@ -463,21 +463,21 @@ const formatRupiah = (val) => {
                 </option>
               </select>
             </div>
-            <div v-else class="flex items-center justify-between bg-white px-3 py-2 border border-indigo-100 rounded-xl">
-              <span class="text-xs font-extrabold text-indigo-950">@{{ addMitraForm.sponsor_username }}</span>
-              <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Sponsor Anda</span>
+            <div v-else class="flex items-center justify-between bg-white px-3 py-2 border border-[#D4AF37]/30 rounded-xl">
+              <span class="text-xs font-extrabold text-[#0F172A]">@{{ addMitraForm.sponsor_username }}</span>
+              <span class="text-[10px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">Sponsor Anda</span>
             </div>
-            <p class="text-[10px] text-indigo-700 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
+            <p class="text-[10px] text-slate-600 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
           </div>
 
           <!-- Data Rekening Bank Mitra Baru -->
-          <div class="p-3.5 bg-emerald-50/60 border border-emerald-200/80 rounded-2xl space-y-3">
-            <div class="flex items-center justify-between border-b border-emerald-200/70 pb-2">
+          <div class="p-3.5 bg-[#fdfbf7] border border-[#D4AF37]/40 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between border-b border-[#D4AF37]/30 pb-2">
               <div class="flex items-center gap-2">
-                <CreditCard class="w-4 h-4 text-emerald-700" />
-                <h4 class="text-[11px] font-extrabold text-emerald-950 uppercase tracking-tight">Data Rekening Bank Mitra (Penerima WD / Bonus)</h4>
+                <CreditCard class="w-4 h-4 text-[#B8922E]" />
+                <h4 class="text-[11px] font-extrabold text-[#0F172A] uppercase tracking-tight">Data Rekening Bank Mitra (Penerima WD / Bonus)</h4>
               </div>
-              <span class="text-[9px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded">
+              <span class="text-[9px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">
                 Untuk Pencairan
               </span>
             </div>
@@ -490,7 +490,7 @@ const formatRupiah = (val) => {
                 </label>
                 <select 
                   v-model="addMitraForm.bank_name"
-                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 transition-all"
+                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#D4AF37] transition-all"
                 >
                   <option value="Bank BRI">Bank BRI</option>
                   <option value="Bank Mandiri">Bank Mandiri</option>
@@ -516,7 +516,7 @@ const formatRupiah = (val) => {
                   v-model="addMitraForm.bank_account_number"
                   type="text"
                   placeholder="cth: 1234567890"
-                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-emerald-500 transition-all"
+                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-[#D4AF37] transition-all"
                 />
               </div>
 
@@ -529,11 +529,11 @@ const formatRupiah = (val) => {
                   v-model="addMitraForm.bank_account_name"
                   type="text"
                   :placeholder="addMitraForm.name || 'Sesuai KTP Mitra'"
-                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 transition-all"
+                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#D4AF37] transition-all"
                 />
               </div>
             </div>
-            <p class="text-[10px] text-emerald-800/80 font-medium">
+            <p class="text-[10px] text-slate-600 font-medium">
               💡 Rekening ini digunakan admin untuk menyalurkan pembayaran pencairan saldo (WD) & bonus mitra sesuai nama lengkap dan NIK-nya.
             </p>
           </div>
@@ -550,7 +550,7 @@ const formatRupiah = (val) => {
             <button 
               type="submit" 
               :disabled="addMitraForm.processing"
-              class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+              class="px-6 py-2.5 bg-[#0F172A] hover:bg-[#1E293B] text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-black rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
             >
               <Check class="w-4 h-4 stroke-[3]" />
               <span>Daftarkan Mitra Sekarang</span>
