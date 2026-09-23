@@ -7,6 +7,7 @@ import {
     Settings as SettingsIcon,
     FileText,
     Users,
+    User,
     Menu,
     X,
     LogOut,
@@ -489,14 +490,14 @@ const logout = () => {
                             >
                         </div>
 
-                        <!-- User Switch Button Dropdown Pill -->
+                        <!-- User Dropdown Pill (User Icon + Down Arrow) -->
                         <div class="relative">
                             <button
                                 @click="isUserMenuOpen = !isUserMenuOpen"
-                                class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                                class="p-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                                title="Akun Saya"
                             >
-                                <Users class="w-3.5 h-3.5 text-[#D4AF37]" />
-                                <span>Akun Saya</span>
+                                <User class="w-4 h-4 text-[#D4AF37]" />
                                 <ChevronDown
                                     class="w-3.5 h-3.5 text-slate-300"
                                 />
