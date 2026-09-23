@@ -236,8 +236,8 @@ const saveBanks = () => {
     <Head
         :title="
             is_admin
-                ? 'Pengaturan Profil Instansi & Administrator - NEXUS COMMUNITY'
-                : 'Pengaturan Profil Member - NEXUS COMMUNITY'
+                ? 'Pengaturan Profile Instansi & Administrator - NEXUS COMMUNITY'
+                : 'Pengaturan Profile Member - NEXUS COMMUNITY'
         "
     />
 
@@ -1038,7 +1038,7 @@ const saveBanks = () => {
                         <h2
                             class="text-lg md:text-xl font-black text-slate-900 tracking-tight"
                         >
-                            Pengaturan Profil Instansi & Administrator Utama
+                            Pengaturan Profile Instansi & Administrator Utama
                         </h2>
                         <p class="text-xs text-slate-500 font-medium mt-0.5">
                             Kelola Identitas korporat perusahaan, nomor rekening
