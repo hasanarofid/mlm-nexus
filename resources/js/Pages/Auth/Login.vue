@@ -31,7 +31,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Login | Talenta52" />
+        <Head title="Login | Nexus Community" />
 
         <div class="panel-heading">
             <span class="eyebrow">MEMBER LOGIN</span>
@@ -100,7 +100,7 @@ const submit = () => {
                     <input
                         type="checkbox"
                         v-model="form.remember"
-                        class="rounded border-slate-300 text-[#1a3a7c] focus:ring-[#c9a227] accent-[#1a3a7c]"
+                        class="rounded border-slate-300 text-[#D4AF37] focus:ring-[#D4AF37] accent-[#0F172A]"
                     />
                     <span class="ms-2 font-medium">Ingat saya</span>
                 </label>
@@ -108,7 +108,7 @@ const submit = () => {
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="text-xs font-bold text-[#a07c10] hover:text-[#1a3a7c] transition-colors"
+                    class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] transition-colors"
                 >
                     Lupa password?
                 </Link>
@@ -127,7 +127,7 @@ const submit = () => {
 
         <div class="mt-6 text-center text-xs text-slate-500 font-medium">
             Belum punya akun?
-            <Link :href="route('register')" class="ms-1 font-bold text-[#1a3a7c] hover:text-[#c9a227] transition-colors">
+            <Link :href="route('register')" class="ms-1 font-bold text-[#B8922E] hover:text-[#D4AF37] transition-colors">
                 Daftar sekarang
             </Link>
         </div>

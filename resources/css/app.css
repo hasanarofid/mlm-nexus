@@ -6,14 +6,15 @@
    RESET & BRAND ROOT VARIABLES
 ========================= */
 :root {
-    /* === Talenta52 Brand Colors (from logo) === */
-    --blue: #1a3a7c;        /* Navy primary */
-    --blue-dark: #0f2558;   /* Navy dark */
-    --blue-mid: #1e5099;    /* Navy mid */
-    --gold: #c9a227;        /* Gold primary */
-    --gold-light: #e8c44a;  /* Gold light */
-    --gold-dark: #a07c10;   /* Gold dark */
-    --teal: #04bdb2;        /* Accent teal (kept) */
+    /* === Nexus Community Brand Colors === */
+    --obsidian: #0F172A;      /* Dark Slate primary */
+    --obsidian-2: #18181B;    /* Dark Slate alt */
+    --obsidian-mid: #1E293B;  /* Dark Slate mid */
+    --gold: #D4AF37;          /* Gold primary */
+    --gold-light: #E5C07B;    /* Gold light */
+    --gold-dark: #B8922E;     /* Gold dark */
+    --gold-glow: #F0D060;     /* Gold highlight */
+    --teal: #04bdb2;          /* Accent teal (kept) */
     --teal-dark: #009c94;
     --text: #4e5864;
     --muted: #8b95a2;
@@ -37,10 +38,10 @@
     overflow: hidden;
     padding: 38px 24px;
     background:
-        radial-gradient(circle at 60% 40%, rgba(201, 162, 39, .06), transparent 35%),
-        radial-gradient(circle at 10% 80%, rgba(26, 58, 124, .06), transparent 30%),
-        radial-gradient(circle at 50% 95%, rgba(201, 162, 39, .04), transparent 20%),
-        #f9f8f5;
+        radial-gradient(circle at 60% 40%, rgba(212, 175, 55, .07), transparent 35%),
+        radial-gradient(circle at 10% 80%, rgba(15, 23, 42, .06), transparent 30%),
+        radial-gradient(circle at 50% 95%, rgba(212, 175, 55, .05), transparent 20%),
+        #f8f6f0;
     font-family: "Montserrat", sans-serif;
 }
 
@@ -97,12 +98,12 @@
     display: grid;
     grid-template-columns: .9fr 1.1fr;
     overflow: hidden;
-    border: 1px solid rgba(201, 162, 39, .15);
+    border: 1px solid rgba(212, 175, 55, .20);
     border-radius: 28px;
-    background: rgba(255, 255, 255, .96);
+    background: rgba(255, 255, 255, .97);
     box-shadow:
-        0 30px 90px rgba(26, 58, 124, .12),
-        0 6px 24px rgba(201, 162, 39, .08);
+        0 30px 90px rgba(15, 23, 42, .18),
+        0 6px 24px rgba(212, 175, 55, .12);
     backdrop-filter: blur(12px);
 }
 
@@ -113,7 +114,7 @@
     align-items: center;
     padding: 58px 50px;
     overflow: hidden;
-    background: linear-gradient(155deg, rgba(15,37,88,.98) 0%, rgba(26,58,124,.97) 45%, rgba(20,60,140,.97) 75%, rgba(28,72,155,.96) 100%);
+    background: linear-gradient(155deg, rgba(10,13,22,.99) 0%, rgba(15,23,42,.98) 40%, rgba(20,28,52,.97) 70%, rgba(24,24,27,.98) 100%);
 }
 
 .brand-side::before,
@@ -270,7 +271,7 @@
 
 .panel-heading h2 {
     margin-bottom: 8px;
-    color: var(--blue-dark);
+    color: var(--obsidian);
     font-size: clamp(27px, 3vw, 35px);
     line-height: 1.14;
     font-weight: 800;
@@ -356,22 +357,22 @@
     gap: 11px;
     border: 0;
     border-radius: 13px;
-    color: #fff;
-    background: linear-gradient(90deg, var(--blue-dark) 0%, var(--blue) 50%, var(--blue-mid) 100%);
+    color: var(--obsidian);
+    background: linear-gradient(90deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-light) 100%);
     font-family: inherit;
     font-size: 12px;
     font-weight: 800;
     letter-spacing: .35px;
     cursor: pointer;
-    box-shadow: 0 14px 28px rgba(26, 58, 124, .22), 0 2px 8px rgba(201, 162, 39, .15);
+    box-shadow: 0 14px 28px rgba(212, 175, 55, .30), 0 2px 8px rgba(15, 23, 42, .20);
     transition: .22s ease;
 }
 
 .auth-primary-btn:hover,
 .primary-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 18px 32px rgba(26, 58, 124, .28), 0 4px 12px rgba(201, 162, 39, .18);
-    background: linear-gradient(90deg, var(--blue) 0%, var(--blue-mid) 50%, #2460b8 100%);
+    box-shadow: 0 18px 36px rgba(212, 175, 55, .40), 0 4px 14px rgba(15, 23, 42, .25);
+    background: linear-gradient(90deg, var(--gold) 0%, var(--gold-glow) 50%, var(--gold-light) 100%);
 }
 
 .auth-primary-btn:active,
