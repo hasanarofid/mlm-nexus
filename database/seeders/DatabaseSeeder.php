@@ -20,11 +20,11 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSeeder::class);
 
         // 2. Seed Default Users and Assign Roles
-        $admin = User::where('username', 'admin')->orWhere('email', 'admin@talenta52.com')->first() ?: new User();
+        $admin = User::where('username', 'admin')->orWhere('email', 'admin@nexuscommunity.com')->first() ?: new User();
         $admin->fill([
             'name' => 'President Director (Admin)',
             'username' => 'admin',
-            'email' => 'admin@talenta52.com',
+            'email' => 'admin@nexuscommunity.com',
             'password' => bcrypt('password'),
             'left_count' => 3,
             'right_count' => 2,
@@ -36,11 +36,11 @@ class DatabaseSeeder extends Seeder
         $admin->assignRole('admin');
 
         // Level 2 (Children of Admin)
-        $budi = User::where('username', 'budi')->orWhere('email', 'budi@talenta52.com')->first() ?: new User();
+        $budi = User::where('username', 'budi')->orWhere('email', 'budi@nexuscommunity.com')->first() ?: new User();
         $budi->fill([
             'name' => 'Budi Santoso',
             'username' => 'budi',
-            'email' => 'budi@talenta52.com',
+            'email' => 'budi@nexuscommunity.com',
             'password' => bcrypt('password'),
             'parent_id' => $admin->id,
             'position' => 'left',
@@ -53,11 +53,11 @@ class DatabaseSeeder extends Seeder
         $budi->save();
         $budi->assignRole('client');
 
-        $siti = User::where('username', 'siti')->orWhere('email', 'siti@talenta52.com')->first() ?: new User();
+        $siti = User::where('username', 'siti')->orWhere('email', 'siti@nexuscommunity.com')->first() ?: new User();
         $siti->fill([
             'name' => 'Siti Rahma',
             'username' => 'siti',
-            'email' => 'siti@talenta52.com',
+            'email' => 'siti@nexuscommunity.com',
             'password' => bcrypt('password'),
             'parent_id' => $admin->id,
             'position' => 'right',
@@ -71,11 +71,11 @@ class DatabaseSeeder extends Seeder
         $siti->assignRole('client');
 
         // Level 3 (Grandchildren)
-        $dewi = User::where('username', 'dewi')->orWhere('email', 'dewi@talenta52.com')->first() ?: new User();
+        $dewi = User::where('username', 'dewi')->orWhere('email', 'dewi@nexuscommunity.com')->first() ?: new User();
         $dewi->fill([
             'name' => 'Dewi Lestari',
             'username' => 'dewi',
-            'email' => 'dewi@talenta52.com',
+            'email' => 'dewi@nexuscommunity.com',
             'password' => bcrypt('password'),
             'parent_id' => $budi->id,
             'position' => 'left',
@@ -88,11 +88,11 @@ class DatabaseSeeder extends Seeder
         $dewi->save();
         $dewi->assignRole('client');
 
-        $eko = User::where('username', 'eko')->orWhere('email', 'eko@talenta52.com')->first() ?: new User();
+        $eko = User::where('username', 'eko')->orWhere('email', 'eko@nexuscommunity.com')->first() ?: new User();
         $eko->fill([
             'name' => 'Eko Prasetyo',
             'username' => 'eko',
-            'email' => 'eko@talenta52.com',
+            'email' => 'eko@nexuscommunity.com',
             'password' => bcrypt('password'),
             'parent_id' => $budi->id,
             'position' => 'right',
@@ -105,11 +105,11 @@ class DatabaseSeeder extends Seeder
         $eko->save();
         $eko->assignRole('client');
 
-        $fajar = User::where('username', 'fajar')->orWhere('email', 'fajar@talenta52.com')->first() ?: new User();
+        $fajar = User::where('username', 'fajar')->orWhere('email', 'fajar@nexuscommunity.com')->first() ?: new User();
         $fajar->fill([
             'name' => 'Fajar Hidayat',
             'username' => 'fajar',
-            'email' => 'fajar@talenta52.com',
+            'email' => 'fajar@nexuscommunity.com',
             'password' => bcrypt('password'),
             'parent_id' => $siti->id,
             'position' => 'left',
