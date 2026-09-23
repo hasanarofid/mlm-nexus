@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title }} - TALENTA52</title>
+    <title>{{ $title }} - NEXUS COMMUNITY</title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -95,7 +95,7 @@
 
     <div class="header">
         <div>
-            <div class="brand">talenta52.com</div>
+            <div class="brand">nexuscommunity.id</div>
             <div class="sub-brand">DUTA SYNERGY BINARY SYSTEM</div>
         </div>
         <div style="text-align: right;">

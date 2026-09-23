@@ -44,14 +44,14 @@ class BonusReceivedNotification extends Notification
         $dashboardUrl = route('admin.finance.index');
 
         return (new MailMessage)
-            ->subject('Selamat! Bonus ' . $categoryName . ' ' . $formattedAmount . ' Berhasil Diterima - talenta52.com')
+            ->subject('Selamat! Bonus ' . $categoryName . ' ' . $formattedAmount . ' Berhasil Diterima - nexuscommunity.id')
             ->greeting('Halo ' . $notifiable->name . ',')
             ->line('Selamat! Anda baru saja mendapatkan alokasi bonus baru ke dompet akun Anda.')
             ->line('• **Kategori Bonus:** Bonus ' . $categoryName)
             ->line('• **Nominal Bonus:** ' . $formattedAmount)
-            ->line('• **Keterangan:** ' . ($this->description ?: 'Distribusi alokasi bonus sistem TALENTA52'))
+            ->line('• **Keterangan:** ' . ($this->description ?: 'Distribusi alokasi bonus sistem NEXUS COMMUNITY'))
             ->action('Cek Saldo & Dompet Saya', $dashboardUrl)
             ->line('Bonus ini dapat dicairkan langsung ke E-Wallet atau direkeningkan sesuai ketentuan sistem.')
-            ->line('Terima kasih atas kerja keras dan perkembangan jaringan Anda di talenta52.com!');
+            ->line('Terima kasih atas kerja keras dan perkembangan jaringan Anda di nexuscommunity.id!');
     }
 }

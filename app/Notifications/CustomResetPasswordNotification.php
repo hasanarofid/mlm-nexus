@@ -41,12 +41,12 @@ class CustomResetPasswordNotification extends Notification
         ], false));
 
         return (new MailMessage)
-            ->subject('Reset Password Akun talenta52.com')
+            ->subject('Reset Password Akun nexuscommunity.id')
             ->greeting('Halo ' . $notifiable->name . ',')
-            ->line('Anda menerima email ini karena kami menerima permintaan reset password untuk akun talenta52.com Anda.')
+            ->line('Anda menerima email ini karena kami menerima permintaan reset password untuk akun nexuscommunity.id Anda.')
             ->action('Reset Password Sekarang', $resetUrl)
             ->line('Tautan reset password ini akan kedaluwarsa dalam waktu 60 menit.')
             ->line('Jika Anda tidak merasa melakukan permintaan reset password, tidak ada tindakan lanjutan yang perlu dilakukan.')
-            ->line('Terima kasih, Salam sukses talenta52.com!');
+            ->line('Terima kasih, Salam sukses nexuscommunity.id!');
     }
 }

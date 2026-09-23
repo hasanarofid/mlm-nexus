@@ -17,7 +17,7 @@ class GenealogyController extends Controller
         $currentUser = auth()->user() ?: User::first();
         
         $isAdmin = $currentUser->username === 'admin' || 
-                   $currentUser->email === 'admin@talenta52.com' || 
+                   $currentUser->email === 'admin@nexuscommunity.id' || 
                    ($currentUser->roles && $currentUser->hasRole('admin'));
 
         // Fetch allowed user IDs for focus selector

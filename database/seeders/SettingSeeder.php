@@ -15,22 +15,22 @@ class SettingSeeder extends Seeder
         $settings = [
             [
                 'key' => 'site_name',
-                'value' => 'TALENTA52',
+                'value' => 'NEXUS COMMUNITY',
                 'type' => 'text',
             ],
             [
                 'key' => 'company_name',
-                'value' => 'PT.Talenta52 Punya Kita',
+                'value' => 'PT.Nexus Community Punya Kita',
                 'type' => 'text',
             ],
             [
                 'key' => 'company_owner',
-                'value' => 'PT.Talenta52 Punya Kita',
+                'value' => 'PT.Nexus Community Punya Kita',
                 'type' => 'text',
             ],
             [
                 'key' => 'company_copyright',
-                'value' => 'PT.Talenta52 Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
+                'value' => 'PT.Nexus Community Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
                 'type' => 'text',
             ],
             [
@@ -40,7 +40,7 @@ class SettingSeeder extends Seeder
                         'type'           => 'bank',
                         'bank_name'      => 'Bank BRI',
                         'account_number' => '806401000095564',
-                        'account_name'   => 'PT.Talenta52 Punya Kita',
+                        'account_name'   => 'PT.Nexus Community Punya Kita',
                     ],
                 ]),
                 'type' => 'json',
@@ -50,16 +50,16 @@ class SettingSeeder extends Seeder
             [
                 'key' => 'company_profile',
                 'value' => json_encode([
-                    'name'      => 'PT.Talenta52 Punya Kita',
-                    'owner'     => 'PT.Talenta52 Punya Kita',
-                    'copyright' => 'PT.Talenta52 Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
+                    'name'      => 'PT.Nexus Community Punya Kita',
+                    'owner'     => 'PT.Nexus Community Punya Kita',
+                    'copyright' => 'PT.Nexus Community Punya Kita Corp. Hak Cipta Dilindungi Undang-Undang.',
                     'whatsapp'  => '6281234567890',
                     'banks'     => [
                         [
                             'type'           => 'bank',
                             'bank_name'      => 'Bank BRI',
                             'account_number' => '806401000095564',
-                            'account_name'   => 'PT.Talenta52 Punya Kita',
+                            'account_name'   => 'PT.Nexus Community Punya Kita',
                         ],
                     ],
                 ]),
@@ -67,7 +67,7 @@ class SettingSeeder extends Seeder
             ],
             [
                 'key' => 'site_description',
-                'value' => 'Platform jaringan mitra & manajemen bonus unilevel matahari multi-tier TALENTA52.',
+                'value' => 'Platform jaringan mitra & manajemen bonus unilevel matahari multi-tier NEXUS COMMUNITY.',
                 'type' => 'textarea',
             ],
             [

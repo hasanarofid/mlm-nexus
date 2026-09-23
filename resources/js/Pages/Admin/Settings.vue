@@ -106,7 +106,7 @@ const saveRewards = () => {
 </script>
 
 <template>
-  <Head title="Pengaturan Sistem & Konfigurasi Bonus - TALENTA52" />
+  <Head title="Pengaturan Sistem & Konfigurasi Bonus - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6">

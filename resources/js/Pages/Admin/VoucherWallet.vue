@@ -86,7 +86,7 @@ const formatRupiah = (val) => {
 </script>
 
 <template>
-  <Head title="Gudang Voucher & Saldo Wallet - TALENTA52" />
+  <Head title="Gudang Voucher & Saldo Wallet - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-7xl mx-auto">
@@ -135,7 +135,7 @@ const formatRupiah = (val) => {
               <div class="text-xs text-slate-700 font-medium space-y-1">
                 <p><strong>Bank:</strong> {{ company_bank?.bank_name || 'Bank BRI' }}</p>
                 <p><strong>No. Rekening:</strong> <span class="font-mono font-black text-slate-900 select-all">{{ company_bank?.account_number || '806401000095564' }}</span></p>
-                <p><strong>Atas Nama:</strong> <strong class="text-slate-900">{{ company_bank?.account_name || 'PT.Talenta52 Punya Kita' }}</strong></p>
+                <p><strong>Atas Nama:</strong> <strong class="text-slate-900">{{ company_bank?.account_name || 'PT.Nexus Community Punya Kita' }}</strong></p>
               </div>
             </div>
 

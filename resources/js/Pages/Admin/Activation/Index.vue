@@ -44,7 +44,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <Head title="Aktivasi & Pendaftaran Member Baru - TALENTA52" />
+  <Head title="Aktivasi & Pendaftaran Member Baru - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6">

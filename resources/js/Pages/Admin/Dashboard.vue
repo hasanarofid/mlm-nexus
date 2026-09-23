@@ -102,7 +102,7 @@ const formatRupiah = (val) => {
 </script>
 
 <template>
-  <Head title="Dashboard Member Area - TALENTA52" />
+  <Head title="Dashboard Member Area - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6">

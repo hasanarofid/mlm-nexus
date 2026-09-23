@@ -40,7 +40,7 @@ class ActivityController extends Controller
             'pal' => 'PAL Bonus (Personal Allocation Level): Bonus yang didapatkan dari Generasi 1 yang terkoleksi Poin PO (Rp 200.000 saat 35 Poin PO, Rp 600.000 saat 90 Poin, Rp 2.400.000 saat 300 Poin, Rp 14.000.000 saat 2.000 Poin, Rp 30.000.000 saat 5.000 Poin).',
             'team_point' => 'Team Poin: Poin perolehan tim terakumulasi dari hasil pendaftaran member di jaringan Anda sesuai alokasi paket (Star Seller +1, Affiliate +4, Business +8, Partner +12).',
             'tpr' => 'Bonus TPR: Diberikan dari alokasi program Trade Promotion Program (TPR) bulanan.',
-            'incentive' => 'Diberikan atas pencapaian Anda dalam menjalankan bisnis Talenta52 yang mengacu pada total Income Anda',
+            'incentive' => 'Diberikan atas pencapaian Anda dalam menjalankan bisnis Nexus Community yang mengacu pada total Income Anda',
             'penarikan' => 'Histori Penarikan Saldo: Rincian transaksi pencairan saldo dari e-wallet ke rekening bank Anda.',
         ];
 

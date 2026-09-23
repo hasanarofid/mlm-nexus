@@ -54,7 +54,7 @@ const redeemForm = useForm({});
 </script>
 
 <template>
-  <Head title="Riwayat Steping Tier & Team Poin - TALENTA52" />
+  <Head title="Riwayat Steping Tier & Team Poin - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-7xl mx-auto">

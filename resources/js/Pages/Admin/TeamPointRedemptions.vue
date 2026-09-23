@@ -35,7 +35,7 @@ const statusColor = (status) => ({
 </script>
 
 <template>
-  <Head title="Klaim Reward Team Poin - Admin TALENTA52" />
+  <Head title="Klaim Reward Team Poin - Admin NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-6xl mx-auto">

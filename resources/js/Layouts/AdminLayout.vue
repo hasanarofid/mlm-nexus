@@ -35,12 +35,12 @@ import {
 const page = usePage();
 const user = page.props.auth?.user || {
     name: "President Director (Admin)",
-    email: "admin@talenta52.com",
+    email: "admin@nexuscommunity.id",
 };
 
 const isAdmin = computed(() => {
     if (!user) return false;
-    if (user.username === "admin" || user.email === "admin@talenta52.com")
+    if (user.username === "admin" || user.email === "admin@nexuscommunity.id")
         return true;
     return (
         user.roles &&
@@ -432,7 +432,7 @@ const logout = () => {
                     'flex flex-col min-h-screen transition-all duration-300 ease-in-out',
                 ]"
             >
-                <!-- Top Bar Header (Theme: Talenta52 Navy + Gold) -->
+                <!-- Top Bar Header (Theme: Nexus Community Navy + Gold) -->
                 <header
                     class="flex items-center justify-between h-16 px-6 md:px-8 bg-gradient-to-r from-[#0f2558] via-[#1a3a7c] to-[#1e5099] text-white sticky top-0 z-30 shadow-md border-b border-[#c9a227]/30"
                 >
@@ -558,7 +558,7 @@ const logout = () => {
                 <footer
                     class="p-4 text-center text-[11px] text-slate-500 border-t border-slate-200 bg-white"
                 >
-                    <p>Copyright@Talenta52 2026 Trade Promotion Program</p>
+                    <p>Copyright@Nexus Community 2026 Trade Promotion Program</p>
                 </footer>
             </div>
         </div>

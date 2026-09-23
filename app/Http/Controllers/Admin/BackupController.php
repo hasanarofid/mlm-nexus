@@ -20,7 +20,7 @@ class BackupController extends Controller
     {
         $backupData = [
             'app_info' => [
-                'name' => 'talenta52.com',
+                'name' => 'nexuscommunity.id',
                 'version' => '2.4 Binary MLM',
                 'exported_at' => now()->toIso8601String(),
                 'exporter' => auth()->user() ? auth()->user()->username : 'admin',
@@ -36,7 +36,7 @@ class BackupController extends Controller
         ];
 
         $jsonContent = json_encode($backupData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        $fileName = 'talenta52_database_backup_' . date('Y-m-d_H-i-s') . '.json';
+        $fileName = 'nexus_database_backup_' . date('Y-m-d_H-i-s') . '.json';
 
         return response($jsonContent, 200, [
             'Content-Type' => 'application/json',

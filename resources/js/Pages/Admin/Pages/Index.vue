@@ -36,7 +36,7 @@ const handleDelete = (item) => {
 </script>
 
 <template>
-  <Head title="Kelola Halaman CMS - TALENTA52" />
+  <Head title="Kelola Halaman CMS - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-7xl mx-auto">
@@ -51,7 +51,7 @@ const handleDelete = (item) => {
             Kelola Halaman Web
           </h1>
           <p class="text-xs md:text-sm text-slate-200 font-medium max-w-xl">
-            Atur struktur layout landing page, banner hero, blok keunggulan, dan testimoni website TALENTA52.
+            Atur struktur layout landing page, banner hero, blok keunggulan, dan testimoni website NEXUS COMMUNITY.
           </p>
         </div>
 

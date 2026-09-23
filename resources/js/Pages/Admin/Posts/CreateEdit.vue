@@ -107,7 +107,7 @@ const submit = () => {
 </script>
 
 <template>
-  <Head :title="isEdit ? 'Edit Artikel - TALENTA52' : 'Tulis Artikel Baru - TALENTA52'" />
+  <Head :title="isEdit ? 'Edit Artikel - NEXUS COMMUNITY' : 'Tulis Artikel Baru - NEXUS COMMUNITY'" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-6xl mx-auto">
@@ -125,7 +125,7 @@ const submit = () => {
               {{ isEdit ? 'Edit Artikel' : 'Tulis Artikel Baru' }}
             </h1>
             <p class="text-xs text-slate-500 font-medium mt-0.5">
-              {{ isEdit ? 'Perbarui isi berita atau artikel edukasi TALENTA52.' : 'Buat publikasi berita atau panduan resmi untuk jaringan kemitraan.' }}
+              {{ isEdit ? 'Perbarui isi berita atau artikel edukasi NEXUS COMMUNITY.' : 'Buat publikasi berita atau panduan resmi untuk jaringan kemitraan.' }}
             </p>
           </div>
         </div>
@@ -159,7 +159,7 @@ const submit = () => {
                 type="text" 
                 required
                 class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-sm font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#04bdb2] transition-all"
-                placeholder="Contoh: Strategi Sukses Meraih Personal Poin Reward TALENTA52"
+                placeholder="Contoh: Strategi Sukses Meraih Personal Poin Reward NEXUS COMMUNITY"
                 @input="!isEdit && (form.slug = form.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''))"
               />
               <div v-if="form.errors.title" class="text-xs text-rose-500 font-semibold">{{ form.errors.title }}</div>

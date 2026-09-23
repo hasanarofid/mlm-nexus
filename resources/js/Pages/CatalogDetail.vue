@@ -41,15 +41,15 @@ const formatRupiah = (val) => {
 const whatsappOrderUrl = () => {
   const phone = props.settings.whatsapp_number || '6280000000000';
   const text = encodeURIComponent(
-    `Halo Admin Talenta52, saya ingin menanyakan / memesan produk katalog:\n*${props.product.name}* (${props.product.type.toUpperCase()})\nHarga: ${formatRupiah(props.product.price)}`
+    `Halo Admin Nexus Community, saya ingin menanyakan / memesan produk katalog:\n*${props.product.name}* (${props.product.type.toUpperCase()})\nHarga: ${formatRupiah(props.product.price)}`
   );
   return `https://wa.me/${phone}?text=${text}`;
 };
 </script>
 
 <template>
-  <Head :title="`${product.name} - Katalog TALENTA52`">
-    <meta name="description" :content="product.description || `Detail produk paket ${product.name} di TALENTA52`" />
+  <Head :title="`${product.name} - Katalog NEXUS COMMUNITY`">
+    <meta name="description" :content="product.description || `Detail produk paket ${product.name} di NEXUS COMMUNITY`" />
   </Head>
 
   <div class="min-h-screen bg-[#f8fafc] text-slate-800 font-sans selection:bg-[#04bdb2] selection:text-white flex flex-col justify-between">
@@ -63,7 +63,7 @@ const whatsappOrderUrl = () => {
           </div>
           <div class="flex flex-col">
             <span class="font-black text-lg tracking-tight text-[#0b1f3a] group-hover:text-[#1653a1] transition-colors">
-              TALENTA52
+              NEXUS COMMUNITY
             </span>
             <span class="text-[9px] font-extrabold uppercase tracking-widest text-[#04bdb2] -mt-1">
               Saling Bantu • Manfaat Bersama
@@ -154,7 +154,7 @@ const whatsappOrderUrl = () => {
               Jaminan Kualitas & Keaslian Produk
             </div>
             <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
-              Produk resmi terdaftar untuk distribusi resmi jaringan kemitraan TALENTA52.
+              Produk resmi terdaftar untuk distribusi resmi jaringan kemitraan NEXUS COMMUNITY.
             </p>
           </div>
         </div>
@@ -163,7 +163,7 @@ const whatsappOrderUrl = () => {
         <div class="md:col-span-7 space-y-6">
           <div class="space-y-2 border-b border-slate-100 pb-5">
             <span class="text-xs font-extrabold text-[#04bdb2] uppercase tracking-wider">
-              Katalog Pilihan Talenta52
+              Katalog Pilihan Nexus Community
             </span>
             <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               {{ product.name }}
@@ -184,7 +184,7 @@ const whatsappOrderUrl = () => {
               Deskripsi Produk:
             </h3>
             <p class="text-sm text-slate-600 leading-relaxed whitespace-pre-line font-medium">
-              {{ product.description || 'Produk herbal berkualitas tinggi pilihan TALENTA52 untuk menunjang kesehatan optimal dan program kemitraan berkelanjutan.' }}
+              {{ product.description || 'Produk herbal berkualitas tinggi pilihan NEXUS COMMUNITY untuk menunjang kesehatan optimal dan program kemitraan berkelanjutan.' }}
             </p>
           </div>
 
@@ -284,10 +284,10 @@ const whatsappOrderUrl = () => {
     <footer class="border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500 mt-12">
       <div class="max-w-7xl mx-auto px-4 space-y-2">
         <p class="font-bold text-slate-700">
-          PT. TALENTA52 PUNYA KITA &copy; {{ new Date().getFullYear() }} — Saling Bantu, Manfaat Bersama.
+          PT. NEXUS COMMUNITY PUNYA KITA &copy; {{ new Date().getFullYear() }} — Saling Bantu, Manfaat Bersama.
         </p>
         <p class="text-[11px] text-slate-400">
-          Domain Resmi: <a href="https://talenta52.com" class="text-[#1653a1] font-bold">https://talenta52.com</a>
+          Domain Resmi: <a href="https://nexuscommunity.id" class="text-[#1653a1] font-bold">https://nexuscommunity.id</a>
         </p>
       </div>
     </footer>

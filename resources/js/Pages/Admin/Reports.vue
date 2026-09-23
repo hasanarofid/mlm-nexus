@@ -64,7 +64,7 @@ const reportTabs = [
 </script>
 
 <template>
-  <Head title="Menu Laporan - TALENTA52" />
+  <Head title="Menu Laporan - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6">

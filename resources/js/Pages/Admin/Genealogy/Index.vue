@@ -85,7 +85,7 @@ const getBadgeColor = (pkg) => {
 </script>
 
 <template>
-  <Head title="Pohon Jaringan & Tabel Sponsor - TALENTA52" />
+  <Head title="Pohon Jaringan & Tabel Sponsor - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6">

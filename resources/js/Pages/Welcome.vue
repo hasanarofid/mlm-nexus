@@ -276,7 +276,7 @@ const testimonialsSection = getSection('testimonials');
           <div class="space-y-3">
             <span class="text-xs font-bold text-[#04bdb2] uppercase tracking-widest">Artikel & Berita</span>
             <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Kabar Terbaru</h2>
-            <p class="text-sm text-slate-400">Dapatkan wawasan seputar program kemitraan, strategi bisnis, dan informasi terkini TALENTA52.</p>
+            <p class="text-sm text-slate-400">Dapatkan wawasan seputar program kemitraan, strategi bisnis, dan informasi terkini NEXUS COMMUNITY.</p>
           </div>
         </div>
 
@@ -335,7 +335,7 @@ const testimonialsSection = getSection('testimonials');
           <!-- Column 1: Info -->
           <div class="md:col-span-2 space-y-4">
             <span class="font-extrabold text-lg text-white tracking-tight">
-              {{ settings.site_name || 'TALENTA52' }}
+              {{ settings.site_name || 'NEXUS COMMUNITY' }}
             </span>
             <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
               {{ settings.site_description || 'Platform kemitraan multi-tier generasi unilevel, Auto Save & Saldo WD terintegrasi. Saling Bantu, Manfaat Bersama.' }}

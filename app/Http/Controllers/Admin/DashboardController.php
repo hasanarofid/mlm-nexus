@@ -14,10 +14,10 @@ use Inertia\Inertia;
 class DashboardController extends Controller
 {
     /**
-     * Display the admin binary MLM dashboard home based on TALENTA52 PRD 2026.
+     * Display the admin binary MLM dashboard home based on NEXUS COMMUNITY PRD 2026.
      */
     /**
-     * Display the admin & member dashboard based on TALENTA52 PRD 2026.
+     * Display the admin & member dashboard based on NEXUS COMMUNITY PRD 2026.
      */
     public function index()
     {
@@ -56,7 +56,7 @@ class DashboardController extends Controller
 
         $voucherAktif = $activeVouchers->count();
 
-        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@talenta52.com' || (method_exists($user, 'hasRole') && $user->hasRole('admin')));
+        $isAdmin = ($user->username === 'admin' || $user->email === 'admin@nexuscommunity.id' || (method_exists($user, 'hasRole') && $user->hasRole('admin')));
 
         $allSponsors = $isAdmin ? User::select('id', 'name', 'username')->get()->map(function ($u) {
             return [
@@ -75,8 +75,8 @@ class DashboardController extends Controller
                     'bank_name' => 'Bank BRI',
                     'bank_account_number' => '806401000095564',
                     'account_number' => '806401000095564',
-                    'bank_account_name' => 'PT.Talenta52 Punya Kita',
-                    'account_name' => 'PT.Talenta52 Punya Kita',
+                    'bank_account_name' => 'PT.Nexus Community Punya Kita',
+                    'account_name' => 'PT.Nexus Community Punya Kita',
                 ]
             ];
 
@@ -165,8 +165,8 @@ class DashboardController extends Controller
                     'bank_name' => 'Bank BRI',
                     'account_number' => '806401000095564',
                     'bank_account_number' => '806401000095564',
-                    'account_name' => 'PT.Talenta52 Punya Kita',
-                    'bank_account_name' => 'PT.Talenta52 Punya Kita',
+                    'account_name' => 'PT.Nexus Community Punya Kita',
+                    'bank_account_name' => 'PT.Nexus Community Punya Kita',
                 ]
             ];
 

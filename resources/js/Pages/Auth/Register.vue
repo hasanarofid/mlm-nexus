@@ -26,12 +26,12 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Daftar Akun | Talenta52" />
+        <Head title="Daftar Akun | Nexus Community" />
 
         <div class="panel-heading">
             <span class="eyebrow">CREATE ACCOUNT</span>
             <h2>Daftar Sekarang</h2>
-            <p>Buat akun baru untuk mulai menggunakan Talenta52.</p>
+            <p>Buat akun baru untuk mulai menggunakan Nexus Community.</p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-3.5">

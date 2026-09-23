@@ -58,7 +58,7 @@ const sendWhatsAppConfirmation = () => {
 </script>
 
 <template>
-  <Head title="Invoice Pembayaran Premi - TALENTA52" />
+  <Head title="Invoice Pembayaran Premi - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="max-w-3xl mx-auto space-y-6 animate-fade-in pb-12">

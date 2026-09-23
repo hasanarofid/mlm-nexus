@@ -86,8 +86,8 @@ class MemberActivationController extends Controller
                     'bank_name' => 'Bank BRI',
                     'bank_account_number' => '806401000095564',
                     'account_number' => '806401000095564',
-                    'bank_account_name' => 'PT.Talenta52 Punya Kita',
-                    'account_name' => 'PT.Talenta52 Punya Kita',
+                    'bank_account_name' => 'PT.Nexus Community Punya Kita',
+                    'account_name' => 'PT.Nexus Community Punya Kita',
                 ]
             ];
 
@@ -121,7 +121,7 @@ class MemberActivationController extends Controller
         ]);
 
         $currentUser = auth()->user() ?: User::first();
-        $isAdmin = ($currentUser->username === 'admin' || $currentUser->email === 'admin@talenta52.com' || (method_exists($currentUser, 'hasRole') && $currentUser->hasRole('admin')));
+        $isAdmin = ($currentUser->username === 'admin' || $currentUser->email === 'admin@nexuscommunity.id' || (method_exists($currentUser, 'hasRole') && $currentUser->hasRole('admin')));
 
         // Verify voucher / PIN if provided
         $voucher = null;

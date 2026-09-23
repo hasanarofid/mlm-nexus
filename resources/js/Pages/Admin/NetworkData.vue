@@ -49,7 +49,7 @@ const formatRupiah = (val) => {
 </script>
 
 <template>
-  <Head title="Data Mitra - TALENTA52" />
+  <Head title="Data Mitra - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6">

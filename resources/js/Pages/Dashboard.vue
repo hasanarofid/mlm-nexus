@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Dashboard | TALENTA52" />
+    <Head title="Dashboard | NEXUS COMMUNITY" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -25,7 +25,7 @@ import { Head } from '@inertiajs/vue3';
                             <span class="text-2xl">👋</span>
                         </div>
                         <div>
-                            <h3 class="text-lg font-extrabold text-[#1653a1]">Selamat Datang di Talenta52 Member Area</h3>
+                            <h3 class="text-lg font-extrabold text-[#1653a1]">Selamat Datang di Nexus Community Member Area</h3>
                             <p class="text-xs text-slate-500 font-medium">Anda telah berhasil masuk ke sistem.</p>
                         </div>
                     </div>

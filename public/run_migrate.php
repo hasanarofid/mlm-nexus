@@ -94,7 +94,7 @@ try {
         $poCount = Product::where('type', 'po')->count();
         $allProducts = Product::orderBy('type')->get();
 
-        echo "<!DOCTYPE html><html><head><title>{$action} - TALENTA52</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
+        echo "<!DOCTYPE html><html><head><title>{$action} - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action}</h1>";
         echo "<pre>" . htmlspecialchars($cmdOutput ?: "Command selesai tanpa error.") . "</pre>";
@@ -119,7 +119,7 @@ try {
         @$kernel->call('route:clear');
         @$kernel->call('view:clear');
 
-        echo "<!DOCTYPE html><html><head><title>Migration & Composer Runner - TALENTA52</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
+        echo "<!DOCTYPE html><html><head><title>Migration & Composer Runner - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action} Finished!</h1>";
         echo "<pre>" . htmlspecialchars($composerLog . ($kernel->output() ?: "Migration completed successfully with no pending migrations.")) . "</pre>";
@@ -153,7 +153,7 @@ try {
 
         $allUsers = User::select('id', 'name', 'username', 'email')->get();
 
-        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - TALENTA52</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
+        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action} Finished!</h1>";
         echo "<pre>" . htmlspecialchars($composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.")) . "</pre>";
@@ -172,7 +172,7 @@ try {
         echo "</div></body></html>";
     }
 } catch (\Throwable $e) {
-    echo "<!DOCTYPE html><html><head><title>Migration Error - TALENTA52</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}pre{background:#1e293b;color:#f87171;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
+    echo "<!DOCTYPE html><html><head><title>Migration Error - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}pre{background:#1e293b;color:#f87171;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
     echo "<div class='card'>";
     echo "<h1 style='color:#ef4444;'>✕ ERROR: Migration Failed</h1>";
     echo "<pre>" . htmlspecialchars($e->getMessage()) . "\n\n" . htmlspecialchars($e->getTraceAsString()) . "</pre>";

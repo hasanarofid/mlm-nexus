@@ -53,7 +53,7 @@ const copyLink = () => {
 };
 
 const shareWhatsapp = () => {
-  const text = encodeURIComponent(`${props.post.title}\n\nBaca selengkapnya di Talenta52:\n${window.location.href}`);
+  const text = encodeURIComponent(`${props.post.title}\n\nBaca selengkapnya di Nexus Community:\n${window.location.href}`);
   window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
 };
 
@@ -86,7 +86,7 @@ const readingTime = Math.max(1, Math.ceil((props.post.content || '').split(' ').
 </script>
 
 <template>
-  <Head :title="`${post.title} - TALENTA52`">
+  <Head :title="`${post.title} - NEXUS COMMUNITY`">
     <meta name="description" :content="post.content?.substring(0, 160)" />
   </Head>
 
@@ -101,7 +101,7 @@ const readingTime = Math.max(1, Math.ceil((props.post.content || '').split(' ').
           </div>
           <div class="flex flex-col">
             <span class="font-black text-lg tracking-tight text-[#0b1f3a] group-hover:text-[#1653a1] transition-colors">
-              TALENTA52
+              NEXUS COMMUNITY
             </span>
             <span class="text-[9px] font-extrabold uppercase tracking-widest text-[#04bdb2] -mt-1">
               Saling Bantu • Manfaat Bersama
@@ -184,7 +184,7 @@ const readingTime = Math.max(1, Math.ceil((props.post.content || '').split(' ').
               </div>
               <div class="flex items-center gap-1.5 text-emerald-600 font-bold">
                 <Sparkles class="w-3.5 h-3.5" />
-                <span>Official Talenta52</span>
+                <span>Official Nexus Community</span>
               </div>
             </div>
           </div>
@@ -261,14 +261,14 @@ const readingTime = Math.max(1, Math.ceil((props.post.content || '').split(' ').
 
         <!-- Right Sidebar -->
         <aside class="lg:col-span-4 space-y-6">
-          <!-- CTA Card Talenta52 -->
+          <!-- CTA Card Nexus Community -->
           <div class="bg-gradient-to-br from-[#0b1f3a] via-[#103f80] to-[#1653a1] rounded-3xl p-6 text-white shadow-lg space-y-4 relative overflow-hidden">
             <div class="space-y-2 relative z-10">
               <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur border border-white/20 rounded-full text-[10px] font-black uppercase tracking-wider text-[#a9fff7]">
                 Program Saling Bantu
               </span>
               <h3 class="text-xl font-black tracking-tight leading-snug">
-                Mulai Sukses Finansial Bersama TALENTA52
+                Mulai Sukses Finansial Bersama NEXUS COMMUNITY
               </h3>
               <p class="text-xs text-slate-200 leading-relaxed font-medium">
                 Nikmati bagi hasil 10 Generasi, Auto Save, Saldo WD, Poin RO & Personal Reward PO hingga Rp 150.000.000.
@@ -353,10 +353,10 @@ const readingTime = Math.max(1, Math.ceil((props.post.content || '').split(' ').
     <footer class="border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500 mt-12">
       <div class="max-w-7xl mx-auto px-4 space-y-2">
         <p class="font-bold text-slate-700">
-          PT. TALENTA52 PUNYA KITA &copy; {{ new Date().getFullYear() }} — Saling Bantu, Manfaat Bersama.
+          PT. NEXUS COMMUNITY PUNYA KITA &copy; {{ new Date().getFullYear() }} — Saling Bantu, Manfaat Bersama.
         </p>
         <p class="text-[11px] text-slate-400">
-          Domain Resmi: <a href="https://talenta52.com" class="text-[#1653a1] font-bold">https://talenta52.com</a>
+          Domain Resmi: <a href="https://nexuscommunity.id" class="text-[#1653a1] font-bold">https://nexuscommunity.id</a>
         </p>
       </div>
     </footer>
