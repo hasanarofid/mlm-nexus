@@ -6,8 +6,15 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import { 
     User, Mail, Phone, Calendar, Users, AlertCircle, 
     CreditCard, UploadCloud, Lock, Eye, EyeOff, ArrowRight, 
-    Check, FileText, X 
+    Check, FileText, X, KeyRound
 } from '@lucide/vue';
+
+const props = defineProps({
+    referral_code: {
+        type: String,
+        default: '',
+    },
+});
 
 const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
@@ -29,6 +36,7 @@ const form = useForm({
     ktp_image: null,
     password: '',
     password_confirmation: '',
+    referral: props.referral_code || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('ref') || new URLSearchParams(window.location.search).get('referral') || '') : ''),
     terms: true,
 });
 
@@ -330,7 +338,7 @@ const submit = () => {
                             <select
                                 v-model="form.bank_name"
                                 required
-                                class="w-full text-xs font-semibold text-slate-800 bg-transparent py-2.5 focus:outline-none"
+                                class="w-full text-xs font-semibold text-slate-800"
                             >
                                 <option v-for="b in bankOptions" :key="b" :value="b">{{ b }}</option>
                             </select>
@@ -490,6 +498,36 @@ const submit = () => {
                         </button>
                     </div>
                     <InputError class="mt-1" :message="form.errors.password_confirmation" />
+                </div>
+            </div>
+
+            <!-- SECTION 5: KODE REFERRAL / SPONSOR -->
+            <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
+                <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
+                    <KeyRound class="w-3.5 h-3.5" />
+                    <span>5. Kode Referral / Sponsor</span>
+                </div>
+
+                <!-- Input Kode Referral -->
+                <div class="form-group">
+                    <label for="referral" class="block text-xs font-bold text-slate-700 mb-1">
+                        Kode Referral / Username Sponsor <span class="text-rose-500">*</span>
+                    </label>
+                    <div class="auth-input-wrap">
+                        <span class="auth-input-icon">
+                            <KeyRound class="w-4.5 h-4.5 text-slate-400" />
+                        </span>
+                        <input
+                            id="referral"
+                            type="text"
+                            v-model="form.referral"
+                            required
+                            placeholder="Masukkan kode referral / username sponsor"
+                            class="w-full text-sm font-semibold text-slate-800"
+                        />
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1">Wajib diisi dengan username atau kode referral sponsor yang mengundang Anda.</p>
+                    <InputError class="mt-1" :message="form.errors.referral" />
                 </div>
             </div>
 

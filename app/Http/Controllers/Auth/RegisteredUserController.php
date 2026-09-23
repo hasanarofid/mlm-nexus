@@ -19,9 +19,13 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('Auth/Register');
+        $ref = $request->query('ref') ?? $request->query('referral') ?? '';
+
+        return Inertia::render('Auth/Register', [
+            'referral_code' => $ref,
+        ]);
     }
 
     /**
@@ -45,7 +49,20 @@ class RegisteredUserController extends Controller
             'bank_account_name' => 'nullable|string|max:100',
             'ktp_image' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'referral' => 'required|string|max:255',
+        ], [
+            'referral.required' => 'Kode Referral / Username Sponsor wajib diisi.',
         ]);
+
+        $sponsor = User::where('username', trim($request->referral))
+            ->orWhere('email', trim($request->referral))
+            ->first();
+
+        if (!$sponsor) {
+            throw ValidationException::withMessages([
+                'referral' => 'Kode Referral / Username Sponsor tidak ditemukan atau tidak valid.',
+            ]);
+        }
 
         $ktpPath = null;
         if ($request->hasFile('ktp_image')) {
@@ -84,6 +101,7 @@ class RegisteredUserController extends Controller
             'bank_account_name' => $request->bank_account_name ?: $request->name,
             'ktp_image' => $ktpPath,
             'password' => Hash::make($request->password),
+            'parent_id' => $sponsor->id,
         ]);
 
         try {
