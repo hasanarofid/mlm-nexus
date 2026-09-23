@@ -451,24 +451,6 @@ const logout = () => {
                             >
                                 <img src="/images/logo-nexus.png" alt="NEXUS" class="h-7 w-auto object-contain" />
                             </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h1
-                                        class="text-xs font-black tracking-wider text-[#D4AF37] uppercase"
-                                    >
-                                        NEXUS
-                                    </h1>
-                                    <span
-                                        class="px-1.5 py-0.2 text-[9px] font-bold bg-white/10 text-slate-200 border border-white/20 rounded"
-                                        >Member Area</span
-                                    >
-                                </div>
-                                <p
-                                    class="text-[9px] text-slate-300 font-medium tracking-tight hidden sm:block"
-                                >
-                                    SALING BANTU - MANFAAT BERSAMA
-                                </p>
-                            </div>
                         </div>
                     </div>
 
