@@ -9,18 +9,22 @@ import {
   Users, 
   ArrowUpRight, 
   Check, 
-  PiggyBank, 
   CreditCard, 
-  Send, 
   HelpCircle,
   UserPlus,
   KeyRound,
   ShieldCheck,
   User,
-  Upload,
-  Image as ImageIcon,
-  Trash2,
-  Building2
+  Mail,
+  Phone,
+  Calendar,
+  AlertCircle,
+  UploadCloud,
+  Lock,
+  Eye,
+  EyeOff,
+  FileText,
+  X
 } from '@lucide/vue';
 
 const props = defineProps({
@@ -36,46 +40,90 @@ const props = defineProps({
 });
 
 const copySuccessMsg = ref('');
-const isPremiModalOpen = ref(false);
 const isAddMitraModalOpen = ref(false);
+const showPassword = ref(false);
+const showPasswordConfirm = ref(false);
+const ktpPreview = ref(null);
+const fileInput = ref(null);
 
-const premiForm = useForm({
-  amount: 10000,
-});
-
-const submitPremi = () => {
-  premiForm.post(route('admin.pay-premi'), {
-    onSuccess: () => {
-      isPremiModalOpen.value = false;
-      premiForm.reset();
-    }
-  });
-};
+const bankOptions = [
+  'Bank BCA',
+  'Bank BRI',
+  'Bank BNI',
+  'Bank Mandiri',
+  'Bank BSI',
+  'Bank CIMB Niaga',
+  'Bank Permata',
+  'Bank Danamon',
+  'Bank Tabungan Negara (BTN)',
+  'Bank Jago',
+  'Seabank',
+  'DANA (E-Wallet)',
+  'OVO (E-Wallet)',
+  'GoPay (E-Wallet)',
+  'Lainnya',
+];
 
 const addMitraForm = useForm({
-  username: '',
   name: '',
-  email: '',
   phone: '',
-  nik: '',
+  email: '',
+  is_left_handed: 'Tidak',
+  beneficiary_name: '',
+  beneficiary_birth_date: '',
+  beneficiary_relation: '',
+  emergency_phone: '',
   bank_name: 'Bank BRI',
   bank_account_number: '',
   bank_account_name: '',
-  sponsor_username: props.current_user_username || 'admin',
+  ktp_image: null,
   password: '',
+  password_confirmation: '',
+  sponsor_username: props.current_user_username || 'admin',
   source: 'dashboard',
 });
 
+const handleFileUpload = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (file.size > 10 * 1024 * 1024) {
+    alert('Ukuran file maksimal adalah 10 MB');
+    return;
+  }
+
+  addMitraForm.ktp_image = file;
+  if (file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      ktpPreview.value = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    ktpPreview.value = 'document';
+  }
+};
+
+const removeFile = () => {
+  addMitraForm.ktp_image = null;
+  ktpPreview.value = null;
+  if (fileInput.value) {
+    fileInput.value.value = '';
+  }
+};
+
 const submitAddMitra = () => {
   addMitraForm.post(route('admin.activation.store'), {
+    forceFormData: true,
     preserveScroll: true,
     onSuccess: () => {
       isAddMitraModalOpen.value = false;
       addMitraForm.reset();
+      addMitraForm.is_left_handed = 'Tidak';
       addMitraForm.bank_name = 'Bank BRI';
       addMitraForm.sponsor_username = props.current_user_username || 'admin';
-      addMitraForm.password = '';
       addMitraForm.source = 'dashboard';
+      ktpPreview.value = null;
     }
   });
 };
@@ -211,227 +259,297 @@ const formatRupiah = (val) => {
 
     <!-- Modal Form Tambah Mitra Baru (Quick Add Mitra from Dashboard) -->
     <div v-if="isAddMitraModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
-      <div class="bg-white rounded-3xl p-6 md:p-7 max-w-lg w-full shadow-2xl space-y-5 border border-slate-100 my-8">
+      <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl space-y-5 border border-slate-100 my-8 max-h-[90vh] overflow-y-auto">
         
         <!-- Modal Header -->
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+            <div class="p-2.5 bg-[#D4AF37]/15 text-[#B8922E] rounded-2xl">
               <UserPlus class="w-5 h-5" />
             </div>
             <div>
               <h3 class="text-base font-extrabold text-slate-900">Tambah Mitra Baru</h3>
-              <p class="text-[11px] text-slate-500 font-medium">Registrasi langsung anggota/mitra ke jaringan Anda.</p>
+              <p class="text-xs text-slate-500 font-medium">Registrasi langsung anggota/mitra ke jaringan Anda.</p>
             </div>
           </div>
-          <button @click="isAddMitraModalOpen = false" class="text-slate-400 hover:text-slate-700 text-lg font-bold cursor-pointer">✕</button>
+          <button @click="isAddMitraModalOpen = false" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer">
+            <X class="w-5 h-5" />
+          </button>
         </div>
 
         <!-- Add Mitra Form -->
         <form @submit.prevent="submitAddMitra" class="space-y-4">
           
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            
-            <!-- Username Mitra -->
-            <div>
-              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                USERNAME MITRA <span class="text-rose-500">*</span>
-              </label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 font-bold text-xs">@</span>
-                <input 
-                  v-model="addMitraForm.username"
-                  type="text"
-                  required
-                  placeholder="cth: andipratama"
-                  class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-                />
+          <!-- SECTION 1: DATA PRIBADI & KONTAK -->
+          <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
+            <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
+              <User class="w-3.5 h-3.5" />
+              <span>1. Data Pribadi & Kontak</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Nama Lengkap -->
+              <div class="form-group sm:col-span-2">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Nama Lengkap <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><User class="w-4 h-4 text-slate-400" /></span>
+                  <input type="text" v-model="addMitraForm.name" required placeholder="Nama Lengkap Mitra" class="w-full text-sm" />
+                </div>
+                <p v-if="addMitraForm.errors.name" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.name }}</p>
               </div>
-              <p v-if="addMitraForm.errors.username" class="text-[10px] text-rose-500 font-bold mt-1">{{ addMitraForm.errors.username }}</p>
-            </div>
 
-            <!-- Nama Lengkap -->
-            <div>
-              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                NAMA LENGKAP <span class="text-rose-500">*</span>
-              </label>
-              <input 
-                v-model="addMitraForm.name"
-                type="text"
-                required
-                placeholder="cth: Andi Pratama"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-              />
-              <p v-if="addMitraForm.errors.name" class="text-[10px] text-rose-500 font-bold mt-1">{{ addMitraForm.errors.name }}</p>
-            </div>
+              <!-- Whatsapp -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Whatsapp <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><Phone class="w-4 h-4 text-slate-400" /></span>
+                  <input type="tel" v-model="addMitraForm.phone" required placeholder="Contoh: 081234567890" class="w-full text-sm" />
+                </div>
+                <p v-if="addMitraForm.errors.phone" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.phone }}</p>
+              </div>
 
-            <!-- Email -->
-            <div>
-              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                ALAMAT EMAIL <span class="text-rose-500">*</span>
-              </label>
-              <input 
-                v-model="addMitraForm.email"
-                type="email"
-                required
-                placeholder="cth: andi@gmail.com"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-              />
-              <p v-if="addMitraForm.errors.email" class="text-[10px] text-rose-500 font-bold mt-1">{{ addMitraForm.errors.email }}</p>
-            </div>
+              <!-- Email -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Email <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><Mail class="w-4 h-4 text-slate-400" /></span>
+                  <input type="email" v-model="addMitraForm.email" required placeholder="nama@email.com" class="w-full text-sm" />
+                </div>
+                <p v-if="addMitraForm.errors.email" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.email }}</p>
+              </div>
 
-            <!-- No HP / WA -->
-            <div>
-              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                NO HP / WHATSAPP
-              </label>
-              <input 
-                v-model="addMitraForm.phone"
-                type="text"
-                placeholder="cth: 081234567890"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-              />
+              <!-- Kidal -->
+              <div class="form-group sm:col-span-2 pt-1">
+                <label class="block text-xs font-bold text-slate-700 mb-2">
+                  Apakah dominan tangan kiri (Kidal) ? <span class="text-rose-500">*</span>
+                </label>
+                <div class="grid grid-cols-2 gap-3">
+                  <label :class="['flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all', addMitraForm.is_left_handed === 'Iya' ? 'border-[#D4AF37] bg-[#D4AF37]/10 font-bold text-slate-900 shadow-sm' : 'border-slate-200 bg-white text-slate-700']">
+                    <input type="radio" value="Iya" v-model="addMitraForm.is_left_handed" class="w-4 h-4 accent-[#0F172A]" />
+                    <span class="text-xs">Iya</span>
+                  </label>
+                  <label :class="['flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all', addMitraForm.is_left_handed === 'Tidak' ? 'border-[#D4AF37] bg-[#D4AF37]/10 font-bold text-slate-900 shadow-sm' : 'border-slate-200 bg-white text-slate-700']">
+                    <input type="radio" value="Tidak" v-model="addMitraForm.is_left_handed" class="w-4 h-4 accent-[#0F172A]" />
+                    <span class="text-xs">Tidak</span>
+                  </label>
+                </div>
+              </div>
             </div>
-
-            <!-- NIK (Opsional) -->
-            <div>
-              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                NIK (KTP - OPSIONAL)
-              </label>
-              <input 
-                v-model="addMitraForm.nik"
-                type="text"
-                maxlength="20"
-                placeholder="cth: 3201234567890001"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-              />
-            </div>
-
-            <!-- Password Awal -->
-            <div>
-              <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                PASSWORD AWAL
-              </label>
-              <input 
-                v-model="addMitraForm.password"
-                type="text"
-                placeholder="Default: password"
-                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
-              />
-            </div>
-
           </div>
 
-          <!-- Sponsor Selection -->
-          <div class="p-3.5 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-2xl space-y-1.5">
-            <label class="block text-[10px] font-extrabold text-[#0F172A] uppercase tracking-wider">
-              SPONSOR LANGSUNG
-            </label>
-            <div v-if="is_admin && all_sponsors && all_sponsors.length > 0">
-              <select 
-                v-model="addMitraForm.sponsor_username"
-                class="w-full bg-white border border-[#D4AF37]/40 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#D4AF37]"
+          <!-- SECTION 2: DATA AHLI WARIS & KONTAK DARURAT -->
+          <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
+            <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
+              <Users class="w-3.5 h-3.5" />
+              <span>2. Data Ahli Waris & Kontak Darurat</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Nama Ahli Waris -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Nama Ahli Waris <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><User class="w-4 h-4 text-slate-400" /></span>
+                  <input type="text" v-model="addMitraForm.beneficiary_name" required placeholder="Nama Lengkap Ahli Waris" class="w-full text-sm" />
+                </div>
+                <p v-if="addMitraForm.errors.beneficiary_name" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.beneficiary_name }}</p>
+              </div>
+
+              <!-- Tanggal Lahir Ahli Waris -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Tanggal Lahir Ahli Waris <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><Calendar class="w-4 h-4 text-slate-400" /></span>
+                  <input type="date" v-model="addMitraForm.beneficiary_birth_date" required class="w-full text-sm bg-transparent" />
+                </div>
+                <p v-if="addMitraForm.errors.beneficiary_birth_date" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.beneficiary_birth_date }}</p>
+              </div>
+
+              <!-- Hubungan dengan Ahli Waris -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Hubungan dengan Ahli Waris <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><Users class="w-4 h-4 text-slate-400" /></span>
+                  <input type="text" v-model="addMitraForm.beneficiary_relation" required placeholder="Contoh: Anak / Pasangan / Orang Tua" class="w-full text-sm" />
+                </div>
+                <p v-if="addMitraForm.errors.beneficiary_relation" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.beneficiary_relation }}</p>
+              </div>
+
+              <!-- Nomor Whatsapp Kontak Darurat -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Whatsapp Kontak Darurat <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><AlertCircle class="w-4 h-4 text-slate-400" /></span>
+                  <input type="tel" v-model="addMitraForm.emergency_phone" required placeholder="Nomor Kontak Darurat" class="w-full text-sm" />
+                </div>
+                <p v-if="addMitraForm.errors.emergency_phone" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.emergency_phone }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: REKENING & DOKUMEN IDENTITAS -->
+          <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
+            <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
+              <CreditCard class="w-3.5 h-3.5" />
+              <span>3. Rekening Bonus & Verifikasi KTP</span>
+            </div>
+
+            <!-- Bank & No Rekening -->
+            <div class="form-group space-y-2">
+              <label class="block text-xs font-bold text-slate-700 mb-1">
+                Bank & Nomor Rekening (untuk bonus referral) <span class="text-rose-500">*</span>
+              </label>
+
+              <!-- Select Bank -->
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon"><CreditCard class="w-4 h-4 text-slate-400" /></span>
+                <select v-model="addMitraForm.bank_name" required class="w-full text-xs font-semibold text-slate-800">
+                  <option v-for="b in bankOptions" :key="b" :value="b">{{ b }}</option>
+                </select>
+              </div>
+
+              <!-- No Rekening -->
+              <div class="auth-input-wrap">
+                <input type="text" v-model="addMitraForm.bank_account_number" required placeholder="Nomor Rekening / No. E-Wallet" class="w-full text-sm" />
+              </div>
+
+              <!-- Atas Nama -->
+              <div class="auth-input-wrap">
+                <input type="text" v-model="addMitraForm.bank_account_name" :placeholder="addMitraForm.name || 'Nama Pemilik Rekening (opsional jika sama)'" class="w-full text-sm" />
+              </div>
+              <p v-if="addMitraForm.errors.bank_name || addMitraForm.errors.bank_account_number" class="text-xs text-rose-500 font-medium mt-1">
+                {{ addMitraForm.errors.bank_name || addMitraForm.errors.bank_account_number }}
+              </p>
+            </div>
+
+            <!-- ID KTP Upload -->
+            <div class="form-group pt-1">
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-bold text-slate-700">ID KTP <span class="text-rose-500">*</span></label>
+                <span class="text-[10px] text-slate-400 font-medium">Maks 10 MB (JPG, PNG, PDF)</span>
+              </div>
+
+              <div 
+                v-if="!addMitraForm.ktp_image"
+                @click="$refs.fileInput.click()"
+                class="border-2 border-dashed border-slate-300 hover:border-[#D4AF37] rounded-xl p-4 text-center cursor-pointer transition-colors bg-white group flex flex-col items-center justify-center gap-2"
               >
-                <option 
-                  v-for="s in all_sponsors" 
-                  :key="s.username" 
-                  :value="s.username"
-                >
-                  {{ s.label }}
-                </option>
+                <div class="w-9 h-9 rounded-full bg-slate-100 group-hover:bg-[#D4AF37]/10 flex items-center justify-center text-slate-500 group-hover:text-[#D4AF37] transition-colors">
+                  <UploadCloud class="w-4.5 h-4.5" />
+                </div>
+                <div class="text-xs font-bold text-slate-700 group-hover:text-slate-900">Tambahkan file KTP</div>
+                <div class="text-[11px] text-slate-400">Klik untuk memilih file foto KTP mitra</div>
+              </div>
+
+              <!-- Preview -->
+              <div v-else class="p-3 bg-white border border-[#D4AF37]/40 rounded-xl flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div v-if="ktpPreview && ktpPreview !== 'document'" class="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
+                    <img :src="ktpPreview" alt="KTP Preview" class="w-full h-full object-cover" />
+                  </div>
+                  <div v-else class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                    <FileText class="w-5 h-5" />
+                  </div>
+                  <div class="overflow-hidden">
+                    <p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">{{ addMitraForm.ktp_image.name }}</p>
+                    <p class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                      <Check class="w-3 h-3" /> Siap diunggah ({{ (addMitraForm.ktp_image.size / 1024 / 1024).toFixed(2) }} MB)
+                    </p>
+                  </div>
+                </div>
+                <button type="button" @click="removeFile" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition-colors">
+                  <X class="w-4 h-4" />
+                </button>
+              </div>
+
+              <input ref="fileInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" @change="handleFileUpload" class="hidden" />
+              <p v-if="addMitraForm.errors.ktp_image" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.ktp_image }}</p>
+            </div>
+          </div>
+
+          <!-- SECTION 4: KEAMANAN AKUN LOGIN -->
+          <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
+            <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
+              <Lock class="w-3.5 h-3.5" />
+              <span>4. Keamanan Akun Login</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Password -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Password <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><Lock class="w-4 h-4 text-slate-400" /></span>
+                  <input :type="showPassword ? 'text' : 'password'" v-model="addMitraForm.password" required placeholder="Minimal 8 karakter" class="w-full text-sm" />
+                  <button type="button" @click="showPassword = !showPassword" class="auth-password-toggle flex items-center justify-center">
+                    <Eye v-if="!showPassword" class="w-4 h-4" />
+                    <EyeOff v-else class="w-4 h-4" />
+                  </button>
+                </div>
+                <p v-if="addMitraForm.errors.password" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.password }}</p>
+              </div>
+
+              <!-- Konfirmasi Password -->
+              <div class="form-group">
+                <label class="block text-xs font-bold text-slate-700 mb-1">
+                  Konfirmasi Password <span class="text-rose-500">*</span>
+                </label>
+                <div class="auth-input-wrap">
+                  <span class="auth-input-icon"><Lock class="w-4 h-4 text-slate-400" /></span>
+                  <input :type="showPasswordConfirm ? 'text' : 'password'" v-model="addMitraForm.password_confirmation" required placeholder="Ulangi password" class="w-full text-sm" />
+                  <button type="button" @click="showPasswordConfirm = !showPasswordConfirm" class="auth-password-toggle flex items-center justify-center">
+                    <Eye v-if="!showPasswordConfirm" class="w-4 h-4" />
+                    <EyeOff v-else class="w-4 h-4" />
+                  </button>
+                </div>
+                <p v-if="addMitraForm.errors.password_confirmation" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.password_confirmation }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 5: SPONSOR LANGSUNG -->
+          <div class="p-4 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-2xl space-y-2">
+            <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-[#D4AF37]/30 pb-2">
+              <KeyRound class="w-3.5 h-3.5" />
+              <span>5. Sponsor Langsung</span>
+            </div>
+            <div v-if="is_admin && all_sponsors && all_sponsors.length > 0">
+              <select v-model="addMitraForm.sponsor_username" class="w-full bg-white border border-[#D4AF37]/40 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#D4AF37]">
+                <option v-for="s in all_sponsors" :key="s.username" :value="s.username">{{ s.label }}</option>
               </select>
             </div>
-            <div v-else class="flex items-center justify-between bg-white px-3 py-2 border border-[#D4AF37]/30 rounded-xl">
+            <div v-else class="flex items-center justify-between bg-white px-3.5 py-2.5 border border-[#D4AF37]/30 rounded-xl">
               <span class="text-xs font-extrabold text-[#0F172A]">@{{ addMitraForm.sponsor_username }}</span>
               <span class="text-[10px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">Sponsor Anda</span>
             </div>
             <p class="text-[10px] text-slate-600 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
           </div>
 
-          <!-- Data Rekening Bank Mitra Baru -->
-          <div class="p-3.5 bg-[#fdfbf7] border border-[#D4AF37]/40 rounded-2xl space-y-3">
-            <div class="flex items-center justify-between border-b border-[#D4AF37]/30 pb-2">
-              <div class="flex items-center gap-2">
-                <CreditCard class="w-4 h-4 text-[#B8922E]" />
-                <h4 class="text-[11px] font-extrabold text-[#0F172A] uppercase tracking-tight">Data Rekening Bank Mitra (Penerima WD / Bonus)</h4>
-              </div>
-              <span class="text-[9px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">
-                Untuk Pencairan
-              </span>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <!-- Bank Name -->
-              <div>
-                <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                  NAMA BANK / E-WALLET <span class="text-rose-500">*</span>
-                </label>
-                <select 
-                  v-model="addMitraForm.bank_name"
-                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#D4AF37] transition-all"
-                >
-                  <option value="Bank BRI">Bank BRI</option>
-                  <option value="Bank Mandiri">Bank Mandiri</option>
-                  <option value="Bank Central Asia (BCA)">BCA</option>
-                  <option value="Bank Negara Indonesia (BNI)">BNI</option>
-                  <option value="Bank Syariah Indonesia (BSI)">BSI</option>
-                  <option value="CIMB Niaga">CIMB Niaga</option>
-                  <option value="Bank Permata">Permata</option>
-                  <option value="Bank Danamon">Danamon</option>
-                  <option value="DANA">DANA (E-Wallet)</option>
-                  <option value="OVO">OVO (E-Wallet)</option>
-                  <option value="GoPay">GoPay (E-Wallet)</option>
-                  <option value="Bank Lainnya">Bank Lainnya</option>
-                </select>
-              </div>
-
-              <!-- Nomor Rekening -->
-              <div>
-                <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                  NO REKENING <span class="text-rose-500">*</span>
-                </label>
-                <input 
-                  v-model="addMitraForm.bank_account_number"
-                  type="text"
-                  placeholder="cth: 1234567890"
-                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-800 focus:outline-none focus:border-[#D4AF37] transition-all"
-                />
-              </div>
-
-              <!-- Nama Pemilik Rekening -->
-              <div>
-                <label class="block text-[10px] font-extrabold text-slate-600 uppercase tracking-wider mb-1">
-                  ATAS NAMA (A.N)
-                </label>
-                <input 
-                  v-model="addMitraForm.bank_account_name"
-                  type="text"
-                  :placeholder="addMitraForm.name || 'Sesuai KTP Mitra'"
-                  class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#D4AF37] transition-all"
-                />
-              </div>
-            </div>
-            <p class="text-[10px] text-slate-600 font-medium">
-              💡 Rekening ini digunakan admin untuk menyalurkan pembayaran pencairan saldo (WD) & bonus mitra sesuai nama lengkap dan NIK-nya.
-            </p>
-          </div>
-
           <!-- Modal Actions -->
           <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
-            <button 
-              type="button" 
-              @click="isAddMitraModalOpen = false" 
-              class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer"
-            >
+            <button type="button" @click="isAddMitraModalOpen = false" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer">
               Batal
             </button>
-            <button 
-              type="submit" 
-              :disabled="addMitraForm.processing"
-              class="px-6 py-2.5 bg-[#0F172A] hover:bg-[#1E293B] text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-black rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
-            >
+            <button type="submit" :disabled="addMitraForm.processing" class="auth-primary-btn !w-auto !h-auto px-6 py-2.5 text-xs font-black uppercase tracking-wider rounded-xl shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-2">
+              <span v-if="addMitraForm.processing">Mendaftarkan...</span>
+              <span v-else>Daftarkan Mitra Sekarang</span>
               <Check class="w-4 h-4 stroke-[3]" />
-              <span>Daftarkan Mitra Sekarang</span>
             </button>
           </div>
 

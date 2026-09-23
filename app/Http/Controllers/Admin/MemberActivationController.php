@@ -107,37 +107,24 @@ class MemberActivationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'username' => 'required|string|alpha_dash|max:50|unique:users,username',
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'phone' => 'nullable|string|max:25',
-            'nik' => 'nullable|string|max:25',
-            'bank_name' => 'nullable|string|max:100',
-            'bank_account_number' => 'nullable|string|max:100',
-            'bank_account_name' => 'nullable|string|max:255',
-            'password' => 'nullable|string|min:6',
+            'email' => 'required|string|lowercase|email|max:255|unique:users,email',
+            'phone' => 'required|string|max:25',
+            'is_left_handed' => 'required|string|in:Iya,Tidak',
+            'beneficiary_name' => 'required|string|max:255',
+            'beneficiary_birth_date' => 'required|date',
+            'beneficiary_relation' => 'required|string|max:100',
+            'emergency_phone' => 'required|string|max:25',
+            'bank_name' => 'required|string|max:100',
+            'bank_account_number' => 'required|string|max:100',
+            'bank_account_name' => 'nullable|string|max:100',
+            'ktp_image' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'password' => 'required|string|min:8|confirmed',
             'sponsor_username' => 'required|string|exists:users,username',
-            'voucher_code' => 'nullable|string',
         ]);
 
         $currentUser = auth()->user() ?: User::first();
         $isAdmin = ($currentUser->username === 'admin' || $currentUser->email === 'admin@nexuscommunity.id' || (method_exists($currentUser, 'hasRole') && $currentUser->hasRole('admin')));
-
-        // Verify voucher / PIN if provided
-        $voucher = null;
-        if (!empty($request->voucher_code)) {
-            $voucherQuery = Voucher::where('code', $request->voucher_code)->where('status', 'active');
-            if (!$isAdmin) {
-                $voucherQuery->where('user_id', $currentUser->id);
-            }
-            $voucher = $voucherQuery->first();
-
-            if (!$voucher) {
-                throw ValidationException::withMessages([
-                    'voucher_code' => 'Voucher Activation (PIN) tidak valid, telah digunakan, atau bukan milik Anda.',
-                ]);
-            }
-        }
 
         $sponsorUser = User::where('username', $request->sponsor_username)->first();
         if (!$sponsorUser) {
@@ -146,23 +133,48 @@ class MemberActivationController extends Controller
             ]);
         }
 
-        $packageName = $voucher ? ($voucher->package_name ?: 'Standard (Rp 100.000)') : 'Standard (Rp 100.000)';
-        $plainPassword = $request->password ?: 'password';
+        $ktpPath = null;
+        if ($request->hasFile('ktp_image')) {
+            $file = $request->file('ktp_image');
+            $filename = 'ktp_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $destination = public_path('images/ktp');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
+            $file->move($destination, $filename);
+            $ktpPath = '/images/ktp/' . $filename;
+        }
 
-        DB::transaction(function () use ($request, $voucher, $sponsorUser, $packageName, $plainPassword) {
+        // Generate username unik dari email
+        $usernameBase = strtolower(explode('@', $request->email)[0]);
+        $usernameBase = preg_replace('/[^a-z0-9_]/', '', $usernameBase) ?: 'member';
+        $username = $usernameBase;
+        $counter = 1;
+        while (User::where('username', $username)->exists()) {
+            $username = $usernameBase . $counter++;
+        }
+
+        $plainPassword = $request->password;
+
+        DB::transaction(function () use ($request, $sponsorUser, $username, $ktpPath, $plainPassword) {
             // Create new member in Matahari system (parent_id = sponsor_id)
             $newUser = User::create([
                 'name' => $request->name,
-                'username' => strtolower($request->username),
+                'username' => $username,
                 'email' => $request->email,
-                'phone' => $request->phone ?? null,
-                'nik' => $request->nik ?? null,
+                'phone' => $request->phone,
+                'is_left_handed' => $request->is_left_handed,
+                'beneficiary_name' => $request->beneficiary_name,
+                'beneficiary_birth_date' => $request->beneficiary_birth_date,
+                'beneficiary_relation' => $request->beneficiary_relation,
+                'beneficiary_phone' => $request->emergency_phone,
+                'emergency_phone' => $request->emergency_phone,
                 'bank_name' => $request->bank_name ?: 'Bank BRI',
-                'bank_account_number' => $request->bank_account_number ?? null,
+                'bank_account_number' => $request->bank_account_number,
                 'bank_account_name' => $request->bank_account_name ?: $request->name,
+                'ktp_image' => $ktpPath,
                 'password' => bcrypt($plainPassword),
                 'parent_id' => $sponsorUser->id,
-                'package_name' => $packageName,
             ]);
             $newUser->assignRole('client');
 
@@ -172,45 +184,34 @@ class MemberActivationController extends Controller
                 \Illuminate\Support\Facades\Log::error('Gagal mengirim email aktivasi member: ' . $e->getMessage());
             }
 
-            // Mark voucher as used if provided
-            if ($voucher) {
-                $voucher->update([
-                    'status' => 'used',
-                    'used_by_id' => $newUser->id,
-                    'used_at' => now(),
-                ]);
-            }
+            // Allocation Bonus Sponsor & Generasi 1-10
+            $bonusPerGen = 25000;
+            $sponsorBonus = 250000;
 
-            // 1. Allocation for Yayasan (Rp 10.000) & Founder (Rp 10.000) from Rp 100.000 registration fee
-            $adminUser = User::where('username', 'admin')->first() ?: User::first();
-            if ($adminUser) {
-                BonusLog::create([
-                    'transaction_code' => 'Y' . sprintf('%03d', BonusLog::count() + 1),
-                    'user_id' => $adminUser->id,
-                    'category' => 'yayasan',
-                    'source_user_id' => $newUser->id,
-                    'description' => "Alokasi Dana Yayasan (Rp 10.000) dari pendaftaran @{$newUser->username}",
-                    'amount' => 10000,
-                ]);
+            // Direct Sponsor (Gen 1)
+            $sponsorUser->increment('saldo', $sponsorBonus);
+            $sponsorUser->increment('total_bonus', $sponsorBonus);
 
-                BonusLog::create([
-                    'transaction_code' => 'F' . sprintf('%03d', BonusLog::count() + 1),
-                    'user_id' => $adminUser->id,
-                    'category' => 'founder',
-                    'source_user_id' => $newUser->id,
-                    'description' => "Alokasi Dana Founder (Rp 10.000) dari pendaftaran @{$newUser->username}",
-                    'amount' => 10000,
-                ]);
-            }
+            BonusLog::create([
+                'transaction_code' => 'SP' . sprintf('%03d', BonusLog::count() + 1),
+                'user_id' => $sponsorUser->id,
+                'category' => 'sponsor',
+                'source_user_id' => $newUser->id,
+                'description' => "Bonus Sponsor Langsung dari pendaftaran @{$newUser->username}",
+                'amount' => $sponsorBonus,
+            ]);
 
-            // 2. Multi-tier Generation Bonus for Generasi 1 s/d Generasi 10 Uplines
-            // Total bonus per generation = Rp 7.000 (50% Auto Save / Rp 3.500 & 50% Saldo WD / Rp 3.500)
-            $bonusPerGen = 7000;
-            $autoSaveShare = 3500;
-            $wdShare = 3500;
+            WalletTransaction::create([
+                'user_id' => $sponsorUser->id,
+                'type' => 'in',
+                'category' => 'bonus_sponsor',
+                'amount' => $sponsorBonus,
+                'description' => "Bonus Sponsor Langsung dari pendaftaran @{$newUser->username}",
+            ]);
 
-            $currentUpline = $newUser;
-            for ($gen = 1; $gen <= 10; $gen++) {
+            // Multi-tier Gen 2 s/d Gen 10 Uplines (Rp 25.000 / level)
+            $currentUpline = $sponsorUser;
+            for ($gen = 2; $gen <= 10; $gen++) {
                 if (!$currentUpline->parent_id) {
                     break;
                 }
@@ -220,9 +221,7 @@ class MemberActivationController extends Controller
                     break;
                 }
 
-                // Credit 50% Auto Save and 50% Saldo WD
-                $upline->increment('auto_save_saldo', $autoSaveShare);
-                $upline->increment('saldo', $wdShare);
+                $upline->increment('saldo', $bonusPerGen);
                 $upline->increment('total_bonus', $bonusPerGen);
 
                 BonusLog::create([
@@ -230,7 +229,7 @@ class MemberActivationController extends Controller
                     'user_id' => $upline->id,
                     'category' => 'generasi',
                     'source_user_id' => $newUser->id,
-                    'description' => "Bonus Generasi {$gen}: Pendaftaran @{$newUser->username} (Total Rp 7.000: Auto Save Rp 3.500, Saldo WD Rp 3.500)",
+                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$newUser->username}",
                     'amount' => $bonusPerGen,
                 ]);
 
@@ -239,20 +238,14 @@ class MemberActivationController extends Controller
                     'type' => 'in',
                     'category' => 'bonus_generasi',
                     'amount' => $bonusPerGen,
-                    'description' => "Bonus Generasi {$gen} dari pendaftaran @{$newUser->username} (50% Auto Save Rp 3.500, 50% Saldo WD Rp 3.500)",
+                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$newUser->username}",
                 ]);
-
-                try {
-                    $upline->notify(new \App\Notifications\BonusReceivedNotification('generasi', (float) $bonusPerGen, "Bonus Generasi {$gen} dari pendaftaran @{$newUser->username}"));
-                } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::error("Gagal mengirim email bonus generasi ke @{$upline->username}: " . $e->getMessage());
-                }
 
                 $currentUpline = $upline;
             }
         });
 
-        $successMsg = "Mitra baru @{$request->username} ({$request->name}) berhasil didaftarkan di bawah Sponsor @{$sponsorUser->username}! Bonus Generasi 1-10 berhasil didistribusikan.";
+        $successMsg = "Mitra baru {$request->name} (@{$username}) berhasil didaftarkan di bawah Sponsor @{$sponsorUser->username}!";
 
         if ($request->input('source') === 'dashboard') {
             return redirect()->route('admin.dashboard')->with('success', $successMsg);
