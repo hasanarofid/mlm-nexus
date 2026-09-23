@@ -248,18 +248,15 @@ const logout = () => {
                 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
                     <!-- Sidebar Brand Header Mobile -->
                     <div
-                        class="flex items-center h-16 px-5 border-b border-slate-100 lg:hidden justify-between shrink-0"
+                        class="flex items-center h-16 px-4 border-b border-slate-100 lg:hidden justify-center relative shrink-0"
                     >
-                        <div class="flex items-center gap-2.5">
-                            <img src="/images/logo-nexus.png" alt="NEXUS" class="h-7 w-auto object-contain" />
-                            <span
-                                class="font-extrabold text-[#1a3a7c] text-sm tracking-tight uppercase"
-                                >NEXUS</span
-                            >
+                        <div class="flex items-center justify-center">
+                            <img src="/images/logo-nexus.png" alt="NEXUS" class="h-8 w-auto object-contain" />
                         </div>
                         <button
                             @click="isSidebarOpen = false"
-                            class="p-2 text-slate-500 hover:text-slate-800"
+                            class="p-2 text-slate-400 hover:text-slate-800 rounded-lg absolute right-3"
+                            title="Tutup Menu"
                         >
                             <X class="w-5 h-5" />
                         </button>
