@@ -204,11 +204,11 @@ const bankList = [
               type="button"
               @click="toggleProfileBank"
               :class="[
-                isUsingProfileBank ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-emerald-50/70 text-emerald-700 border-emerald-200 hover:bg-emerald-100',
+                isUsingProfileBank ? 'bg-[#faf6eb] text-[#B8922E] border-[#D4AF37]' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100',
                 'w-full py-2.5 px-4 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer'
               ]"
             >
-              <div :class="[isUsingProfileBank ? 'bg-emerald-600 text-white' : 'border border-emerald-400 bg-white text-transparent', 'w-4 h-4 rounded flex items-center justify-center transition-colors']">
+              <div :class="[isUsingProfileBank ? 'bg-[#D4AF37] text-slate-950' : 'border border-slate-300 bg-white text-transparent', 'w-4 h-4 rounded flex items-center justify-center transition-colors']">
                 <Check class="w-3 h-3 stroke-[3]" />
               </div>
               <span>Gunakan Rekening Bank di Profil Saya</span>
@@ -224,7 +224,7 @@ const bankList = [
                 <select 
                   v-model="form.bank_name"
                   required
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs font-medium focus:outline-none focus:border-emerald-500"
+                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 >
                   <option v-for="bank in bankList" :key="bank" :value="bank">
                     {{ bank }}
@@ -242,7 +242,7 @@ const bankList = [
                   type="text"
                   required
                   placeholder="Masukkan nomor rekening atau No. HP e-wallet"
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-emerald-500"
+                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
@@ -256,7 +256,7 @@ const bankList = [
                   type="text"
                   required
                   placeholder="Nama lengkap pemilik rekening / akun e-wallet"
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-emerald-500"
+                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
@@ -272,11 +272,11 @@ const bankList = [
                   min="50000"
                   step="1000"
                   placeholder="Min. Rp 50.000"
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs font-bold focus:outline-none focus:border-[#D4AF37]"
                 />
                 <div class="flex items-center justify-between text-[10px] mt-1.5 font-medium">
                   <span class="text-slate-400">Min. {{ formatRupiah(wallet?.min_withdrawal || 50000) }}</span>
-                  <span class="text-slate-500">Max. Bisa ditarik: <strong class="text-emerald-600 font-bold">{{ formatRupiah(wallet?.saldo ?? 0) }}</strong></span>
+                  <span class="text-slate-500">Max. Bisa ditarik: <strong class="text-[#B8922E] font-bold">{{ formatRupiah(wallet?.saldo ?? 0) }}</strong></span>
                 </div>
               </div>
 
@@ -284,9 +284,9 @@ const bankList = [
               <button 
                 type="submit"
                 :disabled="form.processing"
-                class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                class="w-full py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <Send class="w-4 h-4" />
+                <Send class="w-4 h-4 stroke-[2.5]" />
                 <span>Kirim Permohonan WD</span>
               </button>
             </form>
@@ -368,7 +368,7 @@ const bankList = [
                   <div v-if="is_admin && item.status === 'pending'" class="flex items-center gap-1.5 pt-1">
                     <button 
                       @click="openApproveModal(item.id)"
-                      class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1 cursor-pointer"
+                      class="px-2.5 py-1 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] text-[10px] font-bold rounded-lg shadow-sm border border-[#D4AF37]/30 transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <Check class="w-3 h-3" />
                       <span>Setujui (Upload Bukti)</span>
@@ -410,7 +410,7 @@ const bankList = [
                 type="file" 
                 @change="handleProofFile" 
                 accept="image/*,.pdf" 
-                class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
+                class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#faf6eb] file:text-[#B8922E] hover:file:bg-[#f3ebd3] cursor-pointer"
               />
               <p class="text-[10px] text-slate-400 mt-1">Format yang didukung: JPG, PNG, WEBP, PDF (Maks. 5MB)</p>
             </div>
@@ -426,9 +426,9 @@ const bankList = [
               <button 
                 type="submit" 
                 :disabled="approveForm.processing"
-                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-sm flex items-center gap-1.5 disabled:opacity-50"
+                class="px-5 py-2.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] text-slate-950 text-xs font-black uppercase tracking-wider rounded-xl shadow-sm flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
               >
-                <Check class="w-4 h-4" />
+                <Check class="w-4 h-4 stroke-[2.5]" />
                 <span>Konfirmasi Approve</span>
               </button>
             </div>

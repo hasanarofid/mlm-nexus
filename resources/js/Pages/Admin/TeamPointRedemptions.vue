@@ -108,7 +108,7 @@ const statusColor = (status) => ({
                     <button
                       @click="approve(r.id)"
                       :disabled="approveForm.processing"
-                      class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black rounded-xl transition-all disabled:opacity-50 cursor-pointer flex items-center gap-1"
+                      class="px-3 py-1.5 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] text-[10px] font-black rounded-xl border border-[#D4AF37]/30 transition-all disabled:opacity-50 cursor-pointer flex items-center gap-1"
                     >
                       <CheckCircle2 class="w-3 h-3" /> Approve
                     </button>

@@ -130,7 +130,40 @@ Pendaftaran member baru mewajibkan pengisian data lengkap dengan validasi ketat:
 
 ---
 
-## 4. Kualitas Kode & Standar Pemrograman
+## 4. Standar Desain Tombol (Buttons) & Badge / Tagging Sistem (Luxury Gold & Obsidian Slate)
+
+Wajib menjaga keseragaman seluruh elemen interaktif sistem sesuai tema brand **Luxury Gold & Obsidian Slate**:
+
+### A. Aturan Tombol Aksi (Buttons)
+1. **Tombol Aksi Utama / Primary CTA (Submit, Simpan, Konfirmasi, Tambah Mitra, Upgrade, Tarik Saldo):**
+   - **Varian 1 (Metallic Gold Gradient):**
+     ```html
+     class="bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 active:scale-[0.99] text-slate-950 font-black text-xs uppercase tracking-wider py-3.5 px-6 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+     ```
+     *(Atau gunakan class utility `.auth-primary-btn` / `.primary-btn`)*
+   - **Varian 2 (Obsidian Slate Dark dengan Aksen Emas):**
+     ```html
+     class="bg-[#0F172A] hover:bg-slate-800 active:scale-[0.99] text-[#D4AF37] font-extrabold text-xs py-3 px-5 rounded-2xl shadow-md border border-[#D4AF37]/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+     ```
+2. **Tombol Sekunder / Batal / Filter:**
+   - Gunakan `bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl py-2.5 px-4 transition-colors` atau `border border-slate-300 bg-white hover:bg-slate-50 text-slate-700`.
+3. **⛔ LARANGAN KERAS (Anti-Green Button Rule):**
+   - **DILARANG MENGGUNAKAN** tombol warna hijau polos / generic (`bg-emerald-600`, `bg-green-500`, `bg-emerald-500`, dsb.) untuk tombol submit, simpan, aktivasi, pendaftaran mitra, withdrawal, maupun aksi formulir. Hijau hanya untuk indikator icon success kecil atau chat WhatsApp eksternal.
+
+### B. Aturan Badge, Label, dan Section Header
+1. **Section Header / Card Group Badge:**
+   - Gunakan aksen emas dengan background lembut:
+     ```html
+     <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
+     ```
+2. **Badge & Status Label:**
+   - **Gold Badge:** `bg-[#faf6eb] text-[#B8922E] border border-[#D4AF37]/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full`
+   - **Obsidian Badge:** `bg-slate-900 text-[#D4AF37] border border-slate-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full`
+   - **DILARANG** menggunakan background atau border hijau generic (`border-emerald-400 bg-emerald-50 text-emerald-700`) untuk card border, field group border, atau badge keterangan formulir.
+
+---
+
+## 5. Kualitas Kode & Standar Pemrograman
 
 1. **Clean & Maintainable:** Terapkan prinsip DRY (Don't Repeat Yourself) dan KISS (Keep It Simple, Stupid).
 2. **Strict DB Transactions:** Semua perhitungan komisi (Bonus Sponsor, Bonus Tim Gen 2-10, Bonus Upgrade Premium), mutasi wallet, perpanjangan tahunan, dan pengajuan withdrawal **WAJIB dibungkus dalam `DB::transaction()`**.
@@ -140,8 +173,9 @@ Pendaftaran member baru mewajibkan pengisian data lengkap dengan validasi ketat:
 
 ---
 
-## 5. Gaya Komunikasi AI
+## 6. Gaya Komunikasi AI
 
 - Jawab secara singkat, padat, dan langsung ke inti penyelesaian masalah.
 - Tampilkan hanya snippet / diff kode yang berubah tanpa mengulang seluruh file.
 - Gunakan Bahasa Indonesia yang profesional dan santai.
+

@@ -377,7 +377,7 @@ const saveBanks = () => {
 
                             <div>
                                 <label
-                                    class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer transition-colors"
+                                    class="inline-flex items-center px-4 py-2 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] text-xs font-bold rounded-xl shadow-xs border border-[#D4AF37]/30 cursor-pointer transition-colors"
                                 >
                                     <Upload class="w-3.5 h-3.5 mr-1.5" />
                                     <span>{{ ktpPreview ? 'Ganti Foto KTP' : 'Pilih Foto KTP' }}</span>
@@ -928,7 +928,7 @@ const saveBanks = () => {
                         <button
                             type="submit"
                             :disabled="memberForm.processing"
-                            class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                            class="px-8 py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 active:scale-[0.99] text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                         >
                             <Check class="w-4 h-4 stroke-[3]" />
                             <span>Simpan Data Profil Yayasan</span>
@@ -1077,7 +1077,7 @@ const saveBanks = () => {
                                     Tampil di header utama navigasi.
                                 </p>
                                 <label
-                                    class="inline-flex items-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs cursor-pointer transition-colors"
+                                    class="inline-flex items-center px-3 py-1.5 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] text-[11px] font-bold rounded-xl shadow-xs border border-[#D4AF37]/30 cursor-pointer transition-colors"
                                 >
                                     <Upload class="w-3.5 h-3.5 mr-1.5" />
                                     <span>Pilih File Logo</span>
@@ -1094,7 +1094,7 @@ const saveBanks = () => {
                         <!-- Admin Profile Picture -->
                         <div class="flex items-center gap-4">
                             <div
-                                class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 border-2 border-emerald-300 flex items-center justify-center text-xl font-extrabold shrink-0 shadow-xs"
+                                class="w-16 h-16 rounded-full bg-[#faf6eb] text-[#B8922E] border-2 border-[#D4AF37]/40 flex items-center justify-center text-xl font-extrabold shrink-0 shadow-xs"
                             >
                                 A
                             </div>
@@ -1111,7 +1111,7 @@ const saveBanks = () => {
                                 </p>
                                 <button
                                     type="button"
-                                    class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs cursor-pointer transition-colors inline-flex items-center"
+                                    class="px-3 py-1.5 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] text-[11px] font-bold rounded-xl shadow-xs border border-[#D4AF37]/30 cursor-pointer transition-colors inline-flex items-center"
                                 >
                                     <span>Pilih Avatar</span>
                                 </button>
@@ -1131,7 +1131,7 @@ const saveBanks = () => {
                                 v-model="form.company_name"
                                 type="text"
                                 required
-                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-[#D4AF37]"
                             />
                         </div>
 
@@ -1145,7 +1145,7 @@ const saveBanks = () => {
                                 v-model="form.company_owner"
                                 type="text"
                                 required
-                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-[#D4AF37]"
                             />
                         </div>
 
@@ -1159,22 +1159,22 @@ const saveBanks = () => {
                                 v-model="form.company_copyright"
                                 type="text"
                                 required
-                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500"
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-[#D4AF37]"
                             />
                         </div>
                     </div>
 
-                    <!-- SECTION 3: COMPANY BANK ACCOUNTS & VIRTUAL WALLET (Matching Green Box Mockup) -->
+                    <!-- SECTION 3: COMPANY BANK ACCOUNTS & VIRTUAL WALLET -->
                     <div
-                        class="bg-emerald-50/40 border border-emerald-200/60 rounded-2xl p-5 space-y-4"
+                        class="bg-[#faf6eb]/50 border border-[#D4AF37]/30 rounded-2xl p-5 space-y-4"
                     >
                         <div
                             class="flex items-center justify-between flex-wrap gap-2"
                         >
                             <div class="flex items-center gap-2">
-                                <CreditCard class="w-4 h-4 text-emerald-600" />
+                                <CreditCard class="w-4 h-4 text-[#B8922E]" />
                                 <h3
-                                    class="text-xs font-black text-emerald-900 uppercase tracking-tight"
+                                    class="text-xs font-black text-slate-900 uppercase tracking-tight"
                                 >
                                     DAFTAR REKENING BANK & VIRTUAL WALLET /
                                     E-WALLET PERUSAHAAN (ADMIN)
@@ -1184,7 +1184,7 @@ const saveBanks = () => {
                             <button
                                 type="button"
                                 @click="showAddBank = !showAddBank"
-                                class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                                class="px-3.5 py-1.5 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] text-[11px] font-bold rounded-xl shadow-xs border border-[#D4AF37]/30 transition-colors flex items-center gap-1.5 cursor-pointer"
                             >
                                 <Plus class="w-3.5 h-3.5" />
                                 <span>Tambah Rekening / Virtual Wallet</span>
@@ -1194,7 +1194,7 @@ const saveBanks = () => {
                         <!-- Add Bank / Virtual Wallet Form Dropdown -->
                         <div
                             v-if="showAddBank"
-                            class="p-4 bg-white border border-emerald-200 rounded-2xl space-y-4 shadow-sm"
+                            class="p-4 bg-white border border-[#D4AF37]/30 rounded-2xl space-y-4 shadow-sm"
                         >
                             <!-- Type Switcher -->
                             <div
@@ -1334,7 +1334,7 @@ const saveBanks = () => {
                                 <button
                                     @click="addBank"
                                     type="button"
-                                    class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
+                                    class="px-4 py-1.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] text-slate-950 text-xs font-black uppercase tracking-wider rounded-xl shadow-xs cursor-pointer"
                                 >
                                     Simpan Rekening / E-Wallet
                                 </button>
@@ -1541,7 +1541,7 @@ const saveBanks = () => {
                         <button
                             type="submit"
                             :disabled="form.processing"
-                            class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-black rounded-2xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                            class="px-6 py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 active:scale-[0.99] text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                         >
                             <Check class="w-4 h-4 stroke-[3]" />
                             <span>Simpan Profil & Identitas Perusahaan</span>

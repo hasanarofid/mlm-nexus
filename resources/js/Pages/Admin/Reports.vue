@@ -235,7 +235,7 @@ const reportTabs = [
                   <div v-if="row.status === 'PENDING' || row.status === 'pending'" class="flex items-center justify-center gap-1.5">
                     <button 
                       @click="approvePencairan(row.id)"
-                      class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] rounded-lg shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1"
+                      class="px-3 py-1 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] font-extrabold text-[10px] rounded-lg shadow-xs border border-[#D4AF37]/30 transition-colors cursor-pointer inline-flex items-center gap-1"
                     >
                       <Check class="w-3 h-3 stroke-[3]" />
                       <span>Approved</span>

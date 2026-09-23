@@ -158,7 +158,7 @@ const formatRupiah = (val) => {
                 <button 
                   @click="submitCashout"
                   :disabled="cashoutForm.processing"
-                  class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white text-xs font-extrabold rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  class="px-4 py-2 bg-[#0F172A] hover:bg-slate-800 text-[#D4AF37] text-xs font-black rounded-xl shadow-md border border-[#D4AF37]/30 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
                   <span>Cairkan ke E-Wallet</span>
                 </button>
@@ -213,7 +213,7 @@ const formatRupiah = (val) => {
               <button 
                 type="submit"
                 :disabled="generateForm.processing"
-                class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                class="w-full py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <span>Generate Saldo Wallet</span>
               </button>
@@ -223,7 +223,7 @@ const formatRupiah = (val) => {
           <!-- 4. KIRIM SALDO KE MEMBER CARD -->
           <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-4">
             <div class="flex items-start gap-3">
-              <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
+              <div class="p-2.5 bg-[#faf6eb] text-[#B8922E] rounded-xl shrink-0">
                 <ArrowRightLeft class="w-5 h-5" />
               </div>
               <div>
@@ -244,7 +244,7 @@ const formatRupiah = (val) => {
                   type="text"
                   required
                   placeholder="@ cth: siti"
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-emerald-500"
+                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
@@ -259,7 +259,7 @@ const formatRupiah = (val) => {
                   min="1000"
                   step="1000"
                   placeholder="cth: 50000"
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-emerald-500"
+                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
@@ -272,16 +272,16 @@ const formatRupiah = (val) => {
                   type="password"
                   required
                   placeholder="default: 123456 / 111111"
-                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-emerald-500"
+                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
               <button 
                 type="submit"
                 :disabled="transferForm.processing"
-                class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                class="w-full py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <Send class="w-4 h-4" />
+                <Send class="w-4 h-4 stroke-[2.5]" />
                 <span>Kirim Saldo Sekarang</span>
               </button>
             </form>
@@ -480,9 +480,9 @@ const formatRupiah = (val) => {
 
               <button 
                 @click="approvePremi(selectedPremi.id)" 
-                class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+                class="px-5 py-2.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 text-slate-950 text-xs font-black uppercase tracking-wider rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
               >
-                <Check class="w-3.5 h-3.5" />
+                <Check class="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Setujui (Tambah Saldo)</span>
               </button>
             </div>
