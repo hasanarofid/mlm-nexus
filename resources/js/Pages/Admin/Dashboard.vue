@@ -146,11 +146,11 @@ const formatRupiah = (val) => {
         </div>
       </div>
 
-      <!-- 2. Main Saldo Breakdown Grid (TOTAL SALDO, AUTO SAVE, SALDO WD) -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- 2. Main Dashboard Cards Grid (TOTAL SALDO MITRA & RINGKASAN JARINGAN) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <!-- Total Saldo Card (Combined 50% AutoSave + 50% Saldo WD) -->
-        <div class="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white rounded-3xl p-6 relative overflow-hidden shadow-xl space-y-4 border border-[#D4AF37]/40 lg:col-span-1 flex flex-col justify-between">
+        <!-- Total Saldo Card -->
+        <div class="bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white rounded-3xl p-6 relative overflow-hidden shadow-xl space-y-4 border border-[#D4AF37]/40 flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5">
@@ -171,7 +171,7 @@ const formatRupiah = (val) => {
             </div>
             <Link 
               :href="route('admin.withdrawals.index')" 
-              class="px-3.5 py-1.5 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-black rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer"
+              class="px-4 py-2 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-black rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer"
             >
               <span>Penarikan (WD)</span>
               <ArrowUpRight class="w-4 h-4" />
@@ -179,60 +179,8 @@ const formatRupiah = (val) => {
           </div>
         </div>
 
-        <!-- 50% Auto Save Card -->
-        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
-              <PiggyBank class="w-4 h-4 text-[#B8922E]" />
-              AUTO SAVE (50%)
-            </span>
-            <span class="px-2 py-0.5 text-[9px] font-bold bg-[#faf6eb] text-[#B8922E] border border-[#D4AF37]/30 rounded-md">Alokasi 50%</span>
-          </div>
-
-          <div>
-            <h2 class="text-3xl font-black text-slate-900 tracking-tight">{{ formatRupiah(wallet?.auto_save_saldo ?? 0) }}</h2>
-            <p class="text-xs text-slate-500 mt-1 font-medium">Diakumulasikan dari 50% bonus rekrut mitra 10 generasi (Rp 3.500/mitra).</p>
-          </div>
-
-          <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-500 font-medium">
-            Tersimpan otomatis untuk Tabungan Masa Depan Mitra.
-          </div>
-        </div>
-
-        <!-- 50% Saldo WD Card -->
-        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
-              <CreditCard class="w-4 h-4 text-[#0F172A]" />
-              SALDO WD (50%)
-            </span>
-            <span class="px-2 py-0.5 text-[9px] font-bold bg-slate-100 text-[#0F172A] rounded-md">Bisa Ditarik</span>
-          </div>
-
-          <div>
-            <h2 class="text-3xl font-black text-slate-900 tracking-tight">{{ formatRupiah(wallet?.saldo_wd ?? 0) }}</h2>
-            <p class="text-xs text-slate-500 mt-1 font-medium">Dapat ditarik ke rekening bank (Min. WD Rp 50.000, admin Rp 10.000).</p>
-          </div>
-
-          <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
-            <span class="text-[11px] text-slate-500 font-medium">Siap ditarik kapan saja</span>
-            <Link 
-              :href="route('admin.withdrawals.index')" 
-              class="text-xs font-extrabold text-[#B8922E] hover:text-[#0F172A] hover:underline flex items-center gap-1 transition-colors"
-            >
-              <span>Tarik Saldo</span>
-              <ArrowUpRight class="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- 3. Network Metrics & Monthly Premi Card -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Network Summary -->
-        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm lg:col-span-2 space-y-4">
+        <!-- Network Summary Card -->
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <div class="flex items-center gap-2">
               <Users class="w-5 h-5 text-[#0F172A]" />
@@ -244,7 +192,7 @@ const formatRupiah = (val) => {
             </Link>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div class="p-4 rounded-2xl border border-slate-100 bg-[#fdfbf7]">
               <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Mitra Direct (Gen 1)</p>
               <h4 class="text-2xl font-black text-[#0F172A] mt-1">{{ wallet?.direct_downlines ?? 0 }} <span class="text-xs font-normal text-slate-500">Orang</span></h4>
@@ -257,78 +205,8 @@ const formatRupiah = (val) => {
           </div>
         </div>
 
-        <!-- Monthly Premi Action Box -->
-        <div class="bg-gradient-to-br from-[#fdfbf7] to-[#f8f5ee] border border-[#D4AF37]/40 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <div class="p-2 bg-[#D4AF37]/15 text-[#B8922E] rounded-xl">
-                <CreditCard class="w-4 h-4" />
-              </div>
-              <h3 class="text-sm font-extrabold text-[#0F172A] tracking-tight">Bayar Premi Bulanan</h3>
-            </div>
-            <p class="text-xs text-slate-600 mt-2 font-medium">
-              Setoran Premi bulanan (min. Rp 10.000) masuk <strong>100% Full</strong> ke Total Saldo mitra.
-            </p>
-          </div>
-
-          <button 
-            @click="isPremiModalOpen = true" 
-            class="w-full py-3 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-black rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <Send class="w-4 h-4" />
-            <span>Bayar Premi (Min. Rp 10.000)</span>
-          </button>
-        </div>
-
       </div>
 
-    </div>
-
-    <!-- Modal Form Premi Bulanan -->
-    <div v-if="isPremiModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 border border-slate-100">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h3 class="text-base font-extrabold text-slate-900">Setor Premi Bulanan</h3>
-          <button @click="isPremiModalOpen = false" class="text-slate-400 hover:text-slate-700 text-lg font-bold cursor-pointer">✕</button>
-        </div>
-
-        <p class="text-xs text-slate-500 font-medium">
-          Setoran premi bulanan akan langsung menambahkan nominal setoran 100% full ke Saldo WD Anda.
-        </p>
-
-        <form @submit.prevent="submitPremi" class="space-y-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Premi (Rp)</label>
-            <input 
-              v-model="premiForm.amount" 
-              type="number" 
-              min="10000" 
-              step="5000" 
-              class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-[#D4AF37] focus:outline-none" 
-              placeholder="10000"
-              required 
-            />
-            <span class="text-[10px] text-slate-400 mt-1 block">Minimal nominal pembayaran Rp 10.000</span>
-          </div>
-
-          <div class="flex items-center justify-end gap-2 pt-2">
-            <button 
-              type="button" 
-              @click="isPremiModalOpen = false" 
-              class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer"
-            >
-              Batal
-            </button>
-            <button 
-              type="submit" 
-              :disabled="premiForm.processing"
-              class="px-5 py-2 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-bold rounded-xl shadow-md cursor-pointer disabled:opacity-50"
-            >
-              Confirm & Bayar
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
 
     <!-- Modal Form Tambah Mitra Baru (Quick Add Mitra from Dashboard) -->
