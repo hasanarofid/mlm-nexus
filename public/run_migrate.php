@@ -13,9 +13,19 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $kernel = $app->make(Kernel::class);
 
 try {
-    // 1. Run Composer dump-autoload / install if shell execution is supported
+    // 0. Reset PHP OPcache if active
+    if (function_exists('opcache_reset')) {
+        @opcache_reset();
+    }
+
+    // 1. Run Git Pull & Composer dump-autoload if shell execution is supported
+    $gitLog = '';
     $composerLog = '';
     if (function_exists('shell_exec')) {
+        $gitOutput = @shell_exec('git pull origin master 2>&1');
+        if ($gitOutput) {
+            $gitLog = "Git Pull Output:\n" . $gitOutput . "\n\n";
+        }
         $output = @shell_exec('composer dump-autoload 2>&1');
         if ($output) {
             $composerLog = "Composer Output:\n" . $output . "\n\n";
@@ -27,6 +37,10 @@ try {
 
     // Allowed artisan commands that can be triggered via ?cmd=xxx
     $allowedCommands = [
+        'git-pull' => [
+            'command' => 'config:clear',
+            'label'   => 'Git Pull & Clear Cache',
+        ],
         'fix-ro-matching' => [
             'command' => 'fix:ro-matching-bonus',
             'label'   => 'Fix Matching Bonus RO',
@@ -156,7 +170,7 @@ try {
         echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action} Finished!</h1>";
-        echo "<pre>" . htmlspecialchars($composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.")) . "</pre>";
+        echo "<pre>" . htmlspecialchars($gitLog . $composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.")) . "</pre>";
         
         echo "<h3 style='margin-top:1.5rem;'>Daftar User Akun Login (" . count($allUsers) . " Users):</h3>";
         echo "<table><thead><tr><th>ID</th><th>Nama</th><th>Username</th><th>Email</th><th>Default Password</th></tr></thead><tbody>";
