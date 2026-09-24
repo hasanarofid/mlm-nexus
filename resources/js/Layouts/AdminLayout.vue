@@ -288,10 +288,10 @@ const logout = () => {
                             </p>
                         </div>
                         <div
-                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-[#c9a227]/40 text-[#a07c10] bg-[#c9a227]/10 text-[9px] font-extrabold uppercase tracking-wider"
+                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-[#D4AF37]/50 text-[#B8922E] bg-[#faf6eb] text-[9px] font-extrabold uppercase tracking-wider shadow-2xs"
                         >
-                            <Crown class="w-3 h-3 text-[#c9a227]" />
-                            <span>{{ isAdmin ? "ADMIN" : "MEMBER" }}</span>
+                            <Crown class="w-3 h-3 text-[#B8922E]" />
+                            <span>{{ isAdmin ? "ADMIN" : (user.package_name || "STANDARD").toUpperCase() }}</span>
                         </div>
 
                         <!-- Dompet Saya Card Widget -->
@@ -485,8 +485,8 @@ const logout = () => {
                                 user.name
                             }}</span>
                             <span
-                                class="px-2 py-0.5 text-[9px] font-bold bg-[#D4AF37]/20 text-[#D4AF37] border border-[#D4AF37]/40 rounded-md"
-                                >{{ isAdmin ? "Admin" : "Member" }}</span
+                                class="px-2 py-0.5 text-[9px] font-extrabold bg-[#faf6eb] text-[#B8922E] border border-[#D4AF37]/50 rounded-md uppercase"
+                                >{{ isAdmin ? "Admin" : (user.package_name || "Standard") }}</span
                             >
                         </div>
 

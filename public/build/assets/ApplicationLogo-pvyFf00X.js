@@ -1,1 +1,0 @@
-import{O as e,y as t}from"./app-CzPeYd0U.js";import{t as n}from"./_plugin-vue_export-helper-BDNMzG2s.js";var r={},i={src:`/images/logo-nexus.png`,alt:`NEXUS Logo`,class:`h-9 w-auto object-contain`};function a(n,r){return e(),t(`img`,i)}var o=n(r,[[`render`,a]]);export{o as t};

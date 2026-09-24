@@ -51,9 +51,9 @@ class GenealogyController extends Controller
                 return [
                     'id' => $u->id,
                     'name' => $u->name,
-                    'username' => $u->username ? '@' . $u->username : '@' . strtolower(explode(' ', $u->name)[0]),
+                    'username' => $u->username ?: strtolower(explode(' ', $u->name)[0]),
                     'email' => $u->email,
-                    'package_name' => $u->package_name ?? 'Basic',
+                    'package_name' => $u->package_name ?: 'Standard',
                     'direct_count' => $g2Count,
                     'joined_at' => $u->created_at->format('d M Y, H:i'),
                 ];
@@ -67,11 +67,12 @@ class GenealogyController extends Controller
 
         // Search options for quick focus selector (Admin: all users, Member: self + downlines)
         $allUsers = $allowedUserQuery->select('id', 'name', 'username', 'email')->get()->map(function ($u) {
+            $un = $u->username ?: strtolower(explode(' ', $u->name)[0]);
             return [
                 'id' => $u->id,
                 'name' => $u->name,
-                'username' => $u->username ? '@' . $u->username : ('@' . strtolower(explode(' ', $u->name)[0])),
-                'label' => $u->name . ' (' . ($u->username ? '@' . $u->username : $u->email) . ')',
+                'username' => $un,
+                'label' => $u->name . ' (@' . $un . ')',
             ];
         });
 
@@ -79,8 +80,8 @@ class GenealogyController extends Controller
             'focus_user' => [
                 'id' => $focusedUser->id,
                 'name' => $focusedUser->name,
-                'username' => $focusedUser->username ? '@' . $focusedUser->username : '@' . strtolower(explode(' ', $focusedUser->name)[0]),
-                'package_name' => $focusedUser->package_name ?? 'Partner',
+                'username' => $focusedUser->username ?: strtolower(explode(' ', $focusedUser->name)[0]),
+                'package_name' => $focusedUser->package_name ?: 'Standard',
                 'active_tier' => $focusedUser->getActiveTier(),
                 'total_direct' => count($directDownlines),
                 'total_team' => $treeData['total_downlines'] ?? array_sum(array_column($generations, 'count')),

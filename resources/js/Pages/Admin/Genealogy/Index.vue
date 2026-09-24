@@ -130,9 +130,9 @@ const getBadgeColor = (pkg) => {
             <h2 class="text-2xl font-black text-slate-900 tracking-tight">
               {{ focus_user?.name }}
             </h2>
-            <span class="text-xs font-bold text-slate-400 font-mono">@{{ focus_user?.username }}</span>
-            <span :class="['px-2.5 py-0.5 text-[10px] font-extrabold rounded-md border uppercase tracking-wider', getBadgeColor(focus_user?.package_name)]">
-              Paket {{ focus_user?.package_name }}
+            <span class="text-xs font-bold text-slate-400 font-mono">@{{ (focus_user?.username || '').replace(/^@+/, '') }}</span>
+            <span class="px-2.5 py-0.5 text-[10px] font-black rounded-lg border uppercase tracking-wider bg-[#faf6eb] text-[#B8922E] border-[#D4AF37]/50">
+              {{ (focus_user?.package_name || 'STANDARD').toUpperCase() }}
             </span>
           </div>
           <p class="text-xs text-slate-500 font-medium pt-0.5">
