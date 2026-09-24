@@ -372,13 +372,13 @@ const testimonialsSection = getSection('testimonials');
 
         <!-- Lower Footer -->
         <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p class="text-xs text-slate-600">
-            &copy; {{ new Date().getFullYear() }} {{ settings.site_name || 'CMS Boilerplate' }}. All rights reserved.
+          <p class="text-xs text-slate-500">
+            &copy; {{ new Date().getFullYear() }} Nexus Community. All Right Reserver
           </p>
-          <p class="text-xs text-slate-600">
-            Template Owner: 
-            <a href="https://hasanarofid.site" target="_blank" class="text-indigo-500/80 hover:text-indigo-400 transition-colors font-bold">
-              @hasanarofid.site
+          <p class="text-xs text-slate-500">
+            Developer by: 
+            <a href="https://www.cekotechnology.com/mlm/jasa-pembuatan-website-mlm/" target="_blank" rel="noopener noreferrer" class="text-[#D4AF37] hover:text-[#E5C07B] transition-colors font-bold underline">
+              Cekotechnology
             </a>
           </p>
         </div>

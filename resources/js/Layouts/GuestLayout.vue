@@ -119,6 +119,20 @@ import { Link } from '@inertiajs/vue3';
             <div class="form-card">
                 <slot />
             </div>
+
+            <footer class="mt-6 text-center text-[11px] text-slate-400">
+                <p>
+                    &copy;{{ new Date().getFullYear() }} Nexus Community. All Right Reserver | Developer by
+                    <a
+                        href="https://www.cekotechnology.com/mlm/jasa-pembuatan-website-mlm/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-semibold text-slate-400 hover:text-[#D4AF37] transition-colors underline decoration-slate-300 hover:decoration-[#D4AF37]"
+                    >
+                        Cekotechnology
+                    </a>
+                </p>
+            </footer>
         </div>
     </section>
   </main>
