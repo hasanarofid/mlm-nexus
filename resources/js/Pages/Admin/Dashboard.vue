@@ -24,6 +24,9 @@ import {
   Eye,
   EyeOff,
   FileText,
+  Crown,
+  Sparkles,
+  AlertTriangle,
   X
 } from '@lucide/vue';
 
@@ -41,10 +44,20 @@ const props = defineProps({
 
 const copySuccessMsg = ref('');
 const isAddMitraModalOpen = ref(false);
+const isPriorityModalOpen = ref(false);
 const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
 const ktpPreview = ref(null);
 const fileInput = ref(null);
+
+const handleUpgradePrioritas = () => {
+  const totalDownlines = props.wallet?.total_downlines ?? 0;
+  if (totalDownlines < 1000) {
+    isPriorityModalOpen.value = true;
+  } else {
+    alert('Selamat! Anda memenuhi syarat untuk upgrade ke Prioritas. Tim kami akan memproses pengajuan Anda.');
+  }
+};
 
 const bankOptions = [
   'Bank BCA',
@@ -253,6 +266,39 @@ const formatRupiah = (val) => {
           </div>
         </div>
 
+      </div>
+
+      <!-- 3. Upgrade ke Prioritas Card Banner (Purple Luxury Theme) -->
+      <div class="bg-gradient-to-r from-[#2a0845] via-[#4b126d] to-[#6b1187] border border-purple-400/40 rounded-3xl p-5 md:p-6 shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-5 text-white">
+        <!-- Ambient lighting decoration -->
+        <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-purple-400/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute left-1/3 -top-12 w-36 h-36 bg-amber-400/10 rounded-full blur-xl pointer-events-none"></div>
+
+        <div class="flex items-center gap-4 relative z-10">
+          <div class="w-12 h-12 rounded-2xl bg-white/10 border border-purple-300/30 text-amber-300 flex items-center justify-center shrink-0 shadow-inner">
+            <Crown class="w-6 h-6 text-amber-300" />
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <h3 class="text-base sm:text-lg font-black text-white tracking-tight">Upgrade ke Prioritas</h3>
+              <span class="px-2 py-0.5 text-[9px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 rounded-md uppercase tracking-wider">Eksklusif</span>
+            </div>
+            <p class="text-xs sm:text-sm text-purple-100 font-medium">
+              Dapatkan bonus lebih dan raih kesuksesan bersama Nexus Community
+            </p>
+          </div>
+        </div>
+
+        <div class="relative z-10 shrink-0">
+          <button 
+            type="button"
+            @click="handleUpgradePrioritas"
+            class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] active:scale-95 text-slate-950 text-xs font-black rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Upgrade Sekarang</span>
+            <Sparkles class="w-4 h-4 text-slate-950" />
+          </button>
+        </div>
       </div>
 
     </div>
@@ -554,6 +600,60 @@ const formatRupiah = (val) => {
           </div>
 
         </form>
+      </div>
+    </div>
+
+    <!-- Modal Warning: Upgrade Prioritas (Total Downline < 1000) -->
+    <div v-if="isPriorityModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-fade-in">
+      <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl space-y-5 border border-slate-100 text-center relative overflow-hidden animate-scale-in">
+        
+        <!-- Close Button -->
+        <button 
+          @click="isPriorityModalOpen = false" 
+          class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+        >
+          <X class="w-4 h-4" />
+        </button>
+
+        <!-- Warning Icon -->
+        <div class="mx-auto w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-500 shadow-xs">
+          <AlertTriangle class="w-7 h-7 stroke-[2.5]" />
+        </div>
+
+        <!-- Text Content -->
+        <div class="space-y-2">
+          <h3 class="text-lg font-black text-slate-900 tracking-tight">
+            Peringatan Upgrade Prioritas
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+            Untuk upgrade ke prioritas, Anda harus memiliki 1000 mitra di team anda. Fitur ini akan terbuka otomatis jika level tim mitra Anda sudah mencapai 1000
+          </p>
+        </div>
+
+        <!-- Progress Box -->
+        <div class="p-4 bg-purple-50/70 border border-purple-100 rounded-2xl space-y-2 text-left">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-purple-900">Total Mitra Tim Anda:</span>
+            <span class="font-black text-purple-700 font-mono text-sm">{{ wallet?.total_downlines ?? 0 }} / 1000 Mitra</span>
+          </div>
+          <!-- Progress Bar -->
+          <div class="w-full bg-purple-200/60 rounded-full h-2.5 overflow-hidden">
+            <div 
+              class="bg-purple-600 h-2.5 rounded-full transition-all duration-500" 
+              :style="{ width: Math.min(100, Math.round(((wallet?.total_downlines ?? 0) / 1000) * 100)) + '%' }"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <button 
+          type="button"
+          @click="isPriorityModalOpen = false" 
+          class="w-full py-3 bg-[#0F172A] hover:bg-[#1E293B] text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md cursor-pointer"
+        >
+          Tutup
+        </button>
+
       </div>
     </div>
   </AdminLayout>
