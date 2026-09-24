@@ -78,6 +78,49 @@ const isSidebarCollapsed = ref(false);
 const isUserMenuOpen = ref(false);
 const isNotificationsOpen = ref(false);
 
+const readNotificationIds = ref(
+    (() => {
+        try {
+            return JSON.parse(localStorage.getItem("read_notifications") || "[]");
+        } catch (e) {
+            return [];
+        }
+    })()
+);
+
+const notifications = computed(() => {
+    const raw = page.props.notifications || [];
+    return raw.map((item) => ({
+        ...item,
+        is_read: readNotificationIds.value.includes(item.id),
+    }));
+});
+
+const unreadCount = computed(() => {
+    return notifications.value.filter((n) => !n.is_read).length;
+});
+
+const markAllAsRead = () => {
+    const allIds = notifications.value.map((n) => n.id);
+    readNotificationIds.value = Array.from(new Set([...readNotificationIds.value, ...allIds]));
+    try {
+        localStorage.setItem("read_notifications", JSON.stringify(readNotificationIds.value));
+    } catch (e) {}
+};
+
+const handleNotificationClick = (item) => {
+    if (!readNotificationIds.value.includes(item.id)) {
+        readNotificationIds.value.push(item.id);
+        try {
+            localStorage.setItem("read_notifications", JSON.stringify(readNotificationIds.value));
+        } catch (e) {}
+    }
+    isNotificationsOpen.value = false;
+    if (item.link) {
+        router.visit(item.link);
+    }
+};
+
 const toastStack = ref([]);
 
 watch(
@@ -454,16 +497,117 @@ const logout = () => {
 
                     <!-- Right Header Controls -->
                     <div class="flex items-center gap-4 text-xs font-semibold">
-                        <!-- Notification Bell -->
-                        <button
-                            @click="isNotificationsOpen = !isNotificationsOpen"
-                            class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#D4AF37] transition-colors cursor-pointer"
-                        >
-                            <Bell class="w-4 h-4" />
-                            <span
-                                class="absolute top-1 right-1 w-2 h-2 bg-[#D4AF37] rounded-full animate-ping"
-                            ></span>
-                        </button>
+                        <!-- Notification Bell & Dropdown Menu -->
+                        <div class="relative">
+                            <button
+                                @click="isNotificationsOpen = !isNotificationsOpen"
+                                class="relative p-2 rounded-full bg-white/10 hover:bg-white/20 text-[#D4AF37] transition-colors cursor-pointer"
+                                title="Notifikasi Aktivitas"
+                            >
+                                <Bell class="w-4 h-4" />
+                                <span
+                                    v-if="unreadCount > 0"
+                                    class="absolute -top-1 -right-1 min-w-[17px] h-[17px] px-1 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-[#0F172A] shadow-xs"
+                                >
+                                    {{ unreadCount }}
+                                </span>
+                            </button>
+
+                            <!-- Backdrop for Notification Dropdown -->
+                            <div
+                                v-if="isNotificationsOpen"
+                                @click="isNotificationsOpen = false"
+                                class="fixed inset-0 z-40"
+                            ></div>
+
+                            <!-- Notification Dropdown Panel -->
+                            <div
+                                v-if="isNotificationsOpen"
+                                class="absolute right-0 mt-3 w-80 sm:w-96 bg-white text-slate-800 border border-slate-200/90 rounded-3xl shadow-2xl z-50 overflow-hidden animate-scale-in"
+                            >
+                                <!-- Panel Header -->
+                                <div class="px-5 py-3.5 bg-[#0F172A] text-white flex items-center justify-between border-b border-slate-800">
+                                    <div class="flex items-center gap-2">
+                                        <Bell class="w-4 h-4 text-[#D4AF37]" />
+                                        <h3 class="text-xs font-black uppercase tracking-wider text-white">Notifikasi Aktivitas</h3>
+                                        <span v-if="unreadCount > 0" class="px-2 py-0.5 text-[9px] font-black bg-rose-500 text-white rounded-full">
+                                            {{ unreadCount }} Baru
+                                        </span>
+                                    </div>
+                                    <button 
+                                        v-if="unreadCount > 0"
+                                        @click="markAllAsRead" 
+                                        class="text-[10px] text-[#D4AF37] hover:underline font-bold transition-colors cursor-pointer"
+                                    >
+                                        Tandai Dibaca
+                                    </button>
+                                </div>
+
+                                <!-- Notification Items List -->
+                                <div class="max-h-[380px] overflow-y-auto divide-y divide-slate-100">
+                                    <div 
+                                        v-for="item in notifications" 
+                                        :key="item.id"
+                                        @click="handleNotificationClick(item)"
+                                        :class="[
+                                            'p-4 hover:bg-[#faf6eb]/60 transition-colors cursor-pointer flex items-start gap-3.5',
+                                            !item.is_read ? 'bg-[#faf6eb]/30' : 'bg-white'
+                                        ]"
+                                    >
+                                        <!-- Notification Icon by Type -->
+                                        <div 
+                                            :class="[
+                                                'w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 border shadow-2xs',
+                                                item.type === 'bonus' ? 'bg-emerald-50 border-emerald-200 text-emerald-600' :
+                                                item.type === 'member' ? 'bg-indigo-50 border-indigo-200 text-indigo-600' :
+                                                item.type === 'withdrawal' ? 'bg-amber-50 border-amber-200 text-[#B8922E]' :
+                                                'bg-purple-50 border-purple-200 text-purple-600'
+                                            ]"
+                                        >
+                                            <Coins v-if="item.type === 'bonus'" class="w-4 h-4" />
+                                            <Users v-else-if="item.type === 'member'" class="w-4 h-4" />
+                                            <ArrowUpRight v-else-if="item.type === 'withdrawal'" class="w-4 h-4" />
+                                            <Crown v-else class="w-4 h-4" />
+                                        </div>
+
+                                        <!-- Message Body -->
+                                        <div class="flex-1 min-w-0 space-y-0.5">
+                                            <div class="flex items-center justify-between gap-1">
+                                                <h4 class="text-xs font-black text-slate-900 truncate">{{ item.title }}</h4>
+                                                <span class="text-[10px] text-slate-400 shrink-0 font-medium">{{ item.time }}</span>
+                                            </div>
+                                            <p class="text-xs text-slate-600 leading-snug font-medium line-clamp-2">
+                                                {{ item.message }}
+                                            </p>
+                                        </div>
+
+                                        <!-- Unread Dot Indicator -->
+                                        <div v-if="!item.is_read" class="w-2 h-2 rounded-full bg-[#D4AF37] shrink-0 mt-1"></div>
+                                    </div>
+
+                                    <!-- Empty State -->
+                                    <div v-if="notifications.length === 0" class="py-10 px-4 text-center space-y-2">
+                                        <div class="w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
+                                            <Bell class="w-5 h-5" />
+                                        </div>
+                                        <p class="text-xs font-bold text-slate-700">Belum ada notifikasi baru</p>
+                                        <p class="text-[10px] text-slate-400">Semua aktivitas bonus dan jaringan Anda akan muncul di sini.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Panel Footer -->
+                                <div class="p-3 bg-slate-50 border-t border-slate-100 text-center">
+                                    <Link 
+                                        :href="route('admin.reports.index')" 
+                                        @click="isNotificationsOpen = false"
+                                        class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] hover:underline inline-flex items-center gap-1 transition-colors"
+                                    >
+                                        <span>Lihat Semua Laporan Aktivitas</span>
+                                        <ArrowUpRight class="w-3.5 h-3.5" />
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- User Avatar Circle -->
                         <div
