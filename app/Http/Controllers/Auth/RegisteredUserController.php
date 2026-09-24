@@ -21,10 +21,14 @@ class RegisteredUserController extends Controller
      */
     public function create(Request $request): Response
     {
-        $ref = $request->query('ref') ?? $request->query('referral') ?? '';
+        $ref = $request->query('sponsor') 
+            ?? $request->query('ref') 
+            ?? $request->query('referral') 
+            ?? $request->query('reff') 
+            ?? '';
 
         return Inertia::render('Auth/Register', [
-            'referral_code' => $ref,
+            'referral_code' => (string) $ref,
         ]);
     }
 

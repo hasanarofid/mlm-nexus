@@ -51,7 +51,8 @@ Pendaftaran member baru mewajibkan pengisian data lengkap dengan validasi ketat:
 
 ### D. Keamanan Akun & Kode Referral / Sponsor (Wajib)
 12. **Password & Konfirmasi Password:** *(Wajib, minimal 8 karakter)*
-13. **5. Kode Referral / Username Sponsor:** *(Wajib, harus terdaftar di sistem sebagai upline/sponsor langsung)*
+13. **Kode Referral / Username Sponsor:** *(Wajib, harus terdaftar di sistem sebagai upline/sponsor langsung)*
+    - **Aturan URL Referral & Auto-Fill:** Sistem wajib otomatis mengisi input sponsor jika calon member membuka tautan pendaftaran dengan parameter URL (misalnya: `https://system.nexuscommunity.id/register?sponsor=budi`, `?ref=...`, `?referral=...`, atau `?reff=...`). Controller dan frontend Vue wajib menangani parameter ini agar sponsor otomatis terisi tanpa perlu diketik manual oleh calon mitra.
 
 ---
 
