@@ -23,6 +23,8 @@ import {
 } from '@lucide/vue';
 
 const props = defineProps({
+  is_admin: Boolean,
+  current_user_name: String,
   users: Array,
   default_sponsor: String,
 });
@@ -385,13 +387,13 @@ const submitForm = () => {
               <KeyRound class="w-3.5 h-3.5" />
               <span>5. Sponsor Langsung</span>
             </div>
-            <div v-if="users && users.length > 0">
+            <div v-if="is_admin && users && users.length > 0">
               <select v-model="form.sponsor_username" class="w-full bg-white border border-[#D4AF37]/40 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#D4AF37]">
                 <option v-for="u in users" :key="u.username" :value="u.username">{{ u.label }}</option>
               </select>
             </div>
             <div v-else class="flex items-center justify-between bg-white px-3.5 py-2.5 border border-[#D4AF37]/30 rounded-xl">
-              <span class="text-xs font-extrabold text-[#0F172A]">@{{ form.sponsor_username }}</span>
+              <span class="text-xs font-extrabold text-[#0F172A]">@{{ form.sponsor_username }} <span v-if="current_user_name" class="font-bold text-slate-600">({{ current_user_name }})</span></span>
               <span class="text-[10px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">Sponsor Anda</span>
             </div>
             <p class="text-[10px] text-slate-600 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>

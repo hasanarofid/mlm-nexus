@@ -67,14 +67,17 @@ class MemberActivationController extends Controller
             }
         }
 
-        // List of all active users to choose as Sponsor Langsung
-        $allUsers = User::select('id', 'name', 'username', 'email')->get()->map(function ($u) {
+        $currentUser = auth()->user() ?: User::first();
+        $isAdmin = ($currentUser->username === 'admin' || $currentUser->email === 'admin@nexuscommunity.id' || (method_exists($currentUser, 'hasRole') && $currentUser->hasRole('admin')));
+
+        // List of all active users to choose as Sponsor Langsung (Khusus Admin)
+        $allUsers = $isAdmin ? User::select('id', 'name', 'username', 'email')->get()->map(function ($u) {
             return [
                 'username' => $u->username ?: strtolower(explode(' ', $u->name)[0]),
                 'name' => $u->name,
                 'label' => '@' . ($u->username ?: strtolower(explode(' ', $u->name)[0])) . ' (' . $u->name . ')',
             ];
-        });
+        }) : [];
 
         // Company Banks for Direct Transfer Payment
         $settings = \App\Models\Setting::all()->pluck('value', 'key');
@@ -92,6 +95,8 @@ class MemberActivationController extends Controller
             ];
 
         return Inertia::render('Admin/Activation/Index', [
+            'is_admin' => $isAdmin,
+            'current_user_name' => $currentUser->name,
             'vouchers' => $vouchers,
             'voucher_stocks' => $voucherStocks,
             'banks' => $banks,
@@ -106,6 +111,13 @@ class MemberActivationController extends Controller
      */
     public function store(Request $request)
     {
+        $currentUser = auth()->user() ?: User::first();
+        $isAdmin = ($currentUser->username === 'admin' || $currentUser->email === 'admin@nexuscommunity.id' || (method_exists($currentUser, 'hasRole') && $currentUser->hasRole('admin')));
+
+        if (!$isAdmin) {
+            $request->merge(['sponsor_username' => $currentUser->username]);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:users,email',
@@ -122,9 +134,6 @@ class MemberActivationController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'sponsor_username' => 'required|string|exists:users,username',
         ]);
-
-        $currentUser = auth()->user() ?: User::first();
-        $isAdmin = ($currentUser->username === 'admin' || $currentUser->email === 'admin@nexuscommunity.id' || (method_exists($currentUser, 'hasRole') && $currentUser->hasRole('admin')));
 
         $sponsorUser = User::where('username', $request->sponsor_username)->first();
         if (!$sponsorUser) {
