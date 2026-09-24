@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
@@ -14,12 +14,55 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    initial_sponsor: {
+        type: Object,
+        default: null,
+    },
 });
 
 const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
 const ktpPreview = ref(null);
 const fileInput = ref(null);
+
+const sponsorStatus = ref({
+    checked: !!props.initial_sponsor,
+    valid: !!props.initial_sponsor,
+    loading: false,
+    sponsor: props.initial_sponsor,
+    message: props.initial_sponsor ? `Sponsor Valid: ${props.initial_sponsor.name} (@${props.initial_sponsor.username})` : '',
+});
+
+let sponsorCheckTimeout = null;
+
+const checkSponsorLive = async (val) => {
+    const rawVal = (val || '').trim();
+    if (!rawVal) {
+        sponsorStatus.value = {
+            checked: false,
+            valid: false,
+            loading: false,
+            sponsor: null,
+            message: '',
+        };
+        return;
+    }
+
+    sponsorStatus.value.loading = true;
+    try {
+        const res = await fetch(`/register/check-sponsor?username=${encodeURIComponent(rawVal)}`);
+        const data = await res.json();
+        sponsorStatus.value = {
+            checked: true,
+            valid: data.valid,
+            loading: false,
+            sponsor: data.sponsor || null,
+            message: data.message || '',
+        };
+    } catch (e) {
+        sponsorStatus.value.loading = false;
+    }
+};
 
 const form = useForm({
     name: '',
@@ -87,7 +130,24 @@ const removeFile = () => {
     }
 };
 
+watch(() => form.referral, (newVal) => {
+    if (sponsorCheckTimeout) clearTimeout(sponsorCheckTimeout);
+    sponsorCheckTimeout = setTimeout(() => {
+        checkSponsorLive(newVal);
+    }, 400);
+});
+
+onMounted(() => {
+    if (form.referral && !sponsorStatus.value.checked) {
+        checkSponsorLive(form.referral);
+    }
+});
+
 const submit = () => {
+    if (sponsorStatus.value.checked && !sponsorStatus.value.valid && form.referral) {
+        form.setError('referral', `Sponsor "${form.referral}" tidak ditemukan. Pendaftaran tidak dapat diproses.`);
+        return;
+    }
     form.post(route('register'), {
         forceFormData: true,
         onFinish: () => form.reset('password', 'password_confirmation'),
@@ -510,9 +570,15 @@ const submit = () => {
 
                 <!-- Input Kode Referral -->
                 <div class="form-group">
-                    <label for="referral" class="block text-xs font-bold text-slate-700 mb-1">
-                        Kode Referral / Username Sponsor <span class="text-rose-500">*</span>
-                    </label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label for="referral" class="block text-xs font-bold text-slate-700">
+                            Kode Referral / Username Sponsor <span class="text-rose-500">*</span>
+                        </label>
+                        <span v-if="sponsorStatus.loading" class="text-[10px] text-amber-600 font-bold flex items-center gap-1 animate-pulse">
+                            Memeriksa sponsor...
+                        </span>
+                    </div>
+
                     <div class="auth-input-wrap">
                         <span class="auth-input-icon">
                             <KeyRound class="w-4.5 h-4.5 text-slate-400" />
@@ -521,12 +587,48 @@ const submit = () => {
                             id="referral"
                             type="text"
                             v-model="form.referral"
+                            @blur="checkSponsorLive(form.referral)"
                             required
                             placeholder="Masukkan kode referral / username sponsor"
                             class="w-full text-sm font-semibold text-slate-800"
                         />
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1">Wajib diisi dengan username atau kode referral sponsor yang mengundang Anda.</p>
+
+                    <!-- Live Sponsor Status Feedback -->
+                    <div v-if="sponsorStatus.checked && form.referral" class="mt-2.5">
+                        <!-- Valid Sponsor Banner -->
+                        <div v-if="sponsorStatus.valid" class="p-3 bg-emerald-50/90 border border-emerald-300 rounded-xl flex items-center justify-between gap-2 shadow-2xs">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                                    <Check class="w-3.5 h-3.5 stroke-[3]" />
+                                </div>
+                                <div>
+                                    <span class="text-[9px] font-black text-emerald-800 uppercase tracking-wider block">SPONSOR VALID</span>
+                                    <p class="text-xs font-bold text-emerald-950">
+                                        {{ sponsorStatus.sponsor?.name }} <span class="font-mono text-emerald-700">(@{{ sponsorStatus.sponsor?.username }})</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <span class="px-2 py-0.5 text-[9px] font-extrabold bg-[#faf6eb] text-[#B8922E] border border-[#D4AF37]/50 rounded-md uppercase">
+                                {{ sponsorStatus.sponsor?.package_name || 'STANDARD' }}
+                            </span>
+                        </div>
+
+                        <!-- Invalid / Typo Sponsor Banner -->
+                        <div v-else class="p-3 bg-rose-50 border border-rose-300 rounded-xl flex items-center gap-2.5 text-rose-800 shadow-2xs">
+                            <div class="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center shrink-0">
+                                <X class="w-3.5 h-3.5 stroke-[3]" />
+                            </div>
+                            <div>
+                                <span class="text-[9px] font-black text-rose-800 uppercase tracking-wider block">SPONSOR TIDAK DITEMUKAN</span>
+                                <p class="text-xs font-semibold text-rose-700 leading-tight">
+                                    Username "<strong>{{ form.referral }}</strong>" tidak terdaftar. Pendaftaran tidak dapat diproses jika kode sponsor salah / typo.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p v-if="!sponsorStatus.checked || !form.referral" class="text-[11px] text-slate-500 mt-1">Wajib diisi dengan username atau kode referral sponsor yang mengundang Anda.</p>
                     <InputError class="mt-1" :message="form.errors.referral" />
                 </div>
             </div>

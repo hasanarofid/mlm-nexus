@@ -27,8 +27,63 @@ class RegisteredUserController extends Controller
             ?? $request->query('reff') 
             ?? '';
 
+        $cleanRef = ltrim(trim($ref), '@');
+        $sponsorInfo = null;
+        if (!empty($cleanRef)) {
+            $sponsor = User::where('username', $cleanRef)
+                ->orWhere('username', $ref)
+                ->orWhere('email', $ref)
+                ->first();
+            if ($sponsor) {
+                $sponsorInfo = [
+                    'name' => $sponsor->name,
+                    'username' => $sponsor->username,
+                    'package_name' => $sponsor->package_name ?: 'Standard',
+                ];
+            }
+        }
+
         return Inertia::render('Auth/Register', [
             'referral_code' => (string) $ref,
+            'initial_sponsor' => $sponsorInfo,
+        ]);
+    }
+
+    /**
+     * Check if sponsor username/referral is valid (for live validation).
+     */
+    public function checkSponsor(Request $request)
+    {
+        $username = trim($request->query('username', ''));
+        $cleanUsername = ltrim($username, '@');
+
+        if (empty($username)) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Username sponsor wajib diisi.',
+            ]);
+        }
+
+        $sponsor = User::where('username', $cleanUsername)
+            ->orWhere('username', $username)
+            ->orWhere('email', $username)
+            ->first();
+
+        if ($sponsor) {
+            return response()->json([
+                'valid' => true,
+                'sponsor' => [
+                    'name' => $sponsor->name,
+                    'username' => $sponsor->username,
+                    'package_name' => $sponsor->package_name ?: 'Standard',
+                ],
+                'message' => 'Sponsor valid: ' . $sponsor->name . ' (@' . $sponsor->username . ')',
+            ]);
+        }
+
+        return response()->json([
+            'valid' => false,
+            'message' => 'Username/Kode Sponsor "' . $username . '" tidak ditemukan. Mohon periksa kembali.',
         ]);
     }
 
@@ -58,13 +113,17 @@ class RegisteredUserController extends Controller
             'referral.required' => 'Kode Referral / Username Sponsor wajib diisi.',
         ]);
 
-        $sponsor = User::where('username', trim($request->referral))
-            ->orWhere('email', trim($request->referral))
+        $rawReferral = trim($request->referral);
+        $cleanReferral = ltrim($rawReferral, '@');
+
+        $sponsor = User::where('username', $cleanReferral)
+            ->orWhere('username', $rawReferral)
+            ->orWhere('email', $rawReferral)
             ->first();
 
         if (!$sponsor) {
             throw ValidationException::withMessages([
-                'referral' => 'Kode Referral / Username Sponsor tidak ditemukan atau tidak valid.',
+                'referral' => 'Kode Referral / Username Sponsor "' . $rawReferral . '" tidak ditemukan dalam sistem. Pendaftaran tidak dapat diproses jika kode sponsor salah.',
             ]);
         }
 
