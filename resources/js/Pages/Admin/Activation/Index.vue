@@ -261,37 +261,11 @@ const submitForm = () => {
             </div>
           </div>
 
-          <!-- SECTION 3: REKENING & DOKUMEN IDENTITAS -->
+          <!-- SECTION 3: DOKUMEN IDENTITAS KTP -->
           <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-5 space-y-4">
             <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
-              <CreditCard class="w-3.5 h-3.5" />
-              <span>3. Rekening Bonus & Verifikasi KTP</span>
-            </div>
-
-            <!-- Bank & No Rekening -->
-            <div class="form-group space-y-2">
-              <label class="block text-xs font-bold text-slate-700 mb-1">
-                Bank & Nomor Rekening (untuk bonus referral) <span class="text-rose-500">*</span>
-              </label>
-
-              <!-- Select Bank -->
-              <div class="auth-input-wrap">
-                <span class="auth-input-icon"><CreditCard class="w-4 h-4 text-slate-400" /></span>
-                <select v-model="form.bank_name" required class="w-full text-xs font-semibold text-slate-800">
-                  <option v-for="b in bankOptions" :key="b" :value="b">{{ b }}</option>
-                </select>
-              </div>
-
-              <!-- No Rekening -->
-              <div class="auth-input-wrap">
-                <input type="text" v-model="form.bank_account_number" required placeholder="Nomor Rekening / No. E-Wallet" class="w-full text-sm" />
-              </div>
-
-              <!-- Atas Nama -->
-              <div class="auth-input-wrap">
-                <input type="text" v-model="form.bank_account_name" :placeholder="form.name || 'Nama Pemilik Rekening (opsional jika sama)'" class="w-full text-sm" />
-              </div>
-              <InputError class="mt-1" :message="form.errors.bank_name || form.errors.bank_account_number" />
+              <FileText class="w-3.5 h-3.5" />
+              <span>3. Dokumen Verifikasi KTP</span>
             </div>
 
             <!-- ID KTP Upload -->
