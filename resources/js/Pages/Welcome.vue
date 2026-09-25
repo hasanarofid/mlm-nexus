@@ -373,10 +373,10 @@ const testimonialsSection = getSection('testimonials');
         <!-- Lower Footer -->
         <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p class="text-xs text-slate-500">
-            &copy; {{ new Date().getFullYear() }} Nexus Community. All Right Reserver
+            &copy; {{ new Date().getFullYear() }} Nexus Community. All Rights Reserved
           </p>
           <p class="text-xs text-slate-500">
-            Developer by: 
+            Developed by: 
             <a href="https://www.cekotechnology.com/mlm/jasa-pembuatan-website-mlm/" target="_blank" rel="noopener noreferrer" class="text-[#D4AF37] hover:text-[#E5C07B] transition-colors font-bold underline">
               Cekotechnology
             </a>

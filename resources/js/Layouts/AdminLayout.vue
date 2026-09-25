@@ -683,7 +683,7 @@ const logout = () => {
                     class="p-4 text-center text-[11px] text-slate-500 border-t border-slate-200 bg-white"
                 >
                     <p>
-                        &copy;{{ new Date().getFullYear() }} Nexus Community. All Right Reserver | Developer by
+                        &copy;{{ new Date().getFullYear() }} Nexus Community. All Rights Reserved | Developed by
                         <a
                             href="https://www.cekotechnology.com/mlm/jasa-pembuatan-website-mlm/"
                             target="_blank"
