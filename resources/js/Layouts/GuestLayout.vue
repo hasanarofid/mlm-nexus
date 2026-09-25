@@ -115,7 +115,7 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <!-- FORM SIDE RIGHT -->
-        <div class="form-side flex-col justify-between">
+        <div class="form-side">
             <div class="form-card my-auto">
                 <slot />
             </div>
