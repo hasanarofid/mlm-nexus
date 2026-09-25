@@ -115,24 +115,10 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <!-- FORM SIDE RIGHT -->
-        <div class="form-side" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 46px 58px;">
-            <div class="form-card" style="width: 100%; max-width: 430px; margin-top: auto; margin-bottom: auto;">
+        <div class="form-side">
+            <div class="form-card">
                 <slot />
             </div>
-
-            <footer style="width: 100%; text-align: center; font-size: 11px; color: #94a3b8; padding-top: 24px; margin-top: auto;">
-                <p>
-                    &copy;{{ new Date().getFullYear() }} Nexus Community. All Rights Reserved | Developed by
-                    <a
-                        href="https://www.cekotechnology.com/mlm/jasa-pembuatan-website-mlm/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="font-semibold text-slate-400 hover:text-[#D4AF37] transition-colors underline decoration-slate-300 hover:decoration-[#D4AF37]"
-                    >
-                        Cekotechnology
-                    </a>
-                </p>
-            </footer>
         </div>
     </section>
   </main>
