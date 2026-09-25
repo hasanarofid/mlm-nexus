@@ -115,12 +115,12 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <!-- FORM SIDE RIGHT -->
-        <div class="form-side">
-            <div class="form-card my-auto">
+        <div class="form-side" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 46px 58px;">
+            <div class="form-card" style="width: 100%; max-width: 430px; margin-top: auto; margin-bottom: auto;">
                 <slot />
             </div>
 
-            <footer class="w-full text-center text-[11px] text-slate-400 pt-6">
+            <footer style="width: 100%; text-align: center; font-size: 11px; color: #94a3b8; padding-top: 24px; margin-top: auto;">
                 <p>
                     &copy;{{ new Date().getFullYear() }} Nexus Community. All Rights Reserved | Developed by
                     <a
