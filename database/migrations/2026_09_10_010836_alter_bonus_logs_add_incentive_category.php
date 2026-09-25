@@ -12,21 +12,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("ALTER TABLE bonus_logs MODIFY COLUMN category ENUM(
-            'sponsor',
-            'pasangan',
-            'titik',
-            'reward',
-            'penarikan',
-            'po',
-            'pal',
-            'ro',
-            'ro_matching',
-            'tpr',
-            'tier',
-            'generasi',
-            'incentive'
-        ) NOT NULL DEFAULT 'sponsor'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE bonus_logs MODIFY COLUMN category ENUM(
+                'sponsor',
+                'pasangan',
+                'titik',
+                'reward',
+                'penarikan',
+                'po',
+                'pal',
+                'ro',
+                'ro_matching',
+                'tpr',
+                'tier',
+                'generasi',
+                'incentive'
+            ) NOT NULL DEFAULT 'sponsor'");
+        }
 
         Schema::table('bonus_logs', function (Blueprint $table) {
             $table->decimal('qualified_amount', 15, 2)->nullable()->after('amount');
@@ -42,19 +44,21 @@ return new class extends Migration
             $table->dropColumn('qualified_amount');
         });
 
-        DB::statement("ALTER TABLE bonus_logs MODIFY COLUMN category ENUM(
-            'sponsor',
-            'pasangan',
-            'titik',
-            'reward',
-            'penarikan',
-            'po',
-            'pal',
-            'ro',
-            'ro_matching',
-            'tpr',
-            'tier',
-            'generasi'
-        ) NOT NULL DEFAULT 'sponsor'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE bonus_logs MODIFY COLUMN category ENUM(
+                'sponsor',
+                'pasangan',
+                'titik',
+                'reward',
+                'penarikan',
+                'po',
+                'pal',
+                'ro',
+                'ro_matching',
+                'tpr',
+                'tier',
+                'generasi'
+            ) NOT NULL DEFAULT 'sponsor'");
+        }
     }
 };
