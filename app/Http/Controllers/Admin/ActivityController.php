@@ -23,7 +23,7 @@ class ActivityController extends Controller
 
         // Summary totals for cards
         $bonusSponsor = BonusLog::where('user_id', $user->id)->where('category', 'sponsor')->sum('amount');
-        $bonusGenerasi = BonusLog::where('user_id', $user->id)->where('category', 'tier')->sum('amount');
+        $bonusGenerasi = BonusLog::where('user_id', $user->id)->whereIn('category', ['generasi', 'tier'])->sum('amount');
         $bonusRO = BonusLog::where('user_id', $user->id)->where('category', 'ro')->sum('amount');
         $bonusPO = BonusLog::where('user_id', $user->id)->where('category', 'po')->sum('amount');
         $bonusPAL = BonusLog::where('user_id', $user->id)->where('category', 'pal')->sum('amount');
@@ -33,8 +33,8 @@ class ActivityController extends Controller
 
         // Tab Info Descriptions
         $tabDescriptions = [
-            'sponsor' => 'Bonus Sponsor (Direct Referral 20%): Diberikan setiap kali Anda mereferensikan secara langsung member baru yang diaktifkan dengan VOUCHER.',
-            'generasi' => 'Bonus Generasi (Tier Allocation): Diberikan dari alokasi pembagian tier generasi (Generasi 1 s/d Generasi 15) dari pendaftaran member di jaringan Anda.',
+            'sponsor' => 'Bonus Referral / Sponsor (Gen 1): Diberikan sebesar Rp 250.000 setiap kali Anda mereferensikan secara langsung member baru.',
+            'generasi' => 'Bonus Tim (Gen 2 s/d 10): Diberikan sebesar Rp 5.000 per member baru di jaringan Generasi 2 s/d Generasi 10 Anda.',
             'ro' => 'Bonus Repeat Order (RO): Diberikan dari setiap transaksi Repeat Order (RO) di jaringan Anda (Bonus Sponsor RO Rp 20.000 + Matching Bonus).',
             'po' => 'Bonus PO (Purchase Order): Diberikan dari alokasi 15 Generasi Tier transaksi Purchase Order (PO) di jaringan Anda.',
             'pal' => 'PAL Bonus (Personal Allocation Level): Bonus yang didapatkan dari Generasi 1 yang terkoleksi Poin PO (Rp 200.000 saat 35 Poin PO, Rp 600.000 saat 90 Poin, Rp 2.400.000 saat 300 Poin, Rp 14.000.000 saat 2.000 Poin, Rp 30.000.000 saat 5.000 Poin).',
@@ -146,7 +146,7 @@ class ActivityController extends Controller
         } else {
             $categories = [];
             if ($tab === 'generasi') {
-                $categories = ['tier'];
+                $categories = ['generasi', 'tier'];
             } elseif ($tab === 'ro') {
                 $categories = ['ro', 'ro_matching'];
             } else {

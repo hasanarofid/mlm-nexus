@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\BonusLog;
 use App\Models\User;
+use App\Models\WalletTransaction;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -148,30 +151,93 @@ class RegisteredUserController extends Controller
             $username = $usernameBase . $counter++;
         }
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'username' => $username,
-            'phone' => $request->phone,
-            'is_left_handed' => $request->is_left_handed,
-            'beneficiary_name' => $request->beneficiary_name,
-            'beneficiary_birth_date' => $request->beneficiary_birth_date,
-            'beneficiary_relation' => $request->beneficiary_relation,
-            'beneficiary_phone' => $request->emergency_phone,
-            'emergency_phone' => $request->emergency_phone,
-            'bank_name' => $request->bank_name,
-            'bank_account_number' => $request->bank_account_number,
-            'bank_account_name' => $request->bank_account_name ?: $request->name,
-            'ktp_image' => $ktpPath,
-            'password' => Hash::make($request->password),
-            'parent_id' => $sponsor->id,
-        ]);
+        $user = null;
+        DB::transaction(function () use ($request, $sponsor, $username, $ktpPath, &$user) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'username' => $username,
+                'phone' => $request->phone,
+                'is_left_handed' => $request->is_left_handed,
+                'beneficiary_name' => $request->beneficiary_name,
+                'beneficiary_birth_date' => $request->beneficiary_birth_date,
+                'beneficiary_relation' => $request->beneficiary_relation,
+                'beneficiary_phone' => $request->emergency_phone,
+                'emergency_phone' => $request->emergency_phone,
+                'bank_name' => $request->bank_name,
+                'bank_account_number' => $request->bank_account_number,
+                'bank_account_name' => $request->bank_account_name ?: $request->name,
+                'ktp_image' => $ktpPath,
+                'password' => Hash::make($request->password),
+                'parent_id' => $sponsor->id,
+            ]);
 
-        try {
-            $user->assignRole('client');
-        } catch (\Throwable $e) {
-            // Role fallback
-        }
+            try {
+                $user->assignRole('client');
+            } catch (\Throwable $e) {
+                // Role fallback
+            }
+
+            // Allocation Bonus Sponsor (Gen 1: Rp 250.000) & Bonus Tim (Gen 2-10: Rp 5.000 / member)
+            $sponsorBonus = 250000;
+            $bonusPerGen = 5000;
+
+            // Direct Sponsor (Gen 1)
+            $sponsor->increment('saldo', $sponsorBonus);
+            $sponsor->increment('total_bonus', $sponsorBonus);
+
+            BonusLog::create([
+                'transaction_code' => 'SP' . sprintf('%03d', BonusLog::count() + 1),
+                'user_id' => $sponsor->id,
+                'category' => 'sponsor',
+                'source_user_id' => $user->id,
+                'description' => "Bonus Sponsor Langsung dari pendaftaran @{$user->username}",
+                'amount' => $sponsorBonus,
+            ]);
+
+            WalletTransaction::create([
+                'user_id' => $sponsor->id,
+                'type' => 'in',
+                'category' => 'bonus_sponsor',
+                'amount' => $sponsorBonus,
+                'description' => "Bonus Sponsor Langsung dari pendaftaran @{$user->username}",
+            ]);
+
+            // Multi-tier Gen 2 s/d Gen 10 Uplines (Rp 5.000 / level per member baru)
+            $currentUpline = $sponsor;
+            for ($gen = 2; $gen <= 10; $gen++) {
+                if (!$currentUpline->parent_id) {
+                    break;
+                }
+
+                $upline = User::find($currentUpline->parent_id);
+                if (!$upline) {
+                    break;
+                }
+
+                $upline->increment('saldo', $bonusPerGen);
+                $upline->increment('total_bonus', $bonusPerGen);
+
+                BonusLog::create([
+                    'transaction_code' => 'G' . sprintf('%03d', BonusLog::count() + 1),
+                    'user_id' => $upline->id,
+                    'category' => 'generasi',
+                    'source_user_id' => $user->id,
+                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
+                    'amount' => $bonusPerGen,
+                ]);
+
+                WalletTransaction::create([
+                    'user_id' => $upline->id,
+                    'type' => 'in',
+                    'category' => 'bonus_generasi',
+                    'amount' => $bonusPerGen,
+                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
+                ]);
+
+                $currentUpline = $upline;
+            }
+        });
 
         event(new Registered($user));
 

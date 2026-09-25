@@ -321,10 +321,10 @@ class DatabaseSeeder extends Seeder
             ['transaction_code' => 'B005'],
             [
                 'user_id' => $admin->id,
-                'category' => 'sponsor',
+                'category' => 'generasi',
                 'source_user_id' => $eko->id,
-                'description' => 'Bonus Sponsor: Pendaftaran eko (USR005)',
-                'amount' => 25000,
+                'description' => 'Bonus Tim Gen 2: Pendaftaran eko (USR005)',
+                'amount' => 5000,
                 'created_at' => now()->subDays(1)->setHour(23)->setMinute(0)->setSecond(0),
             ]
         );
@@ -335,8 +335,8 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $admin->id,
                 'category' => 'generasi',
                 'source_user_id' => $budi->id,
-                'description' => 'Bonus Generasi: Tim Jaringan Level 1',
-                'amount' => 250000,
+                'description' => 'Bonus Tim Gen 2: Pendaftaran dewi (USR004)',
+                'amount' => 5000,
                 'created_at' => now()->subDays(2)->setHour(12)->setMinute(0)->setSecond(0),
             ]
         );

@@ -58,42 +58,43 @@ Pendaftaran member baru mewajibkan pengisian data lengkap dengan validasi ketat:
 
 ## 3. Arsitektur Sistem Bisnis & Plan MLM NEXUS (PRD 2026)
 
-### A. Biaya Pendaftaran & Komisi Rekrut (Pendaftaran Awal Rp 500.000)
+### A. Biaya Pendaftaran & 3 Sumber Income MLM NEXUS
 
 1. **Biaya Pendaftaran / Iuran Tahunan:** Rp 500.000 / tahun.
-2. **Bonus Sponsor Langsung (Generasi 1):**
-    - Sponsor langsung mendapatkan bonus **Rp 250.000** per member baru yang mendaftar.
-3. **Bonus Jaringan / Tim (Generasi 2 s/d Generasi 10):**
-    - Upline Generasi 2 sampai Generasi 10 masing-masing mendapatkan **Rp 25.000** per member baru.
-    - Rincian Payout Komisi Registrasi:
+2. **Sumber Income 1: Bonus Referral / Sponsor Langsung (Generasi 1):**
+    - Sponsor langsung mendapatkan bonus **Rp 250.000** per 1 member baru yang didaftarkan.
+    - *Simulasi: Jumlah 1 Orang -> Income Rp 250.000,-*
+3. **Sumber Income 2: Bonus Jaringan / Tim (Generasi 2 s/d Generasi 10):**
+    - Upline Generasi 2 sampai Generasi 10 masing-masing mendapatkan **Rp 5.000** per member baru.
+    - *Simulasi: Jumlah 50 Orang -> Income Rp 250.000,- (50 x Rp 5.000 = Rp 250.000,-)*
+    - Rincian Payout Komisi Registrasi Member Baru (Rp 500.000):
         - Gen 1 (Sponsor Langsung): Rp 250.000
-        - Gen 2: Rp 25.000
-        - Gen 3: Rp 25.000
-        - Gen 4: Rp 25.000
-        - Gen 5: Rp 25.000
-        - Gen 6: Rp 25.000
-        - Gen 7: Rp 25.000
-        - Gen 8: Rp 25.000
-        - Gen 9: Rp 25.000
-        - Gen 10: Rp 25.000
-        *(Total Alokasi Bonus: Rp 475.000, Sisa Rp 25.000 masuk kas perusahaan/sistem).*
+        - Gen 2: Rp 5.000
+        - Gen 3: Rp 5.000
+        - Gen 4: Rp 5.000
+        - Gen 5: Rp 5.000
+        - Gen 6: Rp 5.000
+        - Gen 7: Rp 5.000
+        - Gen 8: Rp 5.000
+        - Gen 9: Rp 5.000
+        - Gen 10: Rp 5.000
+        *(Total Alokasi Bonus: Rp 250.000 + (9 x Rp 5.000) = Rp 295.000. Sisa Rp 205.000 masuk kas perusahaan/sistem).*
 
 ---
 
-### B. Kualifikasi & Bonus Upgrade Akun Premium
+### B. Sumber Income 3: Kualifikasi & Bonus Upgrade Akun Premier
 
-1. **Syarat Kualifikasi Upgrade Premium:**
+1. **Syarat Kualifikasi Upgrade Premier:**
     - Memiliki akumulasi minimal **1.000 Member** di seluruh tim jaringan (Generasi 1 s/d Generasi 10).
-    - Tombol Upgrade Premium di dashboard member berstatus **Disabled / Terkunci** jika total tim belum mencapai 1.000 member.
-2. **Biaya Upgrade & Perpanjangan Member Premium:**
-    - Biaya Upgrade / Renewal: **Rp 5.000.000 / tahun**.
+    - Benefit proteksi Asuransi member otomatis ditingkatkan menjadi **Rp 500.000.000 (500 Juta)**.
+    - Tombol Upgrade Premier di dashboard member berstatus **Disabled / Terkunci** jika total tim belum mencapai 1.000 member.
+2. **Biaya Upgrade & Perpanjangan Member Premier:**
+    - Biaya Upgrade / Renewal: **Rp 5.000.000 (5 JT) / tahun**.
     - Metode Pembayaran: Dapat memotong **Saldo Wallet** atau **Transfer Bank**.
-    - Nilai proteksi asuransi member otomatis ditingkatkan menjadi Rp 5.000.000 (dikelola internal).
-3. **Bonus Generasi Upgrade Premium (Multi-Tier 10 Level Upline):**
-    - Setiap ada member downline yang melakukan upgrade/perpanjangan Premium (Rp 5.000.000), sebanyak **10 Level Upline ke atas masing-masing mendapatkan bonus Rp 250.000**.
-    - Simulasi:
-        - Downline Upgrade Premium -> Upline Level 1 menerima Rp 250.000, Upline Level 2 menerima Rp 250.000, ..., Upline Level 10 menerima Rp 250.000.
-        - Total alokasi bonus: 10 level x Rp 250.000 = Rp 2.500.000.
+3. **Bonus Generasi Upgrade Premier (Multi-Tier 10 Level Upline):**
+    - Setiap ada member downline yang melakukan upgrade/perpanjangan Premier (Rp 5.000.000), sebanyak **10 Level Upline ke atas (Gen 1 s/d 10) masing-masing mendapatkan bonus Rp 250.000**.
+    - *Simulasi: 1 Orang Upgrade Premier -> Upline Gen 1 s/d 10 masing-masing menerima Rp 250.000,-*
+    - Total alokasi bonus: 10 level x Rp 250.000 = Rp 2.500.000.
     - **Aturan Sisa Upline:** Jika level upline kurang dari 10 (misalnya member pucuk), sisa bonus yang tidak memiliki upline **menjadi hak profit perusahaan** (tidak dibagikan ke pihak lain).
 
 ---

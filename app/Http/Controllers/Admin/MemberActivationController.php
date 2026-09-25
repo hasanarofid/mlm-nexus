@@ -193,8 +193,8 @@ class MemberActivationController extends Controller
                 \Illuminate\Support\Facades\Log::error('Gagal mengirim email aktivasi member: ' . $e->getMessage());
             }
 
-            // Allocation Bonus Sponsor & Generasi 1-10
-            $bonusPerGen = 25000;
+            // Allocation Bonus Sponsor (Gen 1: Rp 250.000) & Bonus Tim (Gen 2-10: Rp 5.000 / member)
+            $bonusPerGen = 5000;
             $sponsorBonus = 250000;
 
             // Direct Sponsor (Gen 1)
@@ -218,7 +218,7 @@ class MemberActivationController extends Controller
                 'description' => "Bonus Sponsor Langsung dari pendaftaran @{$newUser->username}",
             ]);
 
-            // Multi-tier Gen 2 s/d Gen 10 Uplines (Rp 25.000 / level)
+            // Multi-tier Gen 2 s/d Gen 10 Uplines (Rp 5.000 / level per member baru)
             $currentUpline = $sponsorUser;
             for ($gen = 2; $gen <= 10; $gen++) {
                 if (!$currentUpline->parent_id) {
