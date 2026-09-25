@@ -284,16 +284,16 @@ const saveBanks = () => {
                                 <h2
                                     class="text-lg md:text-xl font-black text-slate-900 tracking-tight"
                                 >
-                                    Data Diri Anggota Yayasan & Rekening Bank
+                                    Data Diri Anggota NEXUS COMMUNITY & Rekening Bank
                                 </h2>
                                 <span
                                     class="px-2.5 py-0.5 text-[10px] font-extrabold bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200 uppercase tracking-wider"
                                 >
-                                    Member Yayasan
+                                    Member NEXUS COMMUNITY
                                 </span>
                             </div>
                             <p class="text-xs text-slate-500 font-medium mt-1">
-                                Lengkapi identitas kependudukan, alamat domisili, data ahli waris, serta rekening bank untuk tertib administrasi yayasan & pencairan saldo (WD).
+                                Lengkapi identitas kependudukan, alamat domisili, data ahli waris, serta rekening bank untuk tertib administrasi NEXUS COMMUNITY & pencairan saldo (WD).
                             </p>
                         </div>
                     </div>
@@ -303,7 +303,7 @@ const saveBanks = () => {
                         class="px-4 py-2.5 bg-amber-50 border border-amber-200/80 rounded-2xl text-[11px] text-amber-900 font-semibold flex items-center gap-2"
                     >
                         <Shield class="w-4 h-4 text-amber-600 shrink-0" />
-                        <span>Data tersimpan aman & terlindungi untuk legalitas keanggotaan yayasan.</span>
+                        <span>Data tersimpan aman & terlindungi untuk legalitas keanggotaan NEXUS COMMUNITY.</span>
                     </div>
                 </div>
 
@@ -757,7 +757,7 @@ const saveBanks = () => {
                                 <h3
                                     class="text-xs font-black text-indigo-950 uppercase tracking-tight"
                                 >
-                                    3. DATA AHLI WARIS & KONTAK DARURAT (YAYASAN)
+                                    3. DATA AHLI WARIS & KONTAK DARURAT (NEXUS COMMUNITY)
                                 </h3>
                             </div>
                             <span class="text-[10px] font-bold text-indigo-500">
@@ -931,18 +931,18 @@ const saveBanks = () => {
                             class="px-8 py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 active:scale-[0.99] text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                         >
                             <Check class="w-4 h-4 stroke-[3]" />
-                            <span>Simpan Data Profil Yayasan</span>
+                            <span>Simpan Data Profil NEXUS COMMUNITY</span>
                         </button>
                     </div>
                 </form>
 
-                <!-- TABEL DATA DIRI & STATUS KEANGGOTAAN YAYASAN (TABLE SUMMARY) -->
+                <!-- TABEL DATA DIRI & STATUS KEANGGOTAAN NEXUS COMMUNITY (TABLE SUMMARY) -->
                 <div class="border-t border-slate-100 pt-8 space-y-4">
                     <div class="flex items-center justify-between flex-wrap gap-2">
                         <div class="flex items-center gap-2">
                             <HeartHandshake class="w-5 h-5 text-emerald-600" />
                             <h3 class="text-sm font-black text-slate-900 uppercase tracking-tight">
-                                TABEL RINGKASAN DATA ANGGOTA YAYASAN TERDAFTAR
+                                TABEL RINGKASAN DATA ANGGOTA NEXUS COMMUNITY TERDAFTAR
                             </h3>
                         </div>
                         <span class="text-xs font-bold text-slate-400">
