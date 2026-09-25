@@ -30,7 +30,9 @@ class DatabaseSeeder extends Seeder
             'right_count' => 2,
             'left_points' => 1,
             'right_points' => 0,
-            'package_name' => 'Ultimate',
+            'package_name' => 'Standard',
+            'saldo' => 500000.00,
+            'total_bonus' => 500000.00,
         ]);
         $admin->save();
         $admin->assignRole('admin');
@@ -48,7 +50,9 @@ class DatabaseSeeder extends Seeder
             'right_count' => 1,
             'left_points' => 0,
             'right_points' => 0,
-            'package_name' => 'Pro',
+            'package_name' => 'Standard',
+            'saldo' => 500000.00,
+            'total_bonus' => 500000.00,
         ]);
         $budi->save();
         $budi->assignRole('client');
@@ -65,7 +69,7 @@ class DatabaseSeeder extends Seeder
             'right_count' => 0,
             'left_points' => 0,
             'right_points' => 0,
-            'package_name' => 'Medium',
+            'package_name' => 'Standard',
         ]);
         $siti->save();
         $siti->assignRole('client');
@@ -83,7 +87,7 @@ class DatabaseSeeder extends Seeder
             'right_count' => 0,
             'left_points' => 0,
             'right_points' => 0,
-            'package_name' => 'Basic',
+            'package_name' => 'Standard',
         ]);
         $dewi->save();
         $dewi->assignRole('client');
@@ -100,7 +104,7 @@ class DatabaseSeeder extends Seeder
             'right_count' => 0,
             'left_points' => 0,
             'right_points' => 0,
-            'package_name' => 'Basic',
+            'package_name' => 'Standard',
         ]);
         $eko->save();
         $eko->assignRole('client');
@@ -117,7 +121,7 @@ class DatabaseSeeder extends Seeder
             'right_count' => 0,
             'left_points' => 0,
             'right_points' => 0,
-            'package_name' => 'Starter',
+            'package_name' => 'Standard',
         ]);
         $fajar->save();
         $fajar->assignRole('client');
@@ -233,6 +237,28 @@ class DatabaseSeeder extends Seeder
         );
 
         \App\Models\WalletTransaction::updateOrCreate(
+            ['description' => 'Bonus Sponsor: Pendaftaran Mitra Dewi', 'user_id' => $budi->id],
+            [
+                'type' => 'in',
+                'category' => 'sponsor',
+                'amount' => 250000,
+                'related_user_id' => $dewi->id,
+                'created_at' => now()->subDays(2)->setHour(10)->setMinute(0)->setSecond(0),
+            ]
+        );
+
+        \App\Models\WalletTransaction::updateOrCreate(
+            ['description' => 'Bonus Sponsor: Pendaftaran Mitra Eko', 'user_id' => $budi->id],
+            [
+                'type' => 'in',
+                'category' => 'sponsor',
+                'amount' => 250000,
+                'related_user_id' => $eko->id,
+                'created_at' => now()->subDays(1)->setHour(14)->setMinute(0)->setSecond(0),
+            ]
+        );
+
+        \App\Models\WalletTransaction::updateOrCreate(
             ['description' => 'Cairkan bonus sponsor ke E-Wallet', 'user_id' => $admin->id],
             [
                 'type' => 'in',
@@ -250,7 +276,7 @@ class DatabaseSeeder extends Seeder
                 'category' => 'sponsor',
                 'source_user_id' => $budi->id,
                 'description' => 'Bonus Sponsor: Pendaftaran budi (USR002)',
-                'amount' => 100000,
+                'amount' => 250000,
                 'created_at' => now()->subDays(4)->setHour(18)->setMinute(30)->setSecond(0),
             ]
         );
@@ -262,8 +288,32 @@ class DatabaseSeeder extends Seeder
                 'category' => 'sponsor',
                 'source_user_id' => $siti->id,
                 'description' => 'Bonus Sponsor: Pendaftaran siti (USR003)',
-                'amount' => 100000,
+                'amount' => 250000,
                 'created_at' => now()->subDays(3)->setHour(16)->setMinute(15)->setSecond(0),
+            ]
+        );
+
+        \App\Models\BonusLog::updateOrCreate(
+            ['transaction_code' => 'B003'],
+            [
+                'user_id' => $budi->id,
+                'category' => 'sponsor',
+                'source_user_id' => $dewi->id,
+                'description' => 'Bonus Sponsor: Pendaftaran dewi (dewi)',
+                'amount' => 250000,
+                'created_at' => now()->subDays(2)->setHour(10)->setMinute(0)->setSecond(0),
+            ]
+        );
+
+        \App\Models\BonusLog::updateOrCreate(
+            ['transaction_code' => 'B004'],
+            [
+                'user_id' => $budi->id,
+                'category' => 'sponsor',
+                'source_user_id' => $eko->id,
+                'description' => 'Bonus Sponsor: Pendaftaran eko (eko)',
+                'amount' => 250000,
+                'created_at' => now()->subDays(1)->setHour(14)->setMinute(0)->setSecond(0),
             ]
         );
 
@@ -274,7 +324,7 @@ class DatabaseSeeder extends Seeder
                 'category' => 'sponsor',
                 'source_user_id' => $eko->id,
                 'description' => 'Bonus Sponsor: Pendaftaran eko (USR005)',
-                'amount' => 100000,
+                'amount' => 25000,
                 'created_at' => now()->subDays(1)->setHour(23)->setMinute(0)->setSecond(0),
             ]
         );
@@ -283,10 +333,10 @@ class DatabaseSeeder extends Seeder
             ['transaction_code' => 'P001'],
             [
                 'user_id' => $admin->id,
-                'category' => 'pasangan',
+                'category' => 'generasi',
                 'source_user_id' => $budi->id,
-                'description' => 'Bonus Pasangan: Keseimbangan Kiri & Kanan',
-                'amount' => 100000,
+                'description' => 'Bonus Generasi: Tim Jaringan Level 1',
+                'amount' => 250000,
                 'created_at' => now()->subDays(2)->setHour(12)->setMinute(0)->setSecond(0),
             ]
         );
