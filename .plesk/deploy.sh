@@ -6,8 +6,10 @@
 
 set -e
 
-# Path aplikasi di server (sesuaikan jika berbeda)
-APP_DIR=$(dirname "$(dirname "$(realpath "$0")")")
+# Path aplikasi di server
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+APP_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$APP_DIR"
 
 echo ">>> [1/7] Install Composer dependencies (production)..."
 composer install --no-dev --optimize-autoloader --no-interaction
