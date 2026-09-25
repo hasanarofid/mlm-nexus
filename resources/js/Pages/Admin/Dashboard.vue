@@ -50,12 +50,12 @@ const showPasswordConfirm = ref(false);
 const ktpPreview = ref(null);
 const fileInput = ref(null);
 
-const handleUpgradePrioritas = () => {
+const handleUpgradePremier = () => {
   const totalDownlines = props.wallet?.total_downlines ?? 0;
   if (totalDownlines < 1000) {
     isPriorityModalOpen.value = true;
   } else {
-    alert('Selamat! Anda memenuhi syarat untuk upgrade ke Prioritas. Tim kami akan memproses pengajuan Anda.');
+    alert('Selamat! Anda memenuhi syarat untuk upgrade ke PREMIER. Tim kami akan memproses pengajuan Anda.');
   }
 };
 
@@ -268,7 +268,7 @@ const formatRupiah = (val) => {
 
       </div>
 
-      <!-- 3. Upgrade ke Prioritas Card Banner (Purple Luxury Theme) -->
+      <!-- 3. Upgrade ke PREMIER Card Banner (Purple Luxury Theme) -->
       <div class="bg-gradient-to-r from-[#2a0845] via-[#4b126d] to-[#6b1187] border border-purple-400/40 rounded-3xl p-5 md:p-6 shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-5 text-white">
         <!-- Ambient lighting decoration -->
         <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-purple-400/20 rounded-full blur-2xl pointer-events-none"></div>
@@ -280,7 +280,7 @@ const formatRupiah = (val) => {
           </div>
           <div class="space-y-1">
             <div class="flex items-center gap-2">
-              <h3 class="text-base sm:text-lg font-black text-white tracking-tight">Upgrade ke Prioritas</h3>
+              <h3 class="text-base sm:text-lg font-black text-white tracking-tight">Upgrade ke PREMIER</h3>
               <span class="px-2 py-0.5 text-[9px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 rounded-md uppercase tracking-wider">Eksklusif</span>
             </div>
             <p class="text-xs sm:text-sm text-purple-100 font-medium">
@@ -292,7 +292,7 @@ const formatRupiah = (val) => {
         <div class="relative z-10 shrink-0">
           <button 
             type="button"
-            @click="handleUpgradePrioritas"
+            @click="handleUpgradePremier"
             class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] active:scale-95 text-slate-950 text-xs font-black rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>Upgrade Sekarang</span>
@@ -575,7 +575,7 @@ const formatRupiah = (val) => {
       </div>
     </div>
 
-    <!-- Modal Warning: Upgrade Prioritas (Total Downline < 1000) -->
+    <!-- Modal Warning: Upgrade PREMIER (Total Downline < 1000) -->
     <div v-if="isPriorityModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-fade-in">
       <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl space-y-5 border border-slate-100 text-center relative overflow-hidden animate-scale-in">
         
@@ -595,10 +595,10 @@ const formatRupiah = (val) => {
         <!-- Text Content -->
         <div class="space-y-2">
           <h3 class="text-lg font-black text-slate-900 tracking-tight">
-            Peringatan Upgrade Prioritas
+            Peringatan Upgrade PREMIER
           </h3>
           <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-            Untuk upgrade ke prioritas, Anda harus memiliki 1000 mitra di team anda. Fitur ini akan terbuka otomatis jika level tim mitra Anda sudah mencapai 1000
+            Untuk upgrade ke PREMIER, Anda harus memiliki 1000 mitra di team anda. Fitur ini akan terbuka otomatis jika level tim mitra Anda sudah mencapai 1000
           </p>
         </div>
 

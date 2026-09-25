@@ -188,7 +188,7 @@ class ReportController extends Controller
                         'generation' => 'Direct / Admin',
                         'gen_level' => 0,
                         'sponsor' => $sponsorLabel,
-                        'tier' => $u->package_name ?: 'Regular Member',
+                        'tier' => $u->package_name ?: 'Standard',
                         'saldo' => (float) ($u->saldo ?? 0),
                         'created_at' => $u->created_at ? $u->created_at->format('d/m/Y H:i') : '-',
                     ];
@@ -228,7 +228,7 @@ class ReportController extends Controller
                     'generation' => $gen === 1 ? 'Generasi 1 (Sponsor Langsung)' : "Generasi {$gen}",
                     'gen_level' => $gen,
                     'sponsor' => $sponsorLabel,
-                    'tier' => $u->package_name ?: 'Regular Member',
+                    'tier' => $u->package_name ?: 'Standard',
                     'saldo' => (float) ($u->saldo ?? 0),
                     'created_at' => $u->created_at ? $u->created_at->format('d/m/Y H:i') : '-',
                 ];
