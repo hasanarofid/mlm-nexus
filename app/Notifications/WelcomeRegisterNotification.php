@@ -38,7 +38,7 @@ class WelcomeRegisterNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $loginUrl = route('login');
-        $packageName = $this->user->package_name ?: 'Basic';
+        $packageName = $this->user->package_name ?: 'Standard';
 
         $mail = (new MailMessage)
             ->subject('Selamat Datang di nexuscommunity.id - Akun Anda Berhasil Terdaftar!')

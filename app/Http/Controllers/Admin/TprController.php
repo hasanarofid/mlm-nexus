@@ -75,7 +75,7 @@ class TprController extends Controller
         return Inertia::render('Admin/Tpr/Index', [
             'is_eligible' => $isEligible,
             'is_admin' => $isAdmin,
-            'user_package' => $user->package_name ?? 'Basic',
+            'user_package' => $user->package_name ?? 'Standard',
             'allowed_options' => $allowedOptions,
             'requests' => $requests,
         ]);
