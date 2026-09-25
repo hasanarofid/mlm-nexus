@@ -115,26 +115,24 @@ import { Link } from '@inertiajs/vue3';
         </div>
 
         <!-- FORM SIDE RIGHT -->
-        <div class="form-side">
-            <div class="w-full max-w-[430px] flex flex-col justify-between min-h-full py-2">
-                <div class="form-card">
-                    <slot />
-                </div>
-
-                <footer class="mt-8 text-center text-[11px] text-slate-400">
-                    <p>
-                        &copy;{{ new Date().getFullYear() }} Nexus Community. All Rights Reserved | Developed by
-                        <a
-                            href="https://www.cekotechnology.com/mlm/jasa-pembuatan-website-mlm/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="font-semibold text-slate-400 hover:text-[#D4AF37] transition-colors underline decoration-slate-300 hover:decoration-[#D4AF37]"
-                        >
-                            Cekotechnology
-                        </a>
-                    </p>
-                </footer>
+        <div class="form-side flex-col justify-between">
+            <div class="form-card my-auto">
+                <slot />
             </div>
+
+            <footer class="w-full text-center text-[11px] text-slate-400 pt-6">
+                <p>
+                    &copy;{{ new Date().getFullYear() }} Nexus Community. All Rights Reserved | Developed by
+                    <a
+                        href="https://www.cekotechnology.com/mlm/jasa-pembuatan-website-mlm/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-semibold text-slate-400 hover:text-[#D4AF37] transition-colors underline decoration-slate-300 hover:decoration-[#D4AF37]"
+                    >
+                        Cekotechnology
+                    </a>
+                </p>
+            </footer>
         </div>
     </section>
   </main>
