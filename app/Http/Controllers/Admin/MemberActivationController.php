@@ -142,6 +142,13 @@ class MemberActivationController extends Controller
             ]);
         }
 
+        $sponsorCheck = $sponsorUser->canSponsorNewMember();
+        if (!$sponsorCheck['allowed']) {
+            throw ValidationException::withMessages([
+                'sponsor_username' => $sponsorCheck['message'],
+            ]);
+        }
+
         $ktpPath = null;
         if ($request->hasFile('ktp_image')) {
             $file = $request->file('ktp_image');
@@ -230,25 +237,28 @@ class MemberActivationController extends Controller
                     break;
                 }
 
-                $upline->increment('saldo', $bonusPerGen);
-                $upline->increment('total_bonus', $bonusPerGen);
+                // Check eligibility (if downlines >= 1000 and not premier, bonus is bypassed)
+                if ($upline->isEligibleForBonus()) {
+                    $upline->increment('saldo', $bonusPerGen);
+                    $upline->increment('total_bonus', $bonusPerGen);
 
-                BonusLog::create([
-                    'transaction_code' => 'G' . sprintf('%03d', BonusLog::count() + 1),
-                    'user_id' => $upline->id,
-                    'category' => 'generasi',
-                    'source_user_id' => $newUser->id,
-                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$newUser->username}",
-                    'amount' => $bonusPerGen,
-                ]);
+                    BonusLog::create([
+                        'transaction_code' => 'G' . sprintf('%03d', BonusLog::count() + 1),
+                        'user_id' => $upline->id,
+                        'category' => 'generasi',
+                        'source_user_id' => $newUser->id,
+                        'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$newUser->username}",
+                        'amount' => $bonusPerGen,
+                    ]);
 
-                WalletTransaction::create([
-                    'user_id' => $upline->id,
-                    'type' => 'in',
-                    'category' => 'bonus_generasi',
-                    'amount' => $bonusPerGen,
-                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$newUser->username}",
-                ]);
+                    WalletTransaction::create([
+                        'user_id' => $upline->id,
+                        'type' => 'in',
+                        'category' => 'bonus_generasi',
+                        'amount' => $bonusPerGen,
+                        'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$newUser->username}",
+                    ]);
+                }
 
                 $currentUpline = $upline;
             }

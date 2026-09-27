@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
 // Admin CMS Routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/upgrade-premier', [DashboardController::class, 'upgradePremier'])->name('upgrade-premier');
     Route::post('/pay-premi', [DashboardController::class, 'payPremi'])->name('pay-premi');
     Route::get('/premi-invoice', [DashboardController::class, 'premiInvoice'])->name('premi-invoice');
     Route::post('/premi-invoice/upload-proof', [DashboardController::class, 'uploadPremiProof'])->name('premi-invoice.upload-proof');

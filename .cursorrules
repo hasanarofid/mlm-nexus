@@ -82,12 +82,18 @@ Pendaftaran member baru mewajibkan pengisian data lengkap dengan validasi ketat:
 
 ---
 
-### B. Sumber Income 3: Kualifikasi & Bonus Upgrade Akun Premier
+### B. Sumber Income 3: Kualifikasi & Bonus Upgrade Akun Premier (Wajib Upgrade $\ge 1.000$ Tim)
 
-1. **Syarat Kualifikasi Upgrade Premier:**
+1. **Syarat Kualifikasi & Aturan Wajib Upgrade Premier:**
     - Memiliki akumulasi minimal **1.000 Member** di seluruh tim jaringan (Generasi 1 s/d Generasi 10).
+    - **Aturan Kewajiban Upgrade (Mandatory Upgrade Rule):**
+      - Jika member telah mencapai $\ge 1.000$ tim dan **belum melakukan upgrade ke Premier**:
+        1. **Blokir Pendaftaran Direct Referral Baru:** Calon mitra yang mendaftar langsung di bawah sponsor tersebut (Direct Sponsor) **TIDAK BISA** melakukan pendaftaran. Sistem akan menampilkan notifikasi validasi:
+           > *"Mohon upgrade ke premier untuk mitra \"@{username_sponsor}\" agar bisa mendaftarkan mitra baru"*
+        2. **Pendaftaran Downline Non-Direct Tetap Berjalan:** Mitra di bawah downline tetap bisa mendaftarkan member baru secara normal di bawah pohon jaringannya.
+        3. **Bypass / Gugur Hak Bonus Bagi Upline yang Belum Upgrade:** Saat terjadi pendaftaran member baru di bawah jaringan, setiap upline (Gen 2 s/d 10) yang sudah mencapai $\ge 1.000$ tim namun **belum upgrade Premier**, hak bonus timnya (Rp 5.000) **TIDAK DIBERIKAN / HANGUS** menjadi hak perusahaan.
     - Benefit proteksi Asuransi member otomatis ditingkatkan menjadi **Rp 500.000.000 (500 Juta)**.
-    - Tombol Upgrade Premier di dashboard member berstatus **Disabled / Terkunci** jika total tim belum mencapai 1.000 member.
+    - Tombol Upgrade Premier di dashboard member berstatus **Aktif** jika total tim $\ge 1.000$ member (dan terkunci dengan progress bar jika $< 1.000$).
 2. **Biaya Upgrade & Perpanjangan Member Premier:**
     - Biaya Upgrade / Renewal: **Rp 5.000.000 (5 JT) / tahun**.
     - Metode Pembayaran: Dapat memotong **Saldo Wallet** atau **Transfer Bank**.

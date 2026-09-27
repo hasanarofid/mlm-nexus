@@ -80,6 +80,8 @@ class DashboardController extends Controller
                 ]
             ];
 
+        $sponsorStatus = $user->canSponsorNewMember();
+
         return Inertia::render('Admin/Dashboard', [
             'is_admin' => $isAdmin,
             'current_user_username' => $user->username ?: 'user_' . $user->id,
@@ -101,12 +103,95 @@ class DashboardController extends Controller
                 'voucher_aktif' => $voucherAktif,
                 'direct_downlines' => $directDownlines,
                 'total_downlines' => $totalDownlines,
+                'is_premier' => $user->isPremier(),
+                'can_sponsor' => $sponsorStatus['allowed'],
+                'sponsor_block_message' => $sponsorStatus['message'] ?? null,
+                'premier_expires_at' => $user->premier_expires_at ? $user->premier_expires_at->format('d M Y') : null,
             ],
             'premi_info' => [
                 'min_amount' => 10000,
                 'description' => 'Pembayaran Premi bulanan (min Rp 10.000) masuk 100% full ke Total Saldo mitra.',
             ],
         ]);
+    }
+
+    /**
+     * Process Upgrade to Premier (Rp 5.000.000 via Wallet balance).
+     */
+    public function upgradePremier(\Illuminate\Http\Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user->isPremier()) {
+            return back()->with('info', 'Akun Anda sudah berstatus Premier Member aktif hingga ' . ($user->premier_expires_at ? $user->premier_expires_at->format('d M Y') : '-'));
+        }
+
+        $upgradeFee = 5000000;
+        $bonusPerLevel = 250000;
+
+        if ($user->saldo < $upgradeFee) {
+            return back()->withErrors([
+                'upgrade' => 'Saldo wallet Anda (Rp ' . number_format($user->saldo, 0, ',', '.') . ') tidak mencukupi untuk upgrade Premier. Biaya upgrade: Rp ' . number_format($upgradeFee, 0, ',', '.') . '.',
+            ]);
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($user, $upgradeFee, $bonusPerLevel) {
+            // Deduct upgrade fee from user wallet
+            $user->decrement('saldo', $upgradeFee);
+            $user->update([
+                'is_premier' => true,
+                'premier_activated_at' => now(),
+                'premier_expires_at' => now()->addYear(),
+            ]);
+
+            \App\Models\WalletTransaction::create([
+                'user_id' => $user->id,
+                'type' => 'out',
+                'category' => 'upgrade_premier',
+                'amount' => $upgradeFee,
+                'description' => 'Upgrade Keanggotaan ke Premier Member (Masa Aktif 1 Tahun)',
+            ]);
+
+            // Allocate Multi-Tier 10-level upline bonus (Rp 250.000 per level)
+            $currentUplineId = $user->parent_id;
+            for ($gen = 1; $gen <= 10; $gen++) {
+                if (!$currentUplineId) {
+                    break; // Sisa alokasi menjadi profit perusahaan
+                }
+
+                $upline = User::find($currentUplineId);
+                if (!$upline) {
+                    break;
+                }
+
+                // Check upline bonus eligibility
+                if ($upline->isEligibleForBonus()) {
+                    $upline->increment('saldo', $bonusPerLevel);
+                    $upline->increment('total_bonus', $bonusPerLevel);
+
+                    BonusLog::create([
+                        'transaction_code' => 'PRM' . sprintf('%03d', BonusLog::count() + 1),
+                        'user_id' => $upline->id,
+                        'category' => 'upgrade_premier',
+                        'source_user_id' => $user->id,
+                        'description' => "Bonus Generasi Upgrade Premier Level {$gen} dari @{$user->username}",
+                        'amount' => $bonusPerLevel,
+                    ]);
+
+                    \App\Models\WalletTransaction::create([
+                        'user_id' => $upline->id,
+                        'type' => 'in',
+                        'category' => 'bonus_upgrade_premier',
+                        'amount' => $bonusPerLevel,
+                        'description' => "Bonus Generasi Upgrade Premier Level {$gen} dari @{$user->username}",
+                    ]);
+                }
+
+                $currentUplineId = $upline->parent_id;
+            }
+        });
+
+        return back()->with('success', 'Selamat! Akun Anda berhasil di-upgrade ke Premier Member. Anda kini dapat mendaftarkan mitra baru dan menikmati seluruh komisi jaringan.');
     }
 
     /**

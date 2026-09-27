@@ -17,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
     'address', 'province', 'city', 'district', 'village', 'postal_code',
     'beneficiary_name', 'beneficiary_birth_date', 'beneficiary_relation', 'beneficiary_phone', 'emergency_phone',
     'parent_id', 'position', 'left_count', 'right_count', 'left_points', 'right_points', 
-    'team_points', 'ro_points', 'po_points', 'package_name', 'saldo', 'auto_save_saldo', 
+    'team_points', 'ro_points', 'po_points', 'package_name', 'is_premier', 'premier_activated_at', 'premier_expires_at', 'saldo', 'auto_save_saldo', 
     'total_bonus', 'security_pin', 'bonus_uncashed', 'bank_name', 'bank_account_number', 'bank_account_name'
 ])]
 #[Hidden(['password', 'remember_token'])]
@@ -37,6 +37,9 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_premier' => 'boolean',
+            'premier_activated_at' => 'datetime',
+            'premier_expires_at' => 'datetime',
         ];
     }
 
@@ -134,6 +137,68 @@ class User extends Authenticatable
         }
 
         return $activeTier;
+    }
+
+    /**
+     * Calculate total downline count across tree up to $maxGen depth.
+     */
+    public function getTotalDownlinesCount(int $maxGen = 10): int
+    {
+        $count = 0;
+        $currentIds = [$this->id];
+
+        for ($g = 1; $g <= $maxGen; $g++) {
+            if (empty($currentIds)) break;
+            $downlineIds = static::whereIn('parent_id', $currentIds)->pluck('id')->toArray();
+            $count += count($downlineIds);
+            $currentIds = $downlineIds;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Check if user is an active Premier member.
+     */
+    public function isPremier(): bool
+    {
+        return (bool) $this->is_premier 
+            || strtolower($this->package_name ?? '') === 'premier' 
+            || strtolower($this->package_name ?? '') === 'premium';
+    }
+
+    /**
+     * Check if user can sponsor new members directly.
+     * If total downlines >= 1000 and not premier, sponsor is blocked.
+     */
+    public function canSponsorNewMember(): array
+    {
+        $totalDownlines = $this->getTotalDownlinesCount(10);
+        if ($totalDownlines >= 1000 && !$this->isPremier()) {
+            return [
+                'allowed' => false,
+                'message' => "Mohon upgrade ke premier untuk mitra \"@{$this->username}\" agar bisa mendaftarkan mitra baru.",
+            ];
+        }
+
+        return [
+            'allowed' => true,
+            'message' => null,
+        ];
+    }
+
+    /**
+     * Check if user is eligible to receive bonuses.
+     * If user has >= 1000 downlines but has not upgraded to Premier, bonuses are bypassed.
+     */
+    public function isEligibleForBonus(): bool
+    {
+        $totalDownlines = $this->getTotalDownlinesCount(10);
+        if ($totalDownlines >= 1000 && !$this->isPremier()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

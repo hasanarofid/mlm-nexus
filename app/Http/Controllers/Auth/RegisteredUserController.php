@@ -73,6 +73,14 @@ class RegisteredUserController extends Controller
             ->first();
 
         if ($sponsor) {
+            $sponsorCheck = $sponsor->canSponsorNewMember();
+            if (!$sponsorCheck['allowed']) {
+                return response()->json([
+                    'valid' => false,
+                    'message' => $sponsorCheck['message'],
+                ]);
+            }
+
             return response()->json([
                 'valid' => true,
                 'sponsor' => [
@@ -127,6 +135,13 @@ class RegisteredUserController extends Controller
         if (!$sponsor) {
             throw ValidationException::withMessages([
                 'referral' => 'Kode Referral / Username Sponsor "' . $rawReferral . '" tidak ditemukan dalam sistem. Pendaftaran tidak dapat diproses jika kode sponsor salah.',
+            ]);
+        }
+
+        $sponsorCheck = $sponsor->canSponsorNewMember();
+        if (!$sponsorCheck['allowed']) {
+            throw ValidationException::withMessages([
+                'referral' => $sponsorCheck['message'],
             ]);
         }
 
@@ -215,25 +230,28 @@ class RegisteredUserController extends Controller
                     break;
                 }
 
-                $upline->increment('saldo', $bonusPerGen);
-                $upline->increment('total_bonus', $bonusPerGen);
+                // Check eligibility (if downlines >= 1000 and not premier, bonus is bypassed)
+                if ($upline->isEligibleForBonus()) {
+                    $upline->increment('saldo', $bonusPerGen);
+                    $upline->increment('total_bonus', $bonusPerGen);
 
-                BonusLog::create([
-                    'transaction_code' => 'G' . sprintf('%03d', BonusLog::count() + 1),
-                    'user_id' => $upline->id,
-                    'category' => 'generasi',
-                    'source_user_id' => $user->id,
-                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
-                    'amount' => $bonusPerGen,
-                ]);
+                    BonusLog::create([
+                        'transaction_code' => 'G' . sprintf('%03d', BonusLog::count() + 1),
+                        'user_id' => $upline->id,
+                        'category' => 'generasi',
+                        'source_user_id' => $user->id,
+                        'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
+                        'amount' => $bonusPerGen,
+                    ]);
 
-                WalletTransaction::create([
-                    'user_id' => $upline->id,
-                    'type' => 'in',
-                    'category' => 'bonus_generasi',
-                    'amount' => $bonusPerGen,
-                    'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
-                ]);
+                    WalletTransaction::create([
+                        'user_id' => $upline->id,
+                        'type' => 'in',
+                        'category' => 'bonus_generasi',
+                        'amount' => $bonusPerGen,
+                        'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
+                    ]);
+                }
 
                 $currentUpline = $upline;
             }
