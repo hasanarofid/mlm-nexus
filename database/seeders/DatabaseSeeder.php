@@ -131,7 +131,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'PIN-9812-XYZ'],
             [
                 'user_id' => $admin->id,
-                'package_name' => 'Basic',
+                'package_name' => 'Standard',
                 'status' => 'active',
                 'created_at' => now()->subDays(5),
             ]
@@ -141,7 +141,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'PIN-4432-ABC'],
             [
                 'user_id' => $admin->id,
-                'package_name' => 'Basic',
+                'package_name' => 'Standard',
                 'status' => 'active',
                 'created_at' => now()->subDays(5),
             ]
@@ -151,7 +151,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'PIN-1234-MNO'],
             [
                 'user_id' => $admin->id,
-                'package_name' => 'Basic',
+                'package_name' => 'Standard',
                 'status' => 'used',
                 'used_by_id' => $budi->id,
                 'used_at' => now()->subDays(4),
@@ -163,7 +163,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'PIN-5678-PQR'],
             [
                 'user_id' => $admin->id,
-                'package_name' => 'Basic',
+                'package_name' => 'Standard',
                 'status' => 'used',
                 'used_by_id' => $siti->id,
                 'used_at' => now()->subDays(3),
@@ -175,7 +175,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'PIN-2222-BBB'],
             [
                 'user_id' => $admin->id,
-                'package_name' => 'Basic',
+                'package_name' => 'Standard',
                 'status' => 'used',
                 'used_by_id' => $dewi->id,
                 'used_at' => now()->subDays(1),
@@ -188,7 +188,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'PIN-5555-DDD'],
             [
                 'user_id' => $budi->id,
-                'package_name' => 'Basic',
+                'package_name' => 'Standard',
                 'status' => 'active',
                 'created_at' => now()->subDays(2),
             ]
@@ -208,7 +208,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'PIN-8888-EEE'],
             [
                 'user_id' => $siti->id,
-                'package_name' => 'Basic',
+                'package_name' => 'Standard',
                 'status' => 'active',
                 'created_at' => now()->subDays(1),
             ]

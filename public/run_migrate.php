@@ -153,6 +153,19 @@ try {
         ]);
         $seedLog = $kernel->output();
 
+        // Ensure all legacy Basic / null membership statuses are converted to Standard
+        \Illuminate\Support\Facades\DB::table('users')
+            ->whereNull('package_name')
+            ->orWhereIn('package_name', ['Basic', 'basic', '', 'Starter', 'Seller'])
+            ->update(['package_name' => 'Standard']);
+
+        if (\Illuminate\Support\Facades\Schema::hasTable('vouchers')) {
+            \Illuminate\Support\Facades\DB::table('vouchers')
+                ->whereNull('package_name')
+                ->orWhereIn('package_name', ['Basic', 'basic', ''])
+                ->update(['package_name' => 'Standard']);
+        }
+
         $action = "Migrate & Seed Catalog (Update Only)";
 
         // 3. Clear & rebuild application caches and bring app online (turn off maintenance mode)
@@ -165,12 +178,12 @@ try {
         @$kernel->call('route:clear');
         @$kernel->call('view:clear');
 
-        $allUsers = User::select('id', 'name', 'username', 'email')->get();
+        $allUsers = User::select('id', 'name', 'username', 'email', 'package_name', 'is_premier')->get();
 
         echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action} Finished!</h1>";
-        echo "<pre>" . htmlspecialchars($gitLog . $composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.")) . "</pre>";
+        echo "<pre>" . htmlspecialchars($gitLog . $composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.\n") . "Status membership berhasil disinkronisasi ke Standard & Premier.") . "</pre>";
         
         echo "<h3 style='margin-top:1.5rem;'>Daftar User Akun Login (" . count($allUsers) . " Users):</h3>";
         echo "<table><thead><tr><th>ID</th><th>Nama</th><th>Username</th><th>Email</th><th>Default Password</th></tr></thead><tbody>";

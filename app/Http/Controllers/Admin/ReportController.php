@@ -179,6 +179,8 @@ class ReportController extends Controller
                         ? ('@' . ($u->parent->username ?: 'user_' . $u->parent->id) . ' (' . $u->parent->name . ')') 
                         : 'DIRECT / PERUSAHAAN';
 
+                    $membership = ($u->is_premier || strtolower($u->package_name ?? '') === 'premier') ? 'Premier' : 'Standard';
+
                     return [
                         'id' => $u->id,
                         'name' => $u->name,
@@ -188,7 +190,7 @@ class ReportController extends Controller
                         'generation' => 'Direct / Admin',
                         'gen_level' => 0,
                         'sponsor' => $sponsorLabel,
-                        'tier' => $u->package_name ?: 'Standard',
+                        'tier' => $membership,
                         'saldo' => (float) ($u->saldo ?? 0),
                         'created_at' => $u->created_at ? $u->created_at->format('d/m/Y H:i') : '-',
                     ];
@@ -219,6 +221,8 @@ class ReportController extends Controller
                     ? ('@' . ($u->parent->username ?: 'user_' . $u->parent->id) . ' (' . $u->parent->name . ')') 
                     : ('@' . ($currentUser->username ?: 'user_' . $currentUser->id));
 
+                $membership = ($u->is_premier || strtolower($u->package_name ?? '') === 'premier') ? 'Premier' : 'Standard';
+
                 $team[] = [
                     'id' => $u->id,
                     'name' => $u->name,
@@ -228,7 +232,7 @@ class ReportController extends Controller
                     'generation' => $gen === 1 ? 'Generasi 1 (Sponsor Langsung)' : "Generasi {$gen}",
                     'gen_level' => $gen,
                     'sponsor' => $sponsorLabel,
-                    'tier' => $u->package_name ?: 'Standard',
+                    'tier' => $membership,
                     'saldo' => (float) ($u->saldo ?? 0),
                     'created_at' => $u->created_at ? $u->created_at->format('d/m/Y H:i') : '-',
                 ];

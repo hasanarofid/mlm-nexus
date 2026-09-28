@@ -63,7 +63,7 @@ const formatRupiah = (val) => {
 };
 
 const reportTabs = [
-  { type: 'team', label: 'Laporan Team Mitra', icon: Users },
+  { type: 'team', label: 'Laporan Team Member', icon: Users },
   { type: 'bonus', label: 'Laporan Bonus', icon: Award },
   { type: 'withdrawal', label: 'Laporan Withdrawal', icon: ArrowUpRight },
   { type: 'mutasi', label: 'Laporan Mutasi Saldo', icon: Wallet },
@@ -84,10 +84,10 @@ const reportTabs = [
             <span>Rekapitulasi Transaksi & Jaringan</span>
           </div>
           <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
-            Menu Laporan {{ is_admin ? 'Sistem' : 'Mitra' }}
+            Menu Laporan {{ is_admin ? 'Sistem' : 'Member' }}
           </h2>
           <p class="text-xs text-slate-500 font-medium mt-0.5">
-            Pantau rincian pendaftaran Team Mitra, akumulasi bonus unilevel, mutasi dompet, dan riwayat penarikan dana (WD).
+            Pantau rincian pendaftaran Team Member, akumulasi bonus unilevel, mutasi dompet, dan riwayat penarikan dana (WD).
           </p>
         </div>
 
@@ -113,14 +113,14 @@ const reportTabs = [
 
       <!-- 2. SUMMARY METRICS CARDS -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Card 1: Total Team Mitra -->
+        <!-- Card 1: Total Team Member -->
         <div class="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-xs flex items-center gap-4 relative overflow-hidden">
           <div class="w-12 h-12 rounded-2xl bg-[#0F172A] text-[#D4AF37] flex items-center justify-center flex-shrink-0 shadow-sm border border-[#D4AF37]/30">
             <Users class="w-6 h-6" />
           </div>
           <div>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Team Mitra</p>
-            <h3 class="text-xl font-black text-slate-900 tracking-tight">{{ summary?.total_team || 0 }} <span class="text-xs font-bold text-slate-400">Mitra</span></h3>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Team Member</p>
+            <h3 class="text-xl font-black text-slate-900 tracking-tight">{{ summary?.total_team || 0 }} <span class="text-xs font-bold text-slate-400">Member</span></h3>
           </div>
         </div>
 
@@ -180,12 +180,12 @@ const reportTabs = [
       <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm">
         <div class="overflow-x-auto">
           
-          <!-- TAB 1: LAPORAN TEAM MITRA -->
+          <!-- TAB 1: LAPORAN TEAM MEMBER -->
           <table v-if="active_type === 'team'" class="w-full text-left text-xs border-collapse">
             <thead>
               <tr class="border-b border-slate-200 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider bg-slate-50/50">
                 <th class="py-3.5 px-4 rounded-l-xl">NO</th>
-                <th class="py-3.5 px-4">NAMA MITRA</th>
+                <th class="py-3.5 px-4">NAMA MEMBER</th>
                 <th class="py-3.5 px-4">NO. WHATSAPP</th>
                 <th class="py-3.5 px-4">TINGKATAN GENERASI</th>
                 <th class="py-3.5 px-4">SPONSOR LANGSUNG</th>
@@ -220,7 +220,12 @@ const reportTabs = [
                   {{ row.sponsor }}
                 </td>
                 <td class="py-3.5 px-4">
-                  <span class="px-2.5 py-1 text-[10px] font-bold bg-slate-900 text-[#D4AF37] border border-slate-800 rounded-lg">
+                  <span 
+                    :class="[
+                      row.tier === 'Premier' ? 'bg-gradient-to-r from-amber-400 to-[#D4AF37] text-slate-950 font-black border border-amber-300 shadow-xs' : 'bg-slate-900 text-[#D4AF37] border border-slate-800 font-bold',
+                      'px-2.5 py-1 text-[10px] rounded-lg inline-block'
+                    ]"
+                  >
                     {{ row.tier }}
                   </span>
                 </td>
@@ -232,7 +237,7 @@ const reportTabs = [
               <tr v-if="report_data.length === 0">
                 <td colspan="7" class="py-14 text-center text-slate-400 text-xs italic space-y-2">
                   <Users class="w-8 h-8 text-slate-300 mx-auto" />
-                  <p>Belum ada mitra jaringan yang terdaftar.</p>
+                  <p>Belum ada member jaringan yang terdaftar.</p>
                 </td>
               </tr>
             </tbody>
@@ -245,7 +250,7 @@ const reportTabs = [
                 <th class="py-3.5 px-4 rounded-l-xl">KODE</th>
                 <th class="py-3.5 px-4">PENERIMA</th>
                 <th class="py-3.5 px-4">JENIS BONUS</th>
-                <th class="py-3.5 px-4">SUMBER MITRA</th>
+                <th class="py-3.5 px-4">SUMBER MEMBER</th>
                 <th class="py-3.5 px-4">DESKRIPSI</th>
                 <th class="py-3.5 px-4">NOMINAL BONUS</th>
                 <th class="py-3.5 px-4 text-right rounded-r-xl">TANGGAL & WAKTU</th>
