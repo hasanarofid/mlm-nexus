@@ -49,7 +49,7 @@ const formatRupiah = (val) => {
 </script>
 
 <template>
-  <Head title="Data Mitra - NEXUS COMMUNITY" />
+  <Head title="Data Member - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6">
@@ -95,10 +95,10 @@ const formatRupiah = (val) => {
             </div>
             <div>
               <h2 class="text-base md:text-lg font-black text-slate-900 tracking-tight">
-                Data Mitra
+                Data Member
               </h2>
               <p class="text-xs text-slate-500 font-medium mt-0.5">
-                Cari, tinjau, dan ganti perspektif login untuk melihat bonus dan team mitra member lain.
+                Cari, tinjau, dan ganti perspektif login untuk melihat bonus dan team member lain.
               </p>
             </div>
           </div>
@@ -159,10 +159,10 @@ const formatRupiah = (val) => {
                   </span>
                 </td>
 
-                <!-- Tim Mitra (G1 / Total) -->
+                <!-- Tim Member (G1 / Total) -->
                 <td class="py-3.5 px-4">
                   <span class="font-extrabold text-slate-700 text-[11px] font-mono">
-                    G1: {{ m.g1_count }} Mitra &nbsp;|&nbsp; Total: {{ m.total_team }} Team
+                    G1: {{ m.g1_count }} Member &nbsp;|&nbsp; Total: {{ m.total_team }} Team
                   </span>
                 </td>
 

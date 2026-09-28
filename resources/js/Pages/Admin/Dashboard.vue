@@ -234,7 +234,7 @@ const formatRupiah = (val) => {
           </div>
           <div>
             <h4 class="text-sm font-black text-slate-900 tracking-tight">Wajib Upgrade ke Premier Member</h4>
-            <p class="text-xs text-slate-700 font-medium mt-0.5">{{ wallet?.sponsor_block_message || 'Total jaringan Anda telah mencapai 1.000 mitra. Wajib upgrade ke Premier agar dapat mendaftarkan mitra baru dan menerima bonus jaringan.' }}</p>
+            <p class="text-xs text-slate-700 font-medium mt-0.5">{{ wallet?.sponsor_block_message || 'Total jaringan Anda telah mencapai 1.000 member. Wajib upgrade ke Premier agar dapat mendaftarkan member baru dan menerima bonus jaringan.' }}</p>
           </div>
         </div>
         <button 
@@ -246,18 +246,15 @@ const formatRupiah = (val) => {
         </button>
       </div>
 
-      <!-- 1. Link Referral & Quick Add Mitra Banner Card -->
+      <!-- 1. Pendaftaran Member Banner Card -->
       <div class="bg-gradient-to-r from-[#fdfbf7] via-[#faf6eb] to-[#f7f3e8] border border-[#D4AF37]/40 rounded-3xl p-5 md:p-6 shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex items-start gap-4">
           <div class="p-3 bg-[#D4AF37]/15 text-[#B8922E] rounded-2xl shrink-0 hidden sm:block">
             <span class="text-xl font-bold">🔗</span>
           </div>
           <div>
-            <div class="flex items-center gap-2">
-              <h3 class="text-sm font-extrabold text-[#0F172A] tracking-tight">Komunitas Mitra</h3>
-              <span class="px-2 py-0.5 text-[9px] font-bold bg-[#D4AF37]/20 text-[#B8922E] border border-[#D4AF37]/30 rounded-md">Pendaftaran Mitra</span>
-            </div>
-            <p class="text-xs text-slate-600 mt-1 font-medium">Daftarkan mitra baru secara langsung dari dashboard atau bagikan link referral Anda.</p>
+            <h3 class="text-sm font-extrabold text-[#0F172A] tracking-tight">Pendaftaran Member</h3>
+            <p class="text-xs text-slate-600 mt-1 font-medium">Daftarkan member baru secara langsung dari dashboard.</p>
           </div>
         </div>
 
@@ -267,20 +264,12 @@ const formatRupiah = (val) => {
             class="px-4 py-2.5 bg-[#0F172A] hover:bg-[#1E293B] text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-black rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
           >
             <UserPlus class="w-4 h-4 stroke-[2.5]" />
-            <span>+ Tambah Mitra Baru</span>
-          </button>
-
-          <button 
-            @click="copyToClipboard(referral_links?.default || referral_links?.url, 'Referral')"
-            class="px-4 py-2.5 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
-          >
-            <Copy class="w-3.5 h-3.5" />
-            <span>Copy Link Referral</span>
+            <span>+ Tambah Member</span>
           </button>
         </div>
       </div>
 
-      <!-- 2. Main Dashboard Cards Grid (TOTAL SALDO MITRA & RINGKASAN JARINGAN) -->
+      <!-- 2. Main Dashboard Cards Grid (TOTAL SALDO MEMBER & TEAM MEMBER) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         <!-- Total Saldo Card -->
@@ -289,7 +278,7 @@ const formatRupiah = (val) => {
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5">
                 <Wallet class="w-3.5 h-3.5 text-[#D4AF37]" />
-                TOTAL SALDO MITRA
+                TOTAL SALDO MEMBER
               </span>
             </div>
 
@@ -307,7 +296,7 @@ const formatRupiah = (val) => {
               :href="route('admin.withdrawals.index')" 
               class="px-4 py-2 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-black rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer"
             >
-              <span>Penarikan (WD)</span>
+              <span>Penarikan</span>
               <ArrowUpRight class="w-4 h-4" />
             </Link>
           </div>
@@ -318,17 +307,17 @@ const formatRupiah = (val) => {
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <div class="flex items-center gap-2">
               <Users class="w-5 h-5 text-[#0F172A]" />
-              <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Ringkasan Mitra Saya</h3>
+              <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Team Member</h3>
             </div>
             <Link :href="route('admin.pohon-jaringan')" class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] hover:underline flex items-center gap-1 transition-colors">
-              <span>Lihat Tree Network</span>
+              <span>Rincian Team</span>
               <ArrowUpRight class="w-3.5 h-3.5" />
             </Link>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div class="p-4 rounded-2xl border border-slate-100 bg-[#fdfbf7]">
-              <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Mitra Direct (Gen 1)</p>
+              <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Member Direct (Gen 1)</p>
               <h4 class="text-2xl font-black text-[#0F172A] mt-1">{{ wallet?.direct_downlines ?? 0 }} <span class="text-xs font-normal text-slate-500">Orang</span></h4>
             </div>
 
@@ -360,12 +349,11 @@ const formatRupiah = (val) => {
                 👑 PREMIER VIP
               </span>
               <span v-else class="px-2 py-0.5 text-[9px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 rounded-md uppercase tracking-wider">
-                {{ (wallet?.total_downlines ?? 0) >= 1000 ? 'Syarat Terpenuhi' : (wallet?.total_downlines ?? 0) + ' / 1000 Mitra' }}
+                {{ (wallet?.total_downlines ?? 0) >= 1000 ? 'Syarat Terpenuhi' : (wallet?.total_downlines ?? 0) + ' / 1000 Member' }}
               </span>
             </div>
-            <p class="text-xs sm:text-sm text-purple-100 font-medium">
-              <span v-if="wallet?.is_premier">Status Premier aktif hingga {{ wallet?.premier_expires_at || '1 Tahun' }}. Anda bebas mendaftarkan mitra baru dan menerima bonus penuh.</span>
-              <span v-else>Dapatkan hak pendaftaran tanpa batas dan nikmati seluruh bonus 10 generasi.</span>
+            <p v-if="wallet?.is_premier" class="text-xs sm:text-sm text-purple-100 font-medium">
+              Status Premier aktif hingga {{ wallet?.premier_expires_at || '1 Tahun' }}. Anda bebas mendaftarkan member baru dan menerima bonus penuh.
             </p>
           </div>
         </div>
@@ -386,7 +374,7 @@ const formatRupiah = (val) => {
 
     </div>
 
-    <!-- Modal Form Tambah Mitra Baru (Quick Add Mitra from Dashboard) -->
+    <!-- Modal Form Tambah Member Baru (Quick Add Member from Dashboard) -->
     <div v-if="isAddMitraModalOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in overflow-y-auto">
       <div class="bg-white rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl space-y-5 border border-slate-100 my-8 max-h-[90vh] overflow-y-auto">
         
@@ -397,8 +385,8 @@ const formatRupiah = (val) => {
               <UserPlus class="w-5 h-5" />
             </div>
             <div>
-              <h3 class="text-base font-extrabold text-slate-900">Tambah Mitra Baru</h3>
-              <p class="text-xs text-slate-500 font-medium">Registrasi langsung anggota/mitra ke jaringan Anda.</p>
+              <h3 class="text-base font-extrabold text-slate-900">Tambah Member Baru</h3>
+              <p class="text-xs text-slate-500 font-medium">Registrasi langsung member ke jaringan Anda.</p>
             </div>
           </div>
           <button @click="isAddMitraModalOpen = false" class="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer">
@@ -424,7 +412,7 @@ const formatRupiah = (val) => {
                 </label>
                 <div class="auth-input-wrap">
                   <span class="auth-input-icon"><User class="w-4 h-4 text-slate-400" /></span>
-                  <input type="text" v-model="addMitraForm.name" required placeholder="Nama Lengkap Mitra" class="w-full text-sm" />
+                  <input type="text" v-model="addMitraForm.name" required placeholder="Nama Lengkap Member" class="w-full text-sm" />
                 </div>
                 <p v-if="addMitraForm.errors.name" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.name }}</p>
               </div>
@@ -553,7 +541,7 @@ const formatRupiah = (val) => {
                   <UploadCloud class="w-4.5 h-4.5" />
                 </div>
                 <div class="text-xs font-bold text-slate-700 group-hover:text-slate-900">Tambahkan file KTP</div>
-                <div class="text-[11px] text-slate-400">Klik untuk memilih file foto KTP mitra</div>
+                <div class="text-[11px] text-slate-400">Klik untuk memilih file foto KTP member</div>
               </div>
 
               <!-- Preview KTP -->
@@ -694,7 +682,7 @@ const formatRupiah = (val) => {
               <span class="text-xs font-extrabold text-[#0F172A]">@{{ addMitraForm.sponsor_username }}</span>
               <span class="text-[10px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">Sponsor Anda</span>
             </div>
-            <p class="text-[10px] text-slate-600 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
+            <p class="text-[10px] text-slate-600 font-medium">Member baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
           </div>
 
           <!-- Modal Actions -->
@@ -704,7 +692,7 @@ const formatRupiah = (val) => {
             </button>
             <button type="submit" :disabled="addMitraForm.processing" class="auth-primary-btn !w-auto !h-auto px-6 py-2.5 text-xs font-black uppercase tracking-wider rounded-xl shadow-md cursor-pointer disabled:opacity-50 flex items-center gap-2">
               <span v-if="addMitraForm.processing">Mendaftarkan...</span>
-              <span v-else>Daftarkan Mitra Sekarang</span>
+              <span v-else>Daftarkan Member Sekarang</span>
               <Check class="w-4 h-4 stroke-[3]" />
             </button>
           </div>
@@ -736,15 +724,15 @@ const formatRupiah = (val) => {
             Peringatan Upgrade PREMIER
           </h3>
           <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-            Untuk upgrade ke PREMIER, Anda harus memiliki 1000 mitra di team anda. Fitur ini akan terbuka otomatis jika level tim mitra Anda sudah mencapai 1000
+            Untuk upgrade ke PREMIER, Anda harus memiliki 1000 member di team anda. Fitur ini akan terbuka otomatis jika level tim member Anda sudah mencapai 1000
           </p>
         </div>
 
         <!-- Progress Box -->
         <div class="p-4 bg-purple-50/70 border border-purple-100 rounded-2xl space-y-2 text-left">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-bold text-purple-900">Total Mitra Tim Anda:</span>
-            <span class="font-black text-purple-700 font-mono text-sm">{{ wallet?.total_downlines ?? 0 }} / 1000 Mitra</span>
+            <span class="font-bold text-purple-900">Total Member Tim Anda:</span>
+            <span class="font-black text-purple-700 font-mono text-sm">{{ wallet?.total_downlines ?? 0 }} / 1000 Member</span>
           </div>
           <!-- Progress Bar -->
           <div class="w-full bg-purple-200/60 rounded-full h-2.5 overflow-hidden">
@@ -790,7 +778,7 @@ const formatRupiah = (val) => {
             Konfirmasi Upgrade PREMIER
           </h3>
           <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-            Selamat! Anda telah mencapai 1.000 mitra jaringan. Lanjutkan upgrade ke Premier untuk membuka hak pendaftaran tanpa batas dan bonus 10 generasi.
+            Selamat! Anda telah mencapai 1.000 member jaringan. Lanjutkan upgrade ke Premier untuk membuka hak pendaftaran tanpa batas dan bonus 10 generasi.
           </p>
         </div>
 

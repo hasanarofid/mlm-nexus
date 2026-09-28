@@ -154,19 +154,19 @@ const navigation = computed(() => {
                 current: route().current("admin.dashboard"),
             },
             {
-                name: "Tambah Mitra",
+                name: "Tambah Member",
                 href: route("admin.activation.index"),
                 icon: UserPlus,
                 current: route().current("admin.activation.index"),
             },
             {
-                name: "Team Mitra",
+                name: "Team Member",
                 href: route("admin.pohon-jaringan"),
                 icon: GitFork,
                 current: route().current("admin.pohon-jaringan"),
             },
             {
-                name: "Data Mitra",
+                name: "Data Member",
                 href: route("admin.network-data.index"),
                 icon: Users,
                 current: route().current("admin.network-data.index"),
@@ -192,7 +192,7 @@ const navigation = computed(() => {
         ];
     }
 
-    // Member Sidebar Navigation (Dashboard, Tambah Mitra, Team Mitra, Penarikan Saldo, Laporan)
+    // Member Sidebar Navigation (Dashboard, Tambah Member, Team Member, Penarikan Saldo, Laporan)
     return [
         {
             name: "Dashboard",
@@ -201,13 +201,13 @@ const navigation = computed(() => {
             current: route().current("admin.dashboard"),
         },
         {
-            name: "Tambah Mitra",
+            name: "Tambah Member",
             href: route("admin.activation.index"),
             icon: UserPlus,
             current: route().current("admin.activation.index"),
         },
         {
-            name: "Team Mitra",
+            name: "Team Member",
             href: route("admin.pohon-jaringan"),
             icon: GitFork,
             current: route().current("admin.pohon-jaringan"),
