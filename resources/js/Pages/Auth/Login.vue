@@ -34,9 +34,7 @@ const submit = () => {
         <Head title="Login | Nexus Community" />
 
         <div class="panel-heading">
-            <span class="eyebrow">MEMBER LOGIN</span>
-            <h2>Masuk ke Akun</h2>
-            <p>Silakan masukkan email dan password Anda.</p>
+            <h2>MEMBER AREA</h2>
         </div>
 
         <div v-if="status" class="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-600">
@@ -124,12 +122,5 @@ const submit = () => {
                 <ArrowRight class="w-4 h-4" />
             </button>
         </form>
-
-        <div class="mt-6 text-center text-xs text-slate-500 font-medium">
-            Belum punya akun?
-            <Link :href="route('register')" class="ms-1 font-bold text-[#B8922E] hover:text-[#D4AF37] transition-colors">
-                Daftar sekarang
-            </Link>
-        </div>
     </GuestLayout>
 </template>

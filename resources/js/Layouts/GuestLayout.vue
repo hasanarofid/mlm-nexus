@@ -87,30 +87,10 @@ import { Link } from '@inertiajs/vue3';
                     <img src="/images/logo-nexus.png" alt="NEXUS Logo">
                 </Link>
 
-                <div class="brand-badge">
-                    <span></span>
-                    NEXUS COMMUNITY MEMBER AREA
-                </div>
-
                 <h1>
                     Welcome to
                     <span>Nexus Community</span>
                 </h1>
-
-                <p>
-                    Masuk ke akun Anda untuk mengakses fitur, aktivitas,
-                    dan layanan Nexus Community dalam satu tempat.
-                </p>
-
-                <div class="brand-divider">
-                    <span></span>
-                    <i></i><i></i><i></i>
-                    <span></span>
-                </div>
-
-                <p class="brand-note">
-                    SALING BANTU - MANFAAT BERSAMA
-                </p>
             </div>
         </div>
 
