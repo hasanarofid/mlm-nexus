@@ -156,7 +156,7 @@ const bankList = [
             {{ formatRupiah(wallet?.saldo ?? 0) }}
           </h2>
           <p class="text-xs text-slate-500 font-medium pt-0.5">
-            Min. Penarikan: <strong class="text-slate-800">{{ formatRupiah(wallet?.min_withdrawal || 50000) }}</strong> | Biaya Admin: <strong class="text-emerald-600">{{ formatRupiah(wallet?.admin_fee || 0) }}</strong>
+            Min. Penarikan: <strong class="text-slate-800">{{ formatRupiah(wallet?.min_withdrawal || 250000) }}</strong> | Biaya Admin: <strong class="text-emerald-600">{{ formatRupiah(wallet?.admin_fee || 0) }}</strong>
           </p>
         </div>
 
@@ -269,13 +269,13 @@ const bankList = [
                   v-model="form.amount"
                   type="number"
                   required
-                  min="50000"
+                  min="250000"
                   step="1000"
-                  placeholder="Min. Rp 50.000"
+                  placeholder="Min. Rp 250.000"
                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs font-bold focus:outline-none focus:border-[#D4AF37]"
                 />
                 <div class="flex items-center justify-between text-[10px] mt-1.5 font-medium">
-                  <span class="text-slate-400">Min. {{ formatRupiah(wallet?.min_withdrawal || 50000) }}</span>
+                  <span class="text-slate-400">Min. {{ formatRupiah(wallet?.min_withdrawal || 250000) }}</span>
                   <span class="text-slate-500">Max. Bisa ditarik: <strong class="text-[#B8922E] font-bold">{{ formatRupiah(wallet?.saldo ?? 0) }}</strong></span>
                 </div>
               </div>

@@ -35,7 +35,7 @@ const form = useForm({
   diamond_reward_percent: props.config?.diamond_reward_percent || 75000,
   crown_reward_percent: props.config?.crown_reward_percent || 375000,
   business_mode: props.config?.business_mode ?? true,
-  min_withdrawal: props.config?.min_withdrawal || 50000,
+  min_withdrawal: props.config?.min_withdrawal || 250000,
   max_level_depth: props.config?.max_level_depth || 0,
   allow_sponsor_exceed: props.config?.allow_sponsor_exceed ?? true,
   allow_pairing_exceed: props.config?.allow_pairing_exceed ?? true,
@@ -63,7 +63,7 @@ const resetDefaults = () => {
     form.sponsor_percent = 100;
     form.pairing_percent = 50;
     form.titik_percent = 1;
-    form.min_withdrawal = 50000;
+    form.min_withdrawal = 250000;
     form.max_level_depth = 0;
     submitSettings();
   }

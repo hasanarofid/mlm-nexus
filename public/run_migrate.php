@@ -166,6 +166,9 @@ try {
                 ->update(['package_name' => 'Standard']);
         }
 
+        // Ensure minimum withdrawal is set to 250.000
+        \App\Models\Setting::setValue('min_withdrawal', 250000);
+
         $action = "Migrate & Seed Catalog (Update Only)";
 
         // 3. Clear & rebuild application caches and bring app online (turn off maintenance mode)

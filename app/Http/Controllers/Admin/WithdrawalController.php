@@ -52,10 +52,12 @@ class WithdrawalController extends Controller
             ];
         });
 
+        $minWithdrawal = (float) \App\Models\Setting::getValue('min_withdrawal', 250000);
+
         return Inertia::render('Admin/Withdrawals', [
             'wallet' => [
                 'saldo' => (float) ($user->saldo ?? 0),
-                'min_withdrawal' => 50000,
+                'min_withdrawal' => $minWithdrawal,
                 'admin_fee' => 10000,
                 'total_cair' => (float) $totalCair,
                 'total_proses' => (float) $totalProses,
@@ -75,15 +77,16 @@ class WithdrawalController extends Controller
      */
     public function store(Request $request)
     {
+        $minWithdrawal = (float) \App\Models\Setting::getValue('min_withdrawal', 250000);
+
         $request->validate([
             'bank_name' => 'required|string',
             'bank_account_number' => 'required|string',
             'bank_account_name' => 'required|string',
-            'amount' => 'required|numeric|min:50000',
+            'amount' => 'required|numeric|min:' . $minWithdrawal,
         ]);
 
         $user = auth()->user();
-        $minWithdrawal = 50000;
         $fee = 10000;
 
         if ($request->amount < $minWithdrawal) {

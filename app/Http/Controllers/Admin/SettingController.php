@@ -69,7 +69,7 @@ class SettingController extends Controller
                 'diamond_reward_percent' => (float) ($settings['diamond_reward_percent'] ?? 75000),
                 'crown_reward_percent' => (float) ($settings['crown_reward_percent'] ?? 375000),
                 'business_mode' => ($settings['business_mode'] ?? 'pin') === 'pin',
-                'min_withdrawal' => (float) ($settings['min_withdrawal'] ?? 50000),
+                'min_withdrawal' => (float) ($settings['min_withdrawal'] ?? 250000),
                 'max_level_depth' => (int) ($settings['max_level_depth'] ?? 0),
                 'allow_sponsor_exceed' => ($settings['allow_sponsor_exceed'] ?? '1') === '1',
                 'allow_pairing_exceed' => ($settings['allow_pairing_exceed'] ?? '1') === '1',
