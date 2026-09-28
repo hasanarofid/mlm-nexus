@@ -148,7 +148,7 @@ const submitForm = () => {
 </script>
 
 <template>
-  <Head title="Pendaftaran Mitra Baru - NEXUS COMMUNITY" />
+  <Head title="Pendaftaran Member Baru - NEXUS COMMUNITY" />
 
   <AdminLayout>
     <div class="space-y-6 max-w-4xl mx-auto">
@@ -163,20 +163,19 @@ const submitForm = () => {
               <div class="p-2.5 bg-[#D4AF37]/15 text-[#B8922E] rounded-2xl">
                 <UserPlus class="w-5 h-5" />
               </div>
-              <h2 class="text-lg font-black text-slate-900 tracking-tight">Form Pendaftaran Mitra Baru</h2>
+              <h2 class="text-lg font-black text-slate-900 tracking-tight">Form Pendaftaran Member Baru</h2>
             </div>
-            <p class="text-xs text-slate-500 font-medium">Lengkapi data pendaftaran anggota/mitra baru ke dalam jaringan Anda dengan data yang valid.</p>
           </div>
         </div>
 
         <!-- Form -->
         <form @submit.prevent="submitForm" class="space-y-5 pt-1">
           
-          <!-- SECTION 1: DATA PRIBADI & KONTAK -->
+          <!-- SECTION 1: DATA PRIBADI -->
           <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-5 space-y-4">
             <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
               <User class="w-3.5 h-3.5" />
-              <span>1. Data Pribadi & Kontak</span>
+              <span>1. Data Pribadi</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -187,7 +186,7 @@ const submitForm = () => {
                 </label>
                 <div class="auth-input-wrap">
                   <span class="auth-input-icon"><User class="w-4 h-4 text-slate-400" /></span>
-                  <input type="text" v-model="form.name" required placeholder="Nama Lengkap Mitra" class="w-full text-sm" />
+                  <input type="text" v-model="form.name" required placeholder="Nama Lengkap Member" class="w-full text-sm" />
                 </div>
                 <InputError class="mt-1" :message="form.errors.name" />
               </div>
@@ -317,7 +316,7 @@ const submitForm = () => {
                   <UploadCloud class="w-5 h-5" />
                 </div>
                 <div class="text-xs font-bold text-slate-700 group-hover:text-slate-900">Tambahkan file KTP</div>
-                <div class="text-[11px] text-slate-400">Klik untuk memilih file foto KTP mitra</div>
+                <div class="text-[11px] text-slate-400">Klik untuk memilih file foto KTP member</div>
               </div>
 
               <!-- Preview KTP -->
@@ -458,7 +457,7 @@ const submitForm = () => {
               <span class="text-xs font-extrabold text-[#0F172A]">@{{ form.sponsor_username }} <span v-if="current_user_name" class="font-bold text-slate-600">({{ current_user_name }})</span></span>
               <span class="text-[10px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">Sponsor Anda</span>
             </div>
-            <p class="text-[10px] text-slate-600 font-medium">Mitra baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
+            <p class="text-[10px] text-slate-600 font-medium">Member baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
           </div>
 
           <!-- Submit Button -->
@@ -469,7 +468,7 @@ const submitForm = () => {
               class="auth-primary-btn w-full flex items-center justify-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-950 py-3.5 rounded-2xl shadow-md transition-all cursor-pointer disabled:opacity-50"
             >
               <span v-if="form.processing">Memproses Pendaftaran...</span>
-              <span v-else>Daftarkan Mitra Sekarang</span>
+              <span v-else>Daftarkan Member Sekarang</span>
               <Check class="w-4 h-4 stroke-[3]" />
             </button>
           </div>
