@@ -169,6 +169,23 @@ try {
         // Ensure minimum withdrawal is set to 250.000
         \App\Models\Setting::setValue('min_withdrawal', 250000);
 
+        // Ensure demo members have valid WhatsApp numbers
+        $demoPhones = [
+            'budi' => '081234567801',
+            'siti' => '081234567802',
+            'dewi' => '081234567803',
+            'eko' => '081234567804',
+            'fajar' => '081234567805',
+        ];
+        foreach ($demoPhones as $uname => $ph) {
+            \Illuminate\Support\Facades\DB::table('users')
+                ->where('username', $uname)
+                ->where(function($q) {
+                    $q->whereNull('phone')->orWhere('phone', '')->orWhere('phone', '-');
+                })
+                ->update(['phone' => $ph]);
+        }
+
         $action = "Migrate & Seed Catalog (Update Only)";
 
         // 3. Clear & rebuild application caches and bring app online (turn off maintenance mode)

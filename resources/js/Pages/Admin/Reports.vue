@@ -62,6 +62,18 @@ const formatRupiah = (val) => {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val || 0);
 };
 
+const getWaLink = (phone) => {
+  if (!phone || phone === '-' || phone === 'null') return null;
+  let clean = String(phone).replace(/\D/g, '');
+  if (!clean) return null;
+  if (clean.startsWith('0')) {
+    clean = '62' + clean.slice(1);
+  } else if (!clean.startsWith('62')) {
+    clean = '62' + clean;
+  }
+  return `https://wa.me/${clean}`;
+};
+
 const reportTabs = [
   { type: 'team', label: 'Laporan Team Member', icon: Users },
   { type: 'bonus', label: 'Laporan Bonus', icon: Award },
@@ -201,9 +213,20 @@ const reportTabs = [
                   <p class="text-[11px] text-[#B8922E] font-mono font-bold">@{{ row.username }}</p>
                 </td>
                 <td class="py-3.5 px-4">
-                  <span class="inline-flex items-center gap-1.5 text-slate-700 font-semibold font-mono">
-                    <Phone class="w-3.5 h-3.5 text-emerald-600" />
-                    <span>{{ row.phone }}</span>
+                  <a 
+                    v-if="getWaLink(row.phone)"
+                    :href="getWaLink(row.phone)" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold font-mono text-xs transition-all group"
+                    title="Hubungi via WhatsApp"
+                  >
+                    <Phone class="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
+                    <span class="underline decoration-emerald-400/50 underline-offset-2">{{ row.phone }}</span>
+                  </a>
+                  <span v-else class="inline-flex items-center gap-1.5 text-slate-400 font-medium font-mono text-xs">
+                    <Phone class="w-3.5 h-3.5 text-slate-300" />
+                    <span>{{ row.phone || '-' }}</span>
                   </span>
                 </td>
                 <td class="py-3.5 px-4">
