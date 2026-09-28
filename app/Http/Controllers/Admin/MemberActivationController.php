@@ -131,6 +131,7 @@ class MemberActivationController extends Controller
             'bank_account_number' => 'nullable|string|max:100',
             'bank_account_name' => 'nullable|string|max:100',
             'ktp_image' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'transfer_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
             'password' => 'required|string|min:8|confirmed',
             'sponsor_username' => 'required|string|exists:users,username',
         ]);
@@ -161,6 +162,18 @@ class MemberActivationController extends Controller
             $ktpPath = '/images/ktp/' . $filename;
         }
 
+        $transferProofPath = null;
+        if ($request->hasFile('transfer_proof')) {
+            $file = $request->file('transfer_proof');
+            $filename = 'transfer_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $destination = public_path('images/transfer_proofs');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
+            $file->move($destination, $filename);
+            $transferProofPath = '/images/transfer_proofs/' . $filename;
+        }
+
         // Generate username unik dari email
         $usernameBase = strtolower(explode('@', $request->email)[0]);
         $usernameBase = preg_replace('/[^a-z0-9_]/', '', $usernameBase) ?: 'member';
@@ -172,7 +185,7 @@ class MemberActivationController extends Controller
 
         $plainPassword = $request->password;
 
-        DB::transaction(function () use ($request, $sponsorUser, $username, $ktpPath, $plainPassword) {
+        DB::transaction(function () use ($request, $sponsorUser, $username, $ktpPath, $transferProofPath, $plainPassword) {
             // Create new member in Matahari system (parent_id = sponsor_id)
             $newUser = User::create([
                 'name' => $request->name,
@@ -189,6 +202,7 @@ class MemberActivationController extends Controller
                 'bank_account_number' => $request->bank_account_number,
                 'bank_account_name' => $request->bank_account_name ?: $request->name,
                 'ktp_image' => $ktpPath,
+                'transfer_proof' => $transferProofPath,
                 'password' => bcrypt($plainPassword),
                 'parent_id' => $sponsorUser->id,
             ]);

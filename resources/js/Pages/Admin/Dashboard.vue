@@ -51,6 +51,8 @@ const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
 const ktpPreview = ref(null);
 const fileInput = ref(null);
+const transferProofPreview = ref(null);
+const transferProofFileInput = ref(null);
 
 const handleUpgradePremier = () => {
   if (props.wallet?.is_premier) {
@@ -110,6 +112,7 @@ const addMitraForm = useForm({
   bank_account_number: '',
   bank_account_name: '',
   ktp_image: null,
+  transfer_proof: null,
   password: '',
   password_confirmation: '',
   sponsor_username: props.current_user_username || 'admin',
@@ -145,6 +148,35 @@ const removeFile = () => {
   }
 };
 
+const handleTransferProofUpload = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (file.size > 10 * 1024 * 1024) {
+    alert('Ukuran file maksimal adalah 10 MB');
+    return;
+  }
+
+  addMitraForm.transfer_proof = file;
+  if (file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      transferProofPreview.value = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    transferProofPreview.value = 'document';
+  }
+};
+
+const removeTransferProof = () => {
+  addMitraForm.transfer_proof = null;
+  transferProofPreview.value = null;
+  if (transferProofFileInput.value) {
+    transferProofFileInput.value.value = '';
+  }
+};
+
 const submitAddMitra = () => {
   addMitraForm.post(route('admin.activation.store'), {
     forceFormData: true,
@@ -157,6 +189,7 @@ const submitAddMitra = () => {
       addMitraForm.sponsor_username = props.current_user_username || 'admin';
       addMitraForm.source = 'dashboard';
       ktpPreview.value = null;
+      transferProofPreview.value = null;
     }
   });
 };
@@ -497,11 +530,11 @@ const formatRupiah = (val) => {
             </div>
           </div>
 
-          <!-- SECTION 3: DOKUMEN IDENTITAS KTP -->
-          <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
+          <!-- SECTION 3: DOKUMEN IDENTITAS KTP & BUKTI TRANSFER -->
+          <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-4">
             <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
               <FileText class="w-3.5 h-3.5" />
-              <span>3. Dokumen Verifikasi KTP</span>
+              <span>3. Dokumen Verifikasi KTP & Bukti Transfer Pembayaran</span>
             </div>
 
             <!-- ID KTP Upload -->
@@ -523,7 +556,7 @@ const formatRupiah = (val) => {
                 <div class="text-[11px] text-slate-400">Klik untuk memilih file foto KTP mitra</div>
               </div>
 
-              <!-- Preview -->
+              <!-- Preview KTP -->
               <div v-else class="p-3 bg-white border border-[#D4AF37]/40 rounded-xl flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3 overflow-hidden">
                   <div v-if="ktpPreview && ktpPreview !== 'document'" class="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
@@ -539,13 +572,68 @@ const formatRupiah = (val) => {
                     </p>
                   </div>
                 </div>
-                <button type="button" @click="removeFile" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition-colors">
+                <button type="button" @click="removeFile" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer">
                   <X class="w-4 h-4" />
                 </button>
               </div>
 
               <input ref="fileInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" @change="handleFileUpload" class="hidden" />
               <p v-if="addMitraForm.errors.ktp_image" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.ktp_image }}</p>
+            </div>
+
+            <!-- Bukti Transfer Upload -->
+            <div class="form-group pt-2 border-t border-slate-200/60">
+              <div class="flex items-center justify-between mb-1">
+                <label class="text-xs font-bold text-slate-700">Bukti Transfer Pembayaran Registrasi (Opsional/Jika Ada)</label>
+                <span class="text-[10px] text-slate-400 font-medium">Maks 10 MB (JPG, PNG, PDF)</span>
+              </div>
+
+              <!-- Company Bank Details Box -->
+              <div class="mb-2.5 p-3 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-xl text-xs space-y-1">
+                <div class="flex items-center justify-between text-slate-800 font-bold">
+                  <span>Rekening Tujuan Transfer:</span>
+                  <span class="text-[#B8922E]">Rp 100.000</span>
+                </div>
+                <div class="text-[11px] text-slate-600 font-mono">
+                  Bank BRI: <strong class="text-slate-900 font-bold">806401000095564</strong> a/n <strong>PT.Nexus Community Punya Kita</strong>
+                </div>
+              </div>
+
+              <div 
+                v-if="!addMitraForm.transfer_proof"
+                @click="$refs.transferProofFileInput.click()"
+                class="border-2 border-dashed border-slate-300 hover:border-[#D4AF37] rounded-xl p-4 text-center cursor-pointer transition-colors bg-white group flex flex-col items-center justify-center gap-2"
+              >
+                <div class="w-9 h-9 rounded-full bg-slate-100 group-hover:bg-[#D4AF37]/10 flex items-center justify-center text-slate-500 group-hover:text-[#D4AF37] transition-colors">
+                  <CreditCard class="w-4.5 h-4.5" />
+                </div>
+                <div class="text-xs font-bold text-slate-700 group-hover:text-slate-900">Tambahkan Bukti Transfer</div>
+                <div class="text-[11px] text-slate-400">Klik untuk memilih struk / foto bukti transfer pembayaran</div>
+              </div>
+
+              <!-- Preview Bukti Transfer -->
+              <div v-else class="p-3 bg-white border border-[#D4AF37]/40 rounded-xl flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3 overflow-hidden">
+                  <div v-if="transferProofPreview && transferProofPreview !== 'document'" class="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
+                    <img :src="transferProofPreview" alt="Transfer Proof Preview" class="w-full h-full object-cover" />
+                  </div>
+                  <div v-else class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                    <CreditCard class="w-5 h-5" />
+                  </div>
+                  <div class="overflow-hidden">
+                    <p class="text-xs font-bold text-slate-800 truncate max-w-[180px]">{{ addMitraForm.transfer_proof.name }}</p>
+                    <p class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                      <Check class="w-3 h-3" /> Bukti transfer siap diunggah ({{ (addMitraForm.transfer_proof.size / 1024 / 1024).toFixed(2) }} MB)
+                    </p>
+                  </div>
+                </div>
+                <button type="button" @click="removeTransferProof" class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer">
+                  <X class="w-4 h-4" />
+                </button>
+              </div>
+
+              <input ref="transferProofFileInput" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" @change="handleTransferProofUpload" class="hidden" />
+              <p v-if="addMitraForm.errors.transfer_proof" class="text-xs text-rose-500 font-medium mt-1">{{ addMitraForm.errors.transfer_proof }}</p>
             </div>
           </div>
 
