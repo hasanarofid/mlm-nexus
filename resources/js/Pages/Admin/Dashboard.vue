@@ -401,7 +401,7 @@ const formatRupiah = (val) => {
           <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
             <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
               <User class="w-3.5 h-3.5" />
-              <span>1. Data Pribadi & Kontak</span>
+              <span>1. Data Pribadi</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">

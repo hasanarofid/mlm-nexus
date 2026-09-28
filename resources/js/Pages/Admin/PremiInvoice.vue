@@ -107,7 +107,7 @@ const sendWhatsAppConfirmation = () => {
             </div>
             <div class="flex items-center justify-center gap-2 text-xs font-medium text-slate-500 bg-slate-50 py-2 px-4 rounded-xl inline-flex mt-2">
               <Info class="w-4 h-4 text-slate-400" />
-              <span>Nominal pembayaran Premi akan dialokasikan 100% full masuk ke Total Saldo mitra.</span>
+              <span>Nominal pembayaran Premi akan dialokasikan 100% full masuk ke Total Saldo member.</span>
             </div>
           </div>
 

@@ -122,7 +122,7 @@
             @if($type === 'team')
                 <tr>
                     <th>NO</th>
-                    <th>NAMA MITRA & USERNAME</th>
+                    <th>NAMA MEMBER & USERNAME</th>
                     <th>NO. WHATSAPP</th>
                     <th>GENERASI</th>
                     <th>SPONSOR LANGSUNG</th>
@@ -134,7 +134,7 @@
                     <th>KODE</th>
                     <th>NAMA MEMBER</th>
                     <th>JENIS BONUS</th>
-                    <th>SUMBER MITRA</th>
+                    <th>SUMBER MEMBER</th>
                     <th>DESKRIPSI</th>
                     <th>NOMINAL (RP)</th>
                     <th>TANGGAL</th>

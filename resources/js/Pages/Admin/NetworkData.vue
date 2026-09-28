@@ -123,7 +123,7 @@ const formatRupiah = (val) => {
                 <th class="py-3 px-4">ID & USERNAME</th>
                 <th class="py-3 px-4">NAMA LENGKAP / EMAIL</th>
                 <th class="py-3 px-4">SPONSOR LANGSUNG</th>
-                <th class="py-3 px-4">TIM MITRA (G1 / TOTAL)</th>
+                <th class="py-3 px-4">TIM MEMBER (G1 / TOTAL)</th>
                 <th class="py-3 px-4">SALDO DOMPET</th>
                 <th v-if="is_admin" class="py-3 px-4 text-right">OPSI PENGUJIAN</th>
               </tr>

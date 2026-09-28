@@ -91,9 +91,9 @@ const getGenBadgeClass = (gen) => {
             {{ node.username || node.name }}
           </span>
 
-          <!-- Mitra Count: (X mitra) -->
+          <!-- Member Count: (X member) -->
           <span class="text-xs font-semibold text-slate-500 font-sans">
-            ({{ node.total_downlines ?? 0 }} mitra)
+            ({{ node.total_downlines ?? 0 }} member)
           </span>
         </div>
 
@@ -112,7 +112,7 @@ const getGenBadgeClass = (gen) => {
           v-if="!isRoot"
           type="button"
           @click.stop="emit('focus-user', node.id)"
-          title="Fokus ke jaringan mitra ini"
+          title="Fokus ke jaringan member ini"
           class="opacity-0 group-hover:opacity-100 transition-opacity ml-1.5 px-2 py-0.5 bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 text-[10px] font-bold rounded-md border border-indigo-200 flex items-center gap-1 cursor-pointer"
         >
           <span>Fokus</span>

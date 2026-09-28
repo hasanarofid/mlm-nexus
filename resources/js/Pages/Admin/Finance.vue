@@ -421,7 +421,7 @@ const formatRupiah = (val) => {
                 <span class="font-semibold text-slate-200 font-mono">{{ selectedPremi.created_at }}</span>
               </div>
               <div class="flex justify-between items-center">
-                <span class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">MITRA / USER</span>
+                <span class="text-slate-400 font-medium uppercase text-[10px] tracking-wider">MEMBER / USER</span>
                 <span class="font-bold text-white">{{ selectedPremi.user_name }} <span class="text-slate-400 font-mono font-normal">({{ selectedPremi.user_username }})</span></span>
               </div>
               <div class="flex justify-between items-center">
@@ -450,11 +450,11 @@ const formatRupiah = (val) => {
                 <img 
                   v-if="selectedPremi.proof_of_transfer" 
                   :src="selectedPremi.proof_of_transfer" 
-                  alt="Bukti Transfer Mitra" 
+                  alt="Bukti Transfer Member" 
                   class="max-h-72 object-contain rounded-xl shadow-md border border-slate-800"
                 />
                 <div v-else class="py-12 text-center text-slate-500 italic">
-                  Belum ada foto bukti transfer yang diunggah mitra.
+                  Belum ada foto bukti transfer yang diunggah member.
                 </div>
               </div>
             </div>

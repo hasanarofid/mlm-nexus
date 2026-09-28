@@ -157,7 +157,7 @@ const getBadgeColor = (pkg) => {
               <Layers class="w-5 h-5" />
             </div>
             <div>
-              <span class="text-[9px] font-extrabold text-indigo-800 uppercase tracking-wider block">JUMLAH MITRA TIM</span>
+              <span class="text-[9px] font-extrabold text-indigo-800 uppercase tracking-wider block">JUMLAH MEMBER TIM</span>
               <span class="text-sm font-black text-indigo-700 font-mono">{{ focus_user?.total_team || 0 }} Member</span>
             </div>
           </div>
@@ -183,7 +183,7 @@ const getBadgeColor = (pkg) => {
                     Tabel Sponsor
                   </h3>
                   <p class="text-[11px] text-slate-400">
-                    Pohon hierarki jaringan mitra sponsor
+                    Pohon hierarki jaringan member sponsor
                   </p>
                 </div>
               </div>
@@ -228,8 +228,8 @@ const getBadgeColor = (pkg) => {
 
             <!-- Card Footer Note -->
             <div class="pt-3 border-t border-slate-700/60 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span>💡 Klik pada nama mitra / panah untuk membuka downline.</span>
-              <span class="text-slate-500">Format: <strong>Username (Jumlah Mitra)</strong></span>
+              <span>💡 Klik pada nama member / panah untuk membuka downline.</span>
+              <span class="text-slate-500">Format: <strong>Username (Jumlah Member)</strong></span>
             </div>
 
           </div>
@@ -267,7 +267,7 @@ const getBadgeColor = (pkg) => {
             <div class="p-3.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl text-[11px] text-amber-900 space-y-1">
               <span class="font-bold block">📌 Aturan Unilevel Multi-Tier:</span>
               <p class="text-amber-800/90 leading-relaxed">
-                Setiap pendaftaran mitra baru memberikan bonus <strong>Rp 7.000</strong> (50% Auto Save & 50% Saldo WD) untuk setiap Upline dari Generasi 1 s/d Generasi 10.
+                Setiap pendaftaran member baru memberikan bonus <strong>Rp 7.000</strong> (50% Auto Save & 50% Saldo WD) untuk setiap Upline dari Generasi 1 s/d Generasi 10.
               </p>
             </div>
           </div>
