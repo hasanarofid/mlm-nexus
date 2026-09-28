@@ -34,9 +34,7 @@ const submit = () => {
         <Head title="Login | Nexus Community" />
 
         <div class="panel-heading">
-            <span class="eyebrow">NEXUS COMMUNITY</span>
             <h2>MEMBER AREA</h2>
-            <p>Silakan masuk ke akun Anda untuk melanjutkan.</p>
         </div>
 
         <div v-if="status" class="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-600">

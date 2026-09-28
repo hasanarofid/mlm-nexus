@@ -89,28 +89,13 @@ import { Link } from '@inertiajs/vue3';
                     </Link>
                 </div>
 
-                <div class="brand-badge">
-                    <span></span>
-                    NEXUS COMMUNITY
-                </div>
-
                 <h1>
                     Welcome to
                     <span>Nexus Community</span>
                 </h1>
 
                 <p>
-                    Akses fitur, aktivitas, dan layanan terbaik bersama Nexus Community.
-                </p>
-
-                <div class="brand-divider">
-                    <span></span>
-                    <i></i><i></i><i></i>
-                    <span></span>
-                </div>
-
-                <p class="brand-note">
-                    SALING BANTU - MANFAAT BERSAMA
+                    Masuk ke akun Anda untuk mengakses fitur, aktivitas, dan layanan Nexus Community.
                 </p>
             </div>
         </div>
