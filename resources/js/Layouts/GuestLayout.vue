@@ -83,14 +83,35 @@ import { Link } from '@inertiajs/vue3';
         <!-- BRAND SIDE LEFT -->
         <div class="brand-side">
             <div class="brand-content">
-                <Link href="/" class="logo-box">
-                    <img src="/images/logo-nexus.png" alt="NEXUS Logo">
-                </Link>
+                <div class="logo-box-wrap">
+                    <Link href="/" class="logo-box">
+                        <img src="/images/logo-nexus.png" alt="NEXUS Logo">
+                    </Link>
+                </div>
+
+                <div class="brand-badge">
+                    <span></span>
+                    NEXUS COMMUNITY
+                </div>
 
                 <h1>
                     Welcome to
                     <span>Nexus Community</span>
                 </h1>
+
+                <p>
+                    Akses fitur, aktivitas, dan layanan terbaik bersama Nexus Community.
+                </p>
+
+                <div class="brand-divider">
+                    <span></span>
+                    <i></i><i></i><i></i>
+                    <span></span>
+                </div>
+
+                <p class="brand-note">
+                    SALING BANTU - MANFAAT BERSAMA
+                </p>
             </div>
         </div>
 
