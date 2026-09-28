@@ -518,11 +518,11 @@ const formatRupiah = (val) => {
             </div>
           </div>
 
-          <!-- SECTION 3: DOKUMEN IDENTITAS KTP & BUKTI TRANSFER -->
+          <!-- SECTION 3: IDENTITAS -->
           <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-4">
             <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
               <FileText class="w-3.5 h-3.5" />
-              <span>3. Dokumen Verifikasi KTP & Bukti Transfer Pembayaran</span>
+              <span>3. Identitas</span>
             </div>
 
             <!-- ID KTP Upload -->
@@ -625,11 +625,11 @@ const formatRupiah = (val) => {
             </div>
           </div>
 
-          <!-- SECTION 4: KEAMANAN AKUN LOGIN -->
+          <!-- SECTION 4: KEAMANAN -->
           <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
             <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
               <Lock class="w-3.5 h-3.5" />
-              <span>4. Keamanan Akun Login</span>
+              <span>4. Keamanan</span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -667,11 +667,11 @@ const formatRupiah = (val) => {
             </div>
           </div>
 
-          <!-- SECTION 5: SPONSOR LANGSUNG -->
+          <!-- SECTION 5: DIREFERENSI OLEH -->
           <div class="p-4 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-2xl space-y-2">
             <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-[#D4AF37]/30 pb-2">
               <KeyRound class="w-3.5 h-3.5" />
-              <span>5. Sponsor Langsung</span>
+              <span>Direferensi oleh:</span>
             </div>
             <div v-if="is_admin && all_sponsors && all_sponsors.length > 0">
               <select v-model="addMitraForm.sponsor_username" class="w-full bg-white border border-[#D4AF37]/40 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-[#D4AF37]">
@@ -682,7 +682,6 @@ const formatRupiah = (val) => {
               <span class="text-xs font-extrabold text-[#0F172A]">@{{ addMitraForm.sponsor_username }}</span>
               <span class="text-[10px] font-bold text-[#B8922E] bg-[#faf6eb] px-2 py-0.5 rounded border border-[#D4AF37]/30">Sponsor Anda</span>
             </div>
-            <p class="text-[10px] text-slate-600 font-medium">Member baru akan otomatis terhubung di bawah sponsor langsung ini.</p>
           </div>
 
           <!-- Modal Actions -->
