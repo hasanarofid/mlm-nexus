@@ -135,9 +135,6 @@ const getBadgeColor = (pkg) => {
               {{ (focus_user?.package_name || 'STANDARD').toUpperCase() }}
             </span>
           </div>
-          <p class="text-xs text-slate-500 font-medium pt-0.5">
-            Struktur Jaringan Sponsor & Multi-Tier Unilevel (Generasi 1 s/d Generasi 10)
-          </p>
         </div>
 
         <!-- Stat Badges -->
@@ -164,10 +161,10 @@ const getBadgeColor = (pkg) => {
         </div>
       </div>
 
-      <!-- Main Layout: Tabel Sponsor (Tree View) + Ringkasan Generasi (Side) -->
+      <!-- Main Layout: Detail Member (Tree View) + Member Generasi (Side) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        <!-- LEFT: TABEL SPONSOR (Tree View) - 8 / 12 Cols -->
+        <!-- LEFT: DETAIL MEMBER (Tree View) - 8 / 12 Cols -->
         <div class="lg:col-span-8 space-y-4">
           <!-- Dark Themed Container matching Mockup Screenshot -->
           <div class="bg-[#182234] border border-slate-700/60 rounded-3xl p-5 sm:p-7 shadow-xl space-y-6 text-white overflow-hidden">
@@ -179,12 +176,9 @@ const getBadgeColor = (pkg) => {
                   <FolderTree class="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 class="text-base font-black text-white tracking-tight">
-                    Tabel Sponsor
+                  <h3 class="text-base font-black text-white tracking-tight uppercase">
+                    Detail Member
                   </h3>
-                  <p class="text-[11px] text-slate-400">
-                    Pohon hierarki jaringan member sponsor
-                  </p>
                 </div>
               </div>
 
@@ -227,21 +221,20 @@ const getBadgeColor = (pkg) => {
             </div>
 
             <!-- Card Footer Note -->
-            <div class="pt-3 border-t border-slate-700/60 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <span>💡 Klik pada nama member / panah untuk membuka downline.</span>
-              <span class="text-slate-500">Format: <strong>Username (Jumlah Member)</strong></span>
+            <div class="pt-3 border-t border-slate-700/60 text-[11px] text-slate-400 flex items-center justify-between">
+              <span>Klik nama member untuk melihat detail</span>
             </div>
 
           </div>
         </div>
 
-        <!-- RIGHT: Ringkasan Kedalaman Generasi (4 / 12 Cols) -->
+        <!-- RIGHT: Member Generasi (4 / 12 Cols) -->
         <div class="lg:col-span-4 space-y-4">
           <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
               <div class="flex items-center gap-2">
                 <Layers class="w-4 h-4 text-indigo-600" />
-                <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight">RINGKASAN KEDALAMAN GENERASI</h3>
+                <h3 class="text-xs font-black text-slate-900 uppercase tracking-tight">MEMBER GENERASI</h3>
               </div>
             </div>
 
@@ -263,13 +256,6 @@ const getBadgeColor = (pkg) => {
               </div>
             </div>
 
-            <!-- Info Box -->
-            <div class="p-3.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl text-[11px] text-amber-900 space-y-1">
-              <span class="font-bold block">📌 Aturan Unilevel Multi-Tier:</span>
-              <p class="text-amber-800/90 leading-relaxed">
-                Setiap pendaftaran member baru memberikan bonus <strong>Rp 7.000</strong> (50% Auto Save & 50% Saldo WD) untuk setiap Upline dari Generasi 1 s/d Generasi 10.
-              </p>
-            </div>
           </div>
         </div>
 
