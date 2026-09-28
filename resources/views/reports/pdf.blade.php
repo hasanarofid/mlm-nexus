@@ -125,7 +125,7 @@
                     <th>NAMA MEMBER & USERNAME</th>
                     <th>NO. WHATSAPP</th>
                     <th>GENERASI</th>
-                    <th>SPONSOR LANGSUNG</th>
+                    <th>SPONSOR</th>
                     <th>MEMBERSHIP</th>
                     <th>TGL DAFTAR</th>
                 </tr>

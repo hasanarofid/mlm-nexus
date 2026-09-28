@@ -199,8 +199,8 @@ const reportTabs = [
                 <th class="py-3.5 px-4 rounded-l-xl">NO</th>
                 <th class="py-3.5 px-4">NAMA MEMBER</th>
                 <th class="py-3.5 px-4">NO. WHATSAPP</th>
-                <th class="py-3.5 px-4">TINGKATAN GENERASI</th>
-                <th class="py-3.5 px-4">SPONSOR LANGSUNG</th>
+                <th class="py-3.5 px-4">GENERASI</th>
+                <th class="py-3.5 px-4">SPONSOR</th>
                 <th class="py-3.5 px-4">MEMBERSHIP</th>
                 <th class="py-3.5 px-4 text-right rounded-r-xl">TGL DAFTAR</th>
               </tr>

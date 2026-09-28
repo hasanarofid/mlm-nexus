@@ -229,7 +229,7 @@ class ReportController extends Controller
                     'username' => $u->username ?: ('user_' . $u->id),
                     'email' => $u->email ?: '-',
                     'phone' => $u->phone ?: '-',
-                    'generation' => $gen === 1 ? 'Generasi 1 (Sponsor Langsung)' : "Generasi {$gen}",
+                    'generation' => "GEN {$gen}",
                     'gen_level' => $gen,
                     'sponsor' => $sponsorLabel,
                     'tier' => $membership,
@@ -278,7 +278,7 @@ class ReportController extends Controller
         $html .= '</style></head><body>';
 
         $titleLabel = match ($type) {
-            'team' => 'LAPORAN TEAM MITRA',
+            'team' => 'LAPORAN TEAM MEMBER',
             'bonus' => 'LAPORAN BONUS',
             'withdrawal' => 'LAPORAN PENARIKAN SALDO (WITHDRAWAL)',
             'mutasi' => 'LAPORAN MUTASI SALDO',
@@ -290,7 +290,7 @@ class ReportController extends Controller
         $html .= '<table>';
 
         if ($type === 'team') {
-            $html .= '<thead><tr><th>NO</th><th>NAMA MITRA</th><th>USERNAME</th><th>WHATSAPP / HP</th><th>EMAIL</th><th>GENERASI</th><th>SPONSOR LANGSUNG</th><th>STATUS MEMBERSHIP</th><th>TGL DAFTAR</th></tr></thead><tbody>';
+            $html .= '<thead><tr><th>NO</th><th>NAMA MEMBER</th><th>USERNAME</th><th>WHATSAPP / HP</th><th>EMAIL</th><th>GENERASI</th><th>SPONSOR</th><th>STATUS MEMBERSHIP</th><th>TGL DAFTAR</th></tr></thead><tbody>';
             $no = 1;
             foreach ($data as $row) {
                 $html .= '<tr>';
