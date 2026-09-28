@@ -111,17 +111,29 @@ const formatRupiah = (val) => {
 
 const bankList = [
   'Bank Mandiri',
-  'Bank Central Asia (BCA)',
-  'Bank Rakyat Indonesia (BRI)',
-  'Bank Negara Indonesia (BNI)',
-  'Bank Syariah Indonesia (BSI)',
-  'CIMB Niaga',
+  'Bank Negara Indonesia',
+  'Bank Rakyat Indonesia',
+  'Bank Syariah Indonesia',
+  'Bank Tabungan Negara',
+  'Bank CIMB Niaga',
+  'Bank Danamon Indonesia',
+  'Bank DBS Indonesia',
+  'Bank Hana Indonesia',
+  'Bank HSBC Indonesia',
+  'Bank Maybank Indonesia',
+  'Bank Neo Commerce',
+  'Bank OCBC',
   'Bank Permata',
-  'Bank Danamon',
-  'DANA',
-  'OVO',
-  'GoPay',
-  'ShopeePay'
+  'Bank QNB Indonesia',
+  'Bank Seabank Indonesia',
+  'Bank SMBC Indonesia',
+  'Bank UOB Indonesia',
+  'Bank Central Asia',
+  'Bank Jago',
+  'Bank Mayapada',
+  'Bank Mega',
+  'Bank Panin',
+  'Bank Sinarmas'
 ];
 </script>
 
@@ -216,10 +228,10 @@ const bankList = [
 
             <!-- Form -->
             <form @submit.prevent="submitWithdrawal" class="space-y-4">
-              <!-- Pilih Bank / Virtual Wallet Tujuan -->
+              <!-- Pilih Bank Tujuan -->
               <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  PILIH BANK TUJUAN / VIRTUAL WALLET (E-WALLET)
+                  PILIH BANK TUJUAN
                 </label>
                 <select 
                   v-model="form.bank_name"
@@ -232,30 +244,30 @@ const bankList = [
                 </select>
               </div>
 
-              <!-- Nomor Rekening / No HP / ID Virtual Wallet -->
+              <!-- Nomor Rekening -->
               <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NOMOR REKENING / NO. HP / ID VIRTUAL WALLET
+                  NOMOR REKENING
                 </label>
                 <input 
                   v-model="form.bank_account_number"
                   type="text"
                   required
-                  placeholder="Masukkan nomor rekening atau No. HP e-wallet"
+                  placeholder="Masukkan nomor rekening"
                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
 
-              <!-- Nama Pemilik Rekening / Atas Nama -->
+              <!-- Nama Pemilik Rekening -->
               <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  NAMA PEMILIK REKENING / ATAS NAMA (A.N)
+                  NAMA PEMILIK REKENING
                 </label>
                 <input 
                   v-model="form.bank_account_name"
                   type="text"
                   required
-                  placeholder="Nama lengkap pemilik rekening / akun e-wallet"
+                  placeholder="Nama lengkap pemilik rekening"
                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 />
               </div>
@@ -287,7 +299,7 @@ const bankList = [
                 class="w-full py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 <Send class="w-4 h-4 stroke-[2.5]" />
-                <span>Kirim Permohonan WD</span>
+                <span>Proses Penarikan</span>
               </button>
             </form>
           </div>
