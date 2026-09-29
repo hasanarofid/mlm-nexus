@@ -580,10 +580,10 @@ const formatRupiah = (val) => {
               <div class="mb-2.5 p-3 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-xl text-xs space-y-1">
                 <div class="flex items-center justify-between text-slate-800 font-bold">
                   <span>Rekening Tujuan Transfer:</span>
-                  <span class="text-[#B8922E]">Rp 100.000</span>
+                  <span class="text-[#B8922E]">Rp 500.000</span>
                 </div>
                 <div class="text-[11px] text-slate-600 font-mono">
-                  Bank BRI: <strong class="text-slate-900 font-bold">806401000095564</strong> a/n <strong>PT.Nexus Community Punya Kita</strong>
+                  Bank BCA: <strong class="text-slate-900 font-bold">172-666-2020</strong> a/n <strong>PT. NEXUS KOMUNITAS BERSAMA</strong>
                 </div>
               </div>
 
