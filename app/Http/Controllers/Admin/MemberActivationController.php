@@ -124,7 +124,7 @@ class MemberActivationController extends Controller
             'phone' => 'required|string|max:25',
             'is_left_handed' => 'required|string|in:Iya,Tidak',
             'beneficiary_name' => 'required|string|max:255',
-            'beneficiary_birth_date' => 'required|date',
+            'beneficiary_birth_date' => 'required|date|before_or_equal:today|after:1900-01-01',
             'beneficiary_relation' => 'required|string|max:100',
             'emergency_phone' => 'required|string|max:25',
             'bank_name' => 'nullable|string|max:100',
