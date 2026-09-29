@@ -127,6 +127,14 @@
                     <th>GENERASI</th>
                     <th>SPONSOR</th>
                     <th>MEMBERSHIP</th>
+                    <th>NIK KTP</th>
+                    <th>JENIS KELAMIN</th>
+                    <th>ALAMAT</th>
+                    <th>KOTA</th>
+                    <th>PROVINSI</th>
+                    <th>KODE POS</th>
+                    <th>INFO BANK</th>
+                    <th>AHLI WARIS</th>
                     <th>TGL DAFTAR</th>
                 </tr>
             @elseif($type === 'bonus')
@@ -172,6 +180,14 @@
                         <td><span class="badge badge-gold">{{ $row['generation'] }}</span></td>
                         <td>{{ $row['sponsor'] }}</td>
                         <td><strong>{{ $row['tier'] }}</strong></td>
+                        <td>{{ $row['nik'] }}</td>
+                        <td>{{ $row['gender'] === 'L' ? 'Laki-laki' : ($row['gender'] === 'P' ? 'Perempuan' : '-') }}</td>
+                        <td>{{ $row['address'] }}</td>
+                        <td>{{ $row['city'] }}</td>
+                        <td>{{ $row['province'] }}</td>
+                        <td>{{ $row['postal_code'] }}</td>
+                        <td>{{ $row['bank_name'] }}<br>{{ $row['bank_account_number'] }}<br>{{ $row['bank_account_name'] }}</td>
+                        <td>{{ $row['beneficiary_name'] }}<br>({{ $row['beneficiary_relation'] }})</td>
                         <td>{{ $row['created_at'] }}</td>
                     </tr>
                 @elseif($type === 'bonus')

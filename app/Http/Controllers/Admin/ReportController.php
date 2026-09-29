@@ -187,6 +187,18 @@ class ReportController extends Controller
                         'username' => $u->username ?: ('user_' . $u->id),
                         'email' => $u->email ?: '-',
                         'phone' => $u->phone ?: '-',
+                        'nik' => $u->nik ?: '-',
+                        'gender' => $u->gender ?: '-',
+                        'address' => $u->address ?: '-',
+                        'city' => $u->city ?: '-',
+                        'province' => $u->province ?: '-',
+                        'postal_code' => $u->postal_code ?: '-',
+                        'bank_name' => $u->bank_name ?: '-',
+                        'bank_account_number' => $u->bank_account_number ?: '-',
+                        'bank_account_name' => $u->bank_account_name ?: '-',
+                        'beneficiary_name' => $u->beneficiary_name ?: '-',
+                        'beneficiary_relation' => $u->beneficiary_relation ?: '-',
+                        'ktp_image' => $u->ktp_image ? asset('storage/' . $u->ktp_image) : null,
                         'generation' => 'Direct / Admin',
                         'gen_level' => 0,
                         'sponsor' => $sponsorLabel,
@@ -229,6 +241,18 @@ class ReportController extends Controller
                     'username' => $u->username ?: ('user_' . $u->id),
                     'email' => $u->email ?: '-',
                     'phone' => $u->phone ?: '-',
+                    'nik' => $u->nik ?: '-',
+                    'gender' => $u->gender ?: '-',
+                    'address' => $u->address ?: '-',
+                    'city' => $u->city ?: '-',
+                    'province' => $u->province ?: '-',
+                    'postal_code' => $u->postal_code ?: '-',
+                    'bank_name' => $u->bank_name ?: '-',
+                    'bank_account_number' => $u->bank_account_number ?: '-',
+                    'bank_account_name' => $u->bank_account_name ?: '-',
+                    'beneficiary_name' => $u->beneficiary_name ?: '-',
+                    'beneficiary_relation' => $u->beneficiary_relation ?: '-',
+                    'ktp_image' => $u->ktp_image ? asset('storage/' . $u->ktp_image) : null,
                     'generation' => "GEN {$gen}",
                     'gen_level' => $gen,
                     'sponsor' => $sponsorLabel,
@@ -290,7 +314,7 @@ class ReportController extends Controller
         $html .= '<table>';
 
         if ($type === 'team') {
-            $html .= '<thead><tr><th>NO</th><th>NAMA MEMBER</th><th>USERNAME</th><th>WHATSAPP / HP</th><th>EMAIL</th><th>GENERASI</th><th>SPONSOR</th><th>STATUS MEMBERSHIP</th><th>TGL DAFTAR</th></tr></thead><tbody>';
+            $html .= '<thead><tr><th>NO</th><th>NAMA MEMBER</th><th>USERNAME</th><th>WHATSAPP / HP</th><th>EMAIL</th><th>GENERASI</th><th>SPONSOR</th><th>STATUS MEMBERSHIP</th><th>NIK KTP</th><th>JENIS KELAMIN</th><th>ALAMAT</th><th>KOTA</th><th>PROVINSI</th><th>KODE POS</th><th>NAMA BANK</th><th>NO REKENING</th><th>ATAS NAMA</th><th>AHLI WARIS</th><th>HUBUNGAN AHLI WARIS</th><th>TGL DAFTAR</th></tr></thead><tbody>';
             $no = 1;
             foreach ($data as $row) {
                 $html .= '<tr>';
@@ -302,6 +326,17 @@ class ReportController extends Controller
                 $html .= '<td>' . htmlspecialchars($row['generation']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['sponsor']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['tier']) . '</td>';
+                $html .= '<td>&nbsp;' . htmlspecialchars($row['nik']) . '</td>'; // &nbsp; to prevent excel scientific notation
+                $html .= '<td>' . htmlspecialchars($row['gender'] === 'L' ? 'Laki-laki' : ($row['gender'] === 'P' ? 'Perempuan' : '-')) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['address']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['city']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['province']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['postal_code']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['bank_name']) . '</td>';
+                $html .= '<td>&nbsp;' . htmlspecialchars($row['bank_account_number']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['bank_account_name']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['beneficiary_name']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['beneficiary_relation']) . '</td>';
                 $html .= '<td>' . $row['created_at'] . '</td>';
                 $html .= '</tr>';
             }

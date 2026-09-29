@@ -1,6 +1,8 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import Modal from '@/Components/Modal.vue';
 import { 
   FileSpreadsheet, 
   FileText, 
@@ -72,6 +74,19 @@ const getWaLink = (phone) => {
     clean = '62' + clean;
   }
   return `https://wa.me/${clean}`;
+};
+
+const isDetailModalOpen = ref(false);
+const selectedMember = ref(null);
+
+const openDetailModal = (member) => {
+  selectedMember.value = member;
+  isDetailModalOpen.value = true;
+};
+
+const closeDetailModal = () => {
+  isDetailModalOpen.value = false;
+  setTimeout(() => { selectedMember.value = null; }, 300);
 };
 
 const reportTabs = [
@@ -202,7 +217,8 @@ const reportTabs = [
                 <th class="py-3.5 px-4">GENERASI</th>
                 <th class="py-3.5 px-4">SPONSOR</th>
                 <th class="py-3.5 px-4">MEMBERSHIP</th>
-                <th class="py-3.5 px-4 text-right rounded-r-xl">TGL DAFTAR</th>
+                <th class="py-3.5 px-4 text-right">TGL DAFTAR</th>
+                <th class="py-3.5 px-4 text-center rounded-r-xl">AKSI</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 font-medium">
@@ -255,10 +271,18 @@ const reportTabs = [
                 <td class="py-3.5 px-4 text-right text-slate-400 font-mono text-xs">
                   {{ row.created_at }}
                 </td>
+                <td class="py-3.5 px-4 text-center">
+                  <button 
+                    @click="openDetailModal(row)"
+                    class="px-3 py-1.5 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B8922E] font-bold text-[10px] uppercase tracking-wider rounded-lg transition-colors border border-[#D4AF37]/20"
+                  >
+                    Detail
+                  </button>
+                </td>
               </tr>
 
               <tr v-if="report_data.length === 0">
-                <td colspan="7" class="py-14 text-center text-slate-400 text-xs italic space-y-2">
+                <td colspan="8" class="py-14 text-center text-slate-400 text-xs italic space-y-2">
                   <Users class="w-8 h-8 text-slate-300 mx-auto" />
                   <p>Belum ada member jaringan yang terdaftar.</p>
                 </td>
@@ -437,6 +461,148 @@ const reportTabs = [
       </div>
 
     </div>
+
+    <!-- Member Detail Modal -->
+    <Modal :show="isDetailModalOpen" @close="closeDetailModal" maxWidth="3xl">
+      <div v-if="selectedMember" class="bg-white rounded-3xl shadow-xl overflow-hidden">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center">
+              <Users class="w-5 h-5 text-[#B8922E]" />
+            </div>
+            <div>
+              <h3 class="text-lg font-black text-slate-900 leading-tight">Detail Member</h3>
+              <p class="text-[11px] text-slate-500 font-medium">Informasi lengkap data diri dan keanggotaan</p>
+            </div>
+          </div>
+          <button @click="closeDetailModal" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-colors">
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 max-h-[75vh] overflow-y-auto">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Kolom Kiri: Informasi Pribadi & Akun -->
+            <div class="space-y-6">
+              <!-- Info Keanggotaan -->
+              <div class="bg-gradient-to-br from-slate-900 to-[#0F172A] p-4 rounded-2xl border border-slate-800 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                  <ShieldCheck class="w-20 h-20" />
+                </div>
+                <div class="relative z-10">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider">Status Membership</span>
+                    <span class="px-2 py-0.5 bg-[#D4AF37] text-slate-900 text-[10px] font-black rounded uppercase">{{ selectedMember.tier }}</span>
+                  </div>
+                  <h4 class="text-xl font-black">{{ selectedMember.name }}</h4>
+                  <p class="text-slate-400 text-xs font-mono mb-4">@{{ selectedMember.username }}</p>
+                  
+                  <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700/50">
+                    <div>
+                      <p class="text-[10px] text-slate-400 font-semibold mb-1">Sponsor</p>
+                      <p class="text-xs font-bold text-slate-200">{{ selectedMember.sponsor }}</p>
+                    </div>
+                    <div>
+                      <p class="text-[10px] text-slate-400 font-semibold mb-1">Generasi</p>
+                      <p class="text-xs font-bold text-slate-200">{{ selectedMember.generation }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Biodata Dasar -->
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
+                <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-2">Informasi Pribadi</h4>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <div class="text-slate-500 font-medium">Email</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.email }}</div>
+                  
+                  <div class="text-slate-500 font-medium">No. HP / WA</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.phone }}</div>
+
+                  <div class="text-slate-500 font-medium">Jenis Kelamin</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.gender === 'L' ? 'Laki-laki' : (selectedMember.gender === 'P' ? 'Perempuan' : '-') }}</div>
+                  
+                  <div class="text-slate-500 font-medium mt-2">NIK KTP</div>
+                  <div class="col-span-2 font-bold text-slate-900 font-mono mt-2">{{ selectedMember.nik }}</div>
+                </div>
+              </div>
+              
+              <!-- Data Alamat -->
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
+                <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-2">Alamat</h4>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <div class="text-slate-500 font-medium">Alamat Lengkap</div>
+                  <div class="col-span-2 font-bold text-slate-900 leading-relaxed">{{ selectedMember.address }}</div>
+                  
+                  <div class="text-slate-500 font-medium">Kota/Kab</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.city }}</div>
+
+                  <div class="text-slate-500 font-medium">Provinsi</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.province }}</div>
+                  
+                  <div class="text-slate-500 font-medium">Kode Pos</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.postal_code }}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kolom Kanan: Bank, Ahli Waris, dan Dokumen -->
+            <div class="space-y-6">
+              <!-- Data Bank -->
+              <div class="bg-[#faf6eb] p-4 rounded-2xl border border-[#D4AF37]/30 space-y-3">
+                <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 border-b border-[#D4AF37]/20 pb-2 flex items-center gap-2">
+                  <Wallet class="w-3.5 h-3.5 text-[#B8922E]" />
+                  Informasi Rekening
+                </h4>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <div class="text-slate-600 font-medium">Nama Bank</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.bank_name }}</div>
+                  
+                  <div class="text-slate-600 font-medium">No. Rekening</div>
+                  <div class="col-span-2 font-bold text-slate-900 font-mono text-sm">{{ selectedMember.bank_account_number }}</div>
+
+                  <div class="text-slate-600 font-medium">Atas Nama</div>
+                  <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.bank_account_name }}</div>
+                </div>
+              </div>
+
+              <!-- Ahli Waris -->
+              <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 space-y-3">
+                <h4 class="text-xs font-black text-indigo-900 uppercase tracking-wider mb-2 border-b border-indigo-200/60 pb-2 flex items-center gap-2">
+                  <Users class="w-3.5 h-3.5 text-indigo-600" />
+                  Ahli Waris
+                </h4>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                  <div class="text-indigo-700/70 font-medium">Nama</div>
+                  <div class="col-span-2 font-bold text-indigo-900">{{ selectedMember.beneficiary_name }}</div>
+                  
+                  <div class="text-indigo-700/70 font-medium">Hubungan</div>
+                  <div class="col-span-2 font-bold text-indigo-900">{{ selectedMember.beneficiary_relation }}</div>
+                </div>
+              </div>
+
+              <!-- Dokumen KTP -->
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
+                <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-2 flex items-center gap-2">
+                  <FileText class="w-3.5 h-3.5 text-slate-500" />
+                  Foto KTP
+                </h4>
+                <div v-if="selectedMember.ktp_image" class="rounded-xl overflow-hidden border border-slate-200">
+                  <img :src="selectedMember.ktp_image" alt="Foto KTP" class="w-full h-auto object-cover max-h-48 cursor-pointer hover:opacity-90 transition-opacity" @click="window.open(selectedMember.ktp_image, '_blank')" title="Klik untuk memperbesar">
+                </div>
+                <div v-else class="py-8 bg-slate-100 rounded-xl flex flex-col items-center justify-center text-slate-400 border border-slate-200 border-dashed">
+                  <FileText class="w-8 h-8 mb-2 text-slate-300" />
+                  <span class="text-xs font-medium italic">Belum ada foto KTP</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Modal>
   </AdminLayout>
 </template>
 
