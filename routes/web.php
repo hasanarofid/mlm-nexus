@@ -107,6 +107,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/team-point-redemptions/{redemption}/approve', [\App\Http\Controllers\Admin\TeamPointRedemptionController::class, 'approve'])->name('team-point-redemptions.approve');
     Route::post('/team-point-redemptions/{redemption}/reject', [\App\Http\Controllers\Admin\TeamPointRedemptionController::class, 'reject'])->name('team-point-redemptions.reject');
 
+    // Notifications
+    Route::get('/notifikasi', [\App\Http\Controllers\Admin\NotificationController::class, 'index'])->name('notifications.index');
+
     // Laporan (Reports & Excel/PDF Exports)
     Route::get('/laporan', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
     Route::get('/laporan/export-excel', [\App\Http\Controllers\Admin\ReportController::class, 'exportExcel'])->name('reports.export-excel');

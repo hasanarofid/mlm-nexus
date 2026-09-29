@@ -598,7 +598,7 @@ const logout = () => {
                                 <!-- Panel Footer -->
                                 <div class="p-3 bg-slate-50 border-t border-slate-100 text-center">
                                     <Link 
-                                        :href="route('admin.reports.index')" 
+                                        :href="route('admin.notifications.index')" 
                                         @click="isNotificationsOpen = false"
                                         class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] hover:underline inline-flex items-center gap-1 transition-colors"
                                     >
