@@ -343,7 +343,7 @@ const logout = () => {
                         >
                             <span
                                 class="text-[9px] font-extrabold text-[#0F172A] uppercase tracking-wider block"
-                                >DOMPET SAYA</span
+                                >SALDO TERSEDIA</span
                             >
                             <p
                                 class="text-sm font-black text-slate-900 leading-tight"

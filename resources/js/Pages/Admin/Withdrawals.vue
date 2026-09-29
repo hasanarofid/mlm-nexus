@@ -162,7 +162,7 @@ const bankList = [
       <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div class="space-y-1">
           <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 block">
-            SALDO E-WALLET ANDA SAAT INI
+            SALDO TERSEDIA SAAT INI
           </span>
           <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
             {{ formatRupiah(wallet?.saldo ?? 0) }}
