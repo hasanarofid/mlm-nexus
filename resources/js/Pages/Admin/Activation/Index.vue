@@ -347,14 +347,14 @@ const submitForm = () => {
             <!-- Bukti Transfer Upload -->
             <div class="form-group pt-3 border-t border-slate-200/60">
               <div class="flex items-center justify-between mb-1">
-                <label class="text-xs font-bold text-slate-700">Bukti Transfer Pembayaran Registrasi (Opsional/Jika Ada)</label>
+                <label class="text-xs font-bold text-slate-700">Bukti Transfer</label>
                 <span class="text-[10px] text-slate-400 font-medium">Maks 10 MB (JPG, PNG, PDF)</span>
               </div>
 
               <div class="mb-3 p-3.5 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-xl text-xs space-y-1">
                 <div class="flex items-center justify-between text-slate-800 font-bold">
-                  <span>Rekening Tujuan Transfer Perusahaan:</span>
-                  <span class="text-[#B8922E]">Rp 500.000 (Biaya Registrasi)</span>
+                  <span>Rekening Perusahaan:</span>
+                  <span class="text-[#B8922E]">Rp 500.000</span>
                 </div>
                 <div class="text-[11px] text-slate-600 font-mono">
                   Bank BCA: <strong class="text-slate-900 font-bold">172-666-2020</strong> a/n <strong>PT. NEXUS KOMUNITAS BERSAMA</strong>
@@ -370,7 +370,7 @@ const submitForm = () => {
                   <CreditCard class="w-5 h-5" />
                 </div>
                 <div class="text-xs font-bold text-slate-700 group-hover:text-slate-900">Tambahkan Bukti Transfer</div>
-                <div class="text-[11px] text-slate-400">Klik untuk memilih struk / foto bukti transfer pembayaran</div>
+                <div class="text-[11px] text-slate-400">Klik untuk memilih foto bukti transfer pembayaran</div>
               </div>
 
               <!-- Preview Bukti Transfer -->
