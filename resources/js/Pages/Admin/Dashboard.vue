@@ -259,6 +259,14 @@ const formatRupiah = (val) => {
         </div>
 
         <div class="flex items-center flex-wrap gap-2.5 shrink-0">
+          <button
+            @click="copyToClipboard(referral_links?.default || referral_links?.url, 'Referral')"
+            class="px-4 py-2.5 bg-gradient-to-r from-[#D4AF37] to-[#B8922E] hover:from-[#E5C07B] hover:to-[#D4AF37] text-slate-950 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+          >
+            <Copy class="w-3.5 h-3.5" />
+            <span>Copy Link Referral</span>
+          </button>
+          
           <button 
             @click="isAddMitraModalOpen = true"
             class="px-4 py-2.5 bg-[#0F172A] hover:bg-[#1E293B] text-[#D4AF37] border border-[#D4AF37]/40 text-xs font-black rounded-xl transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
