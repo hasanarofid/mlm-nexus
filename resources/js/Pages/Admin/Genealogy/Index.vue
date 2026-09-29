@@ -144,7 +144,7 @@ const getBadgeColor = (pkg) => {
               <Users class="w-5 h-5" />
             </div>
             <div>
-              <span class="text-[9px] font-extrabold text-emerald-800 uppercase tracking-wider block">SPONSOR LANGSUNG (G1)</span>
+              <span class="text-[9px] font-extrabold text-emerald-800 uppercase tracking-wider block">GEN 1</span>
               <span class="text-sm font-black text-emerald-700 font-mono">{{ focus_user?.total_direct || 0 }} Member</span>
             </div>
           </div>

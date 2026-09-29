@@ -106,16 +106,9 @@ const reportTabs = [
       <!-- 1. TOP HEADER & EXPORT ACTION BUTTONS -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-xs">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#faf6eb] border border-[#D4AF37]/30 text-[#b8922e] text-[10px] font-black uppercase tracking-wider mb-2">
-            <Sparkles class="w-3 h-3 text-[#D4AF37]" />
-            <span>Rekapitulasi Transaksi & Jaringan</span>
-          </div>
           <h2 class="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
             Menu Laporan {{ is_admin ? 'Sistem' : 'Member' }}
           </h2>
-          <p class="text-xs text-slate-500 font-medium mt-0.5">
-            Pantau rincian pendaftaran Team Member, akumulasi bonus unilevel, mutasi dompet, dan riwayat penarikan dana (WD).
-          </p>
         </div>
 
         <!-- Export Buttons -->

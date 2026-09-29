@@ -30,19 +30,57 @@ const flashError = computed(() => page.props.flash?.error);
 
 const isUsingProfileBank = ref(false);
 
+const normalizeBankName = (rawName) => {
+  if (!rawName) return '';
+  const n = String(rawName).trim().toLowerCase();
+  if (n.includes('sinarmas')) return 'Bank Sinarmas';
+  if (n.includes('bca') || n.includes('central asia')) return 'Bank Central Asia';
+  if (n.includes('mandiri')) return 'Bank Mandiri';
+  if (n.includes('bri') || n.includes('rakyat indonesia')) return 'Bank Rakyat Indonesia';
+  if (n.includes('bni') || n.includes('negara indonesia')) return 'Bank Negara Indonesia';
+  if (n.includes('bsi') || n.includes('syariah indonesia')) return 'Bank Syariah Indonesia';
+  if (n.includes('cimb')) return 'Bank CIMB Niaga';
+  if (n.includes('btn') || n.includes('tabungan negara')) return 'Bank Tabungan Negara';
+  if (n.includes('danamon')) return 'Bank Danamon Indonesia';
+  if (n.includes('permata')) return 'Bank Permata';
+  if (n.includes('ocbc')) return 'Bank OCBC';
+  if (n.includes('maybank')) return 'Bank Maybank Indonesia';
+  if (n.includes('mega')) return 'Bank Mega';
+  if (n.includes('panin')) return 'Bank Panin';
+  if (n.includes('jago')) return 'Bank Jago';
+  if (n.includes('seabank')) return 'Bank Seabank Indonesia';
+  if (n.includes('neo')) return 'Bank Neo Commerce';
+  if (n.includes('dbs')) return 'Bank DBS Indonesia';
+  if (n.includes('uob')) return 'Bank UOB Indonesia';
+  if (n.includes('hana')) return 'Bank Hana Indonesia';
+  if (n.includes('hsbc')) return 'Bank HSBC Indonesia';
+  if (n.includes('mayapada')) return 'Bank Mayapada';
+  if (n.includes('qnb')) return 'Bank QNB Indonesia';
+  if (n.includes('smbc')) return 'Bank SMBC Indonesia';
+  
+  const found = bankList.find(b => b.toLowerCase() === n);
+  if (found) return found;
+  return rawName;
+};
+
 const form = useForm({
-  bank_name: props.user_bank?.bank_name || 'Bank Mandiri',
-  bank_account_number: props.user_bank?.bank_account_number || '',
-  bank_account_name: props.user_bank?.bank_account_name || '',
+  bank_name: '',
+  bank_account_number: '',
+  bank_account_name: '',
   amount: '',
 });
 
 const toggleProfileBank = () => {
   isUsingProfileBank.value = !isUsingProfileBank.value;
   if (isUsingProfileBank.value) {
-    form.bank_name = props.user_bank?.bank_name || 'Bank Mandiri';
-    form.bank_account_number = props.user_bank?.bank_account_number || '';
-    form.bank_account_name = props.user_bank?.bank_account_name || '';
+    const userBank = props.user_bank || {};
+    form.bank_name = normalizeBankName(userBank.bank_name) || bankList[0];
+    form.bank_account_number = userBank.bank_account_number || '';
+    form.bank_account_name = userBank.bank_account_name || '';
+  } else {
+    form.bank_name = '';
+    form.bank_account_number = '';
+    form.bank_account_name = '';
   }
 };
 
@@ -110,30 +148,30 @@ const formatRupiah = (val) => {
 };
 
 const bankList = [
-  'Bank Mandiri',
-  'Bank Negara Indonesia',
-  'Bank Rakyat Indonesia',
-  'Bank Syariah Indonesia',
-  'Bank Tabungan Negara',
-  'Bank CIMB Niaga',
-  'Bank Danamon Indonesia',
-  'Bank DBS Indonesia',
-  'Bank Hana Indonesia',
-  'Bank HSBC Indonesia',
-  'Bank Maybank Indonesia',
-  'Bank Neo Commerce',
-  'Bank OCBC',
-  'Bank Permata',
-  'Bank QNB Indonesia',
-  'Bank Seabank Indonesia',
-  'Bank SMBC Indonesia',
-  'Bank UOB Indonesia',
+  'Bank Sinarmas',
   'Bank Central Asia',
-  'Bank Jago',
-  'Bank Mayapada',
+  'Bank Mandiri',
+  'Bank Rakyat Indonesia',
+  'Bank Negara Indonesia',
+  'Bank Syariah Indonesia',
+  'Bank CIMB Niaga',
+  'Bank Tabungan Negara',
+  'Bank Danamon Indonesia',
+  'Bank Permata',
+  'Bank OCBC',
+  'Bank Maybank Indonesia',
   'Bank Mega',
   'Bank Panin',
-  'Bank Sinarmas'
+  'Bank Jago',
+  'Bank Seabank Indonesia',
+  'Bank Neo Commerce',
+  'Bank DBS Indonesia',
+  'Bank UOB Indonesia',
+  'Bank Hana Indonesia',
+  'Bank HSBC Indonesia',
+  'Bank Mayapada',
+  'Bank QNB Indonesia',
+  'Bank SMBC Indonesia'
 ];
 </script>
 
@@ -238,6 +276,7 @@ const bankList = [
                   required
                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs font-medium focus:outline-none focus:border-[#D4AF37]"
                 >
+                  <option value="" disabled>-- Pilih Bank Tujuan --</option>
                   <option v-for="bank in bankList" :key="bank" :value="bank">
                     {{ bank }}
                   </option>
