@@ -97,9 +97,6 @@ const formatRupiah = (val) => {
               <h2 class="text-base md:text-lg font-black text-slate-900 tracking-tight">
                 Data Member
               </h2>
-              <p class="text-xs text-slate-500 font-medium mt-0.5">
-                Cari, tinjau, dan ganti perspektif login untuk melihat bonus dan team member lain.
-              </p>
             </div>
           </div>
 
@@ -122,9 +119,9 @@ const formatRupiah = (val) => {
               <tr class="border-b border-slate-100 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
                 <th class="py-3 px-4">ID & USERNAME</th>
                 <th class="py-3 px-4">NAMA LENGKAP / EMAIL</th>
-                <th class="py-3 px-4">SPONSOR</th>
+                <th class="py-3 px-4">DIREFERENSI</th>
                 <th class="py-3 px-4">TIM MEMBER (G1 / TOTAL)</th>
-                <th class="py-3 px-4">SALDO DOMPET</th>
+                <th class="py-3 px-4">TOTAL EWALLET</th>
                 <th v-if="is_admin" class="py-3 px-4 text-right">OPSI PENGUJIAN</th>
               </tr>
             </thead>
