@@ -523,7 +523,7 @@ const logout = () => {
                             <!-- Notification Dropdown Panel -->
                             <div
                                 v-if="isNotificationsOpen"
-                                class="absolute right-0 mt-3 w-80 sm:w-96 bg-white text-slate-800 border border-slate-200/90 rounded-3xl shadow-2xl z-50 overflow-hidden animate-scale-in"
+                                class="absolute -right-[72px] sm:right-0 mt-3 w-[320px] max-w-[calc(100vw-32px)] sm:w-96 bg-white text-slate-800 border border-slate-200/90 rounded-3xl shadow-2xl z-50 overflow-hidden animate-scale-in"
                             >
                                 <!-- Panel Header -->
                                 <div class="px-5 py-3.5 bg-[#0F172A] text-white flex items-center justify-between border-b border-slate-800">
