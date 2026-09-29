@@ -31,7 +31,7 @@ class NotificationController extends Controller
         }
 
         // 2. Recent Registered Members (Jaringan)
-        $newMembers = \App\Models\User::where('sponsor_id', $user->id)
+        $newMembers = \App\Models\User::where('parent_id', $user->id)
             ->latest()
             ->limit(20)
             ->get();
