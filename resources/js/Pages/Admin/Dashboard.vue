@@ -278,7 +278,7 @@ const formatRupiah = (val) => {
             <div class="flex items-center justify-between">
               <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#D4AF37] flex items-center gap-1.5">
                 <Wallet class="w-3.5 h-3.5 text-[#D4AF37]" />
-                TOTAL SALDO MEMBER
+                SALDO TERSEDIA SAAT INI
               </span>
             </div>
 
