@@ -132,7 +132,7 @@ const reportTabs = [
       </div>
 
       <!-- 2. SUMMARY METRICS CARDS -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Card 1: Total Team Member -->
         <div class="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-xs flex items-center gap-4 relative overflow-hidden">
           <div class="w-12 h-12 rounded-2xl bg-[#0F172A] text-[#D4AF37] flex items-center justify-center flex-shrink-0 shadow-sm border border-[#D4AF37]/30">
@@ -144,29 +144,7 @@ const reportTabs = [
           </div>
         </div>
 
-        <!-- Card 2: Total Bonus Diterima -->
-        <div class="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-xs flex items-center gap-4 relative overflow-hidden">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 shadow-sm border border-emerald-200">
-            <Award class="w-6 h-6" />
-          </div>
-          <div>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Bonus Diterima</p>
-            <h3 class="text-lg font-black text-emerald-700 tracking-tight">{{ formatRupiah(summary?.total_bonus) }}</h3>
-          </div>
-        </div>
-
-        <!-- Card 3: Total Withdrawal (WD) -->
-        <div class="bg-white border border-slate-200/80 rounded-3xl p-5 shadow-xs flex items-center gap-4 relative overflow-hidden">
-          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 shadow-sm border border-blue-200">
-            <ArrowUpRight class="w-6 h-6" />
-          </div>
-          <div>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Penarikan (WD)</p>
-            <h3 class="text-lg font-black text-blue-700 tracking-tight">{{ formatRupiah(summary?.total_withdrawal) }}</h3>
-          </div>
-        </div>
-
-        <!-- Card 4: Saldo Dompet -->
+        <!-- Card 2: Saldo Dompet / Wallet -->
         <div class="bg-gradient-to-br from-[#0F172A] to-[#1E293B] border border-[#D4AF37]/40 rounded-3xl p-5 shadow-sm flex items-center gap-4 text-white relative overflow-hidden">
           <div class="w-12 h-12 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center flex-shrink-0 shadow-sm">
             <Wallet class="w-6 h-6" />
