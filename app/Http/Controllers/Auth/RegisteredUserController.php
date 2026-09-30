@@ -222,7 +222,7 @@ class RegisteredUserController extends Controller
             $sponsor->increment('saldo', $sponsorBonus);
             $sponsor->increment('total_bonus', $sponsorBonus);
 
-            $sponsorDesc = "Bonus Sponsor Langsung dari pendaftaran @{$user->username}";
+            $sponsorDesc = "Bonus Referral Langsung dari pendaftaran @{$user->username}";
             BonusLog::create([
                 'transaction_code' => 'SP' . sprintf('%03d', BonusLog::count() + 1),
                 'user_id' => $sponsor->id,

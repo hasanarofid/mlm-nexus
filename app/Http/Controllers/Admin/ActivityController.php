@@ -33,7 +33,7 @@ class ActivityController extends Controller
 
         // Tab Info Descriptions
         $tabDescriptions = [
-            'sponsor' => 'Bonus Referral / Sponsor (Gen 1): Diberikan sebesar Rp 250.000 setiap kali Anda mereferensikan secara langsung member baru.',
+            'sponsor' => 'Bonus Referral (Gen 1): Diberikan sebesar Rp 250.000 setiap kali Anda mereferensikan secara langsung member baru.',
             'generasi' => 'Bonus Tim (Gen 2 s/d 10): Diberikan sebesar Rp 5.000 per member baru di jaringan Generasi 2 s/d Generasi 10 Anda.',
             'ro' => 'Bonus Repeat Order (RO): Diberikan dari setiap transaksi Repeat Order (RO) di jaringan Anda (Bonus Sponsor RO Rp 20.000 + Matching Bonus).',
             'po' => 'Bonus PO (Purchase Order): Diberikan dari alokasi 15 Generasi Tier transaksi Purchase Order (PO) di jaringan Anda.',

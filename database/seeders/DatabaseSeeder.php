@@ -268,7 +268,7 @@ class DatabaseSeeder extends Seeder
         );
 
         \App\Models\WalletTransaction::updateOrCreate(
-            ['description' => 'Bonus Sponsor: Pendaftaran Mitra Dewi', 'user_id' => $budi->id],
+            ['description' => 'Bonus Referral: Pendaftaran Mitra Dewi', 'user_id' => $budi->id],
             [
                 'type' => 'in',
                 'category' => 'sponsor',
@@ -279,7 +279,7 @@ class DatabaseSeeder extends Seeder
         );
 
         \App\Models\WalletTransaction::updateOrCreate(
-            ['description' => 'Bonus Sponsor: Pendaftaran Mitra Eko', 'user_id' => $budi->id],
+            ['description' => 'Bonus Referral: Pendaftaran Mitra Eko', 'user_id' => $budi->id],
             [
                 'type' => 'in',
                 'category' => 'sponsor',
@@ -306,7 +306,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $admin->id,
                 'category' => 'sponsor',
                 'source_user_id' => $budi->id,
-                'description' => 'Bonus Sponsor: Pendaftaran budi (USR002)',
+                'description' => 'Bonus Referral: Pendaftaran budi (USR002)',
                 'amount' => 250000,
                 'created_at' => now()->subDays(4)->setHour(18)->setMinute(30)->setSecond(0),
             ]
@@ -318,7 +318,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $admin->id,
                 'category' => 'sponsor',
                 'source_user_id' => $siti->id,
-                'description' => 'Bonus Sponsor: Pendaftaran siti (USR003)',
+                'description' => 'Bonus Referral: Pendaftaran siti (USR003)',
                 'amount' => 250000,
                 'created_at' => now()->subDays(3)->setHour(16)->setMinute(15)->setSecond(0),
             ]
@@ -330,7 +330,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $budi->id,
                 'category' => 'sponsor',
                 'source_user_id' => $dewi->id,
-                'description' => 'Bonus Sponsor: Pendaftaran dewi (dewi)',
+                'description' => 'Bonus Referral: Pendaftaran dewi (dewi)',
                 'amount' => 250000,
                 'created_at' => now()->subDays(2)->setHour(10)->setMinute(0)->setSecond(0),
             ]
@@ -342,7 +342,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $budi->id,
                 'category' => 'sponsor',
                 'source_user_id' => $eko->id,
-                'description' => 'Bonus Sponsor: Pendaftaran eko (eko)',
+                'description' => 'Bonus Referral: Pendaftaran eko (eko)',
                 'amount' => 250000,
                 'created_at' => now()->subDays(1)->setHour(14)->setMinute(0)->setSecond(0),
             ]

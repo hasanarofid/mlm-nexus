@@ -91,11 +91,17 @@ class ReportController extends Controller
 
             return $query->get()->map(function ($b) {
                 $catLabel = match ($b->category) {
-                    'sponsor' => 'Bonus Sponsor Langsung',
+                    'sponsor' => 'BONUS REFERRAL LANGSUNG',
                     'generasi' => 'Bonus Tim Generasi',
                     'tier', 'upgrade_tier' => 'Bonus Upgrade Premium',
                     default => ucfirst(str_replace('_', ' ', $b->category)),
                 };
+
+                $description = str_replace(
+                    ['Bonus Sponsor:', 'Bonus Sponsor Langsung', 'Bonus Sponsor', 'Sponsor:'],
+                    ['Bonus Referral:', 'Bonus Referral Langsung', 'Bonus Referral', 'Referral:'],
+                    $b->description
+                );
 
                 return [
                     'id' => $b->id,
@@ -107,7 +113,7 @@ class ReportController extends Controller
                     'raw_category' => $b->category,
                     'source' => $b->sourceUser ? ('@' . ($b->sourceUser->username ?: $b->sourceUser->id)) : '-',
                     'source_name' => $b->sourceUser ? $b->sourceUser->name : '-',
-                    'description' => $b->description,
+                    'description' => $description,
                     'amount' => (float) $b->amount,
                     'created_at' => $b->created_at ? $b->created_at->format('d/m/Y H:i') : '-',
                 ];
@@ -147,14 +153,26 @@ class ReportController extends Controller
             }
 
             return $query->get()->map(function ($t) {
+                $catLabel = match (strtolower($t->category)) {
+                    'sponsor' => 'REFERRAL',
+                    'bonus_sponsor' => 'BONUS REFERRAL',
+                    default => strtoupper(str_replace('_', ' ', $t->category)),
+                };
+
+                $description = str_replace(
+                    ['Bonus Sponsor:', 'Bonus Sponsor Langsung', 'Bonus Sponsor', 'Sponsor:'],
+                    ['Bonus Referral:', 'Bonus Referral Langsung', 'Bonus Referral', 'Referral:'],
+                    $t->description
+                );
+
                 return [
                     'id' => $t->id,
                     'code' => 'TX' . str_pad($t->id, 4, '0', STR_PAD_LEFT),
                     'name' => $t->user ? $t->user->name : 'Member',
                     'username' => $t->user ? ($t->user->username ?: 'user_' . $t->user->id) : '-',
                     'email' => $t->user ? $t->user->email : '-',
-                    'category' => ucfirst(str_replace('_', ' ', $t->category)),
-                    'description' => $t->description,
+                    'category' => $catLabel,
+                    'description' => $description,
                     'type' => $t->type === 'in' ? 'MASUK' : 'KELUAR',
                     'amount' => (float) $t->amount,
                     'created_at' => $t->created_at ? $t->created_at->format('d/m/Y H:i') : '-',

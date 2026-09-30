@@ -223,7 +223,7 @@ class MemberActivationController extends Controller
             $sponsorUser->increment('saldo', $sponsorBonus);
             $sponsorUser->increment('total_bonus', $sponsorBonus);
 
-            $sponsorDesc = "Bonus Sponsor Langsung dari pendaftaran @{$newUser->username}";
+            $sponsorDesc = "Bonus Referral Langsung dari pendaftaran @{$newUser->username}";
             BonusLog::create([
                 'transaction_code' => 'SP' . sprintf('%03d', BonusLog::count() + 1),
                 'user_id' => $sponsorUser->id,
