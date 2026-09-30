@@ -323,6 +323,9 @@ try {
             ");
             if (!empty($duplicateBonus)) {
                 $delBonusIds = array_map(fn($r) => $r->id, $duplicateBonus);
+                \Illuminate\Support\Facades\DB::table('bonus_logs')->whereIn('id', $delBonusIds)->delete();
+            }
+
             // Clean up any descriptions with 'Langsung'
             \Illuminate\Support\Facades\DB::table('bonus_logs')
                 ->where('description', 'like', '%Bonus Referral Langsung%')
