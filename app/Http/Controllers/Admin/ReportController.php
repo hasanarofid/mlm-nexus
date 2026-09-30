@@ -91,15 +91,15 @@ class ReportController extends Controller
 
             return $query->get()->map(function ($b) {
                 $catLabel = match ($b->category) {
-                    'sponsor' => 'BONUS REFERRAL LANGSUNG',
+                    'sponsor' => 'BONUS REFERRAL',
                     'generasi' => 'Bonus Tim Generasi',
                     'tier', 'upgrade_tier' => 'Bonus Upgrade Premium',
                     default => ucfirst(str_replace('_', ' ', $b->category)),
                 };
 
                 $description = str_replace(
-                    ['Bonus Sponsor:', 'Bonus Sponsor Langsung', 'Bonus Sponsor', 'Sponsor:'],
-                    ['Bonus Referral:', 'Bonus Referral Langsung', 'Bonus Referral', 'Referral:'],
+                    ['Bonus Sponsor:', 'Bonus Sponsor Langsung', 'Bonus Sponsor', 'Sponsor:', 'Bonus Referral Langsung', 'Referral Langsung'],
+                    ['Bonus Referral:', 'Bonus Referral', 'Bonus Referral', 'Referral:', 'Bonus Referral', 'Bonus Referral'],
                     $b->description
                 );
 
@@ -160,8 +160,8 @@ class ReportController extends Controller
                 };
 
                 $description = str_replace(
-                    ['Bonus Sponsor:', 'Bonus Sponsor Langsung', 'Bonus Sponsor', 'Sponsor:'],
-                    ['Bonus Referral:', 'Bonus Referral Langsung', 'Bonus Referral', 'Referral:'],
+                    ['Bonus Sponsor:', 'Bonus Sponsor Langsung', 'Bonus Sponsor', 'Sponsor:', 'Bonus Referral Langsung', 'Referral Langsung'],
+                    ['Bonus Referral:', 'Bonus Referral', 'Bonus Referral', 'Referral:', 'Bonus Referral', 'Bonus Referral'],
                     $t->description
                 );
 
