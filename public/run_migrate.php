@@ -11,6 +11,7 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
+$kernel->bootstrap();
 
 try {
     // 0. Reset PHP OPcache if active
@@ -81,6 +82,69 @@ try {
 
     $cmdKey = $_GET['cmd'] ?? null;
 
+    if ($cmdKey === 'reset-edbert') {
+        // Reset status Premier & topup saldo edberttjen
+        $edbert = User::where('username', 'edberttjen')->orWhere('email', 'edbert.tjen@gmail.com')->first();
+        if (!$edbert) {
+            $budi = User::where('username', 'budi')->first();
+            $edbert = User::create([
+                'name' => 'Edbert Tjen',
+                'username' => 'edberttjen',
+                'email' => 'edbert.tjen@gmail.com',
+                'phone' => '082120000228',
+                'password' => bcrypt('password'),
+                'parent_id' => $budi ? $budi->id : 1,
+                'package_name' => 'Standard',
+                'saldo' => 10000000.00,
+                'total_bonus' => 10000000.00,
+                'is_premier' => false,
+            ]);
+        } else {
+            $edbert->update([
+                'is_premier' => false,
+                'premier_activated_at' => null,
+                'premier_expires_at' => null,
+                'saldo' => 10000000.00,
+                'total_bonus' => 10000000.00,
+            ]);
+        }
+
+        echo "<!DOCTYPE html><html><head><title>Reset Edbert Tjen - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}</style></head><body>";
+        echo "<div class='card'>";
+        echo "<h1 style='color:#10b981;'>✓ SUCCESS: Status @edberttjen Berhasil Di-Reset!</h1>";
+        echo "<p>User <strong>@edberttjen</strong> (Edbert Tjen - <code>edbert.tjen@gmail.com</code>) telah diset ke:</p>";
+        echo "<ul>";
+        echo "<li><strong>Status Premier:</strong> Non-Premier (Siap Di-Upgrade)</li>";
+        echo "<li><strong>Saldo E-Wallet:</strong> Rp 10.000.000</li>";
+        echo "<li><strong>Default Password:</strong> <code>password</code></li>";
+        echo "</ul>";
+        echo "<p style='margin-top:20px;'><a href='/login' style='padding:10px 18px;background:#10b981;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Login Sebagai @edberttjen & Tes Upgrade Premier</a> &nbsp; <a href='/run_migrate.php' style='padding:10px 18px;background:#64748b;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Kembali ke Panel Migrate</a></p>";
+        echo "</div></body></html>";
+        exit;
+    }
+
+    if ($cmdKey === 'test-email') {
+        // Send a test email via Brevo SMTP
+        $targetEmail = $_GET['email'] ?? 'edbert.tjen@gmail.com';
+        $userObj = User::where('email', $targetEmail)->first() ?: User::first();
+
+        $smtpStatus = "Sukses";
+        try {
+            $userObj->notify(new \App\Notifications\RegistrationPendingNotification($userObj));
+        } catch (\Throwable $e) {
+            $smtpStatus = "Gagal: " . $e->getMessage();
+        }
+
+        echo "<!DOCTYPE html><html><head><title>Test Email SMTP - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
+        echo "<div class='card'>";
+        echo "<h1 style='color:#10b981;'>✓ Test Email Brevo SMTP Executed</h1>";
+        echo "<p>Pengiriman email tes ke <strong>" . htmlspecialchars($targetEmail) . "</strong>:</p>";
+        echo "<pre>Status Pengiriman: {$smtpStatus}\nHost SMTP: smtp-relay.brevo.com:587\nFrom: noreply@nexuscommunity.id</pre>";
+        echo "<p style='margin-top:20px;'><a href='/run_migrate.php' style='padding:10px 18px;background:#10b981;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Kembali ke Panel Migrate</a></p>";
+        echo "</div></body></html>";
+        exit;
+    }
+
     if ($cmdKey && isset($allowedCommands[$cmdKey])) {
         // Run specific artisan command
         $cmdConfig = $allowedCommands[$cmdKey];
@@ -128,7 +192,7 @@ try {
         ]);
         $action = "Migrate Fresh & Seed";
 
-        // 3. Clear & rebuild application caches
+        // Clear & rebuild application caches
         @$kernel->call('config:clear');
         @$kernel->call('route:clear');
         @$kernel->call('view:clear');
@@ -153,6 +217,31 @@ try {
         ]);
         $seedLog = $kernel->output();
 
+        // Ensure user @edberttjen exists with sufficient saldo for Premier upgrade testing
+        $budiUser = User::where('username', 'budi')->first();
+        $edbert = User::where('username', 'edberttjen')->orWhere('email', 'edbert.tjen@gmail.com')->first();
+        if (!$edbert) {
+            User::create([
+                'name' => 'Edbert Tjen',
+                'username' => 'edberttjen',
+                'email' => 'edbert.tjen@gmail.com',
+                'phone' => '082120000228',
+                'password' => bcrypt('password'),
+                'parent_id' => $budiUser ? $budiUser->id : 1,
+                'package_name' => 'Standard',
+                'saldo' => 10000000.00,
+                'total_bonus' => 10000000.00,
+                'is_premier' => false,
+            ]);
+        } else {
+            if ($edbert->saldo < 5000000) {
+                $edbert->update([
+                    'saldo' => 10000000.00,
+                    'total_bonus' => 10000000.00,
+                ]);
+            }
+        }
+
         // Ensure all legacy Basic / null membership statuses are converted to Standard
         \Illuminate\Support\Facades\DB::table('users')
             ->whereNull('package_name')
@@ -176,6 +265,7 @@ try {
             'dewi' => '081234567803',
             'eko' => '081234567804',
             'fajar' => '081234567805',
+            'edberttjen' => '082120000228',
         ];
         foreach ($demoPhones as $uname => $ph) {
             \Illuminate\Support\Facades\DB::table('users')
@@ -188,7 +278,7 @@ try {
 
         $action = "Migrate & Seed Catalog (Update Only)";
 
-        // 3. Clear & rebuild application caches and bring app online (turn off maintenance mode)
+        // Clear & rebuild application caches and bring app online (turn off maintenance mode)
         @$kernel->call('up');
         $downFile = __DIR__ . '/../storage/framework/down';
         if (file_exists($downFile)) {
@@ -198,17 +288,32 @@ try {
         @$kernel->call('route:clear');
         @$kernel->call('view:clear');
 
-        $allUsers = User::select('id', 'name', 'username', 'email', 'package_name', 'is_premier')->get();
+        $allUsers = User::select('id', 'name', 'username', 'email', 'package_name', 'is_premier', 'saldo')->get();
+        $edbertUser = User::where('username', 'edberttjen')->orWhere('email', 'edbert.tjen@gmail.com')->first();
 
-        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}</style></head><body>";
+        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:850px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}.box-tester{background:#fef3c7;border:1px solid #f59e0b;padding:1.25rem;border-radius:10px;margin-top:1.5rem;}.btn{display:inline-block;padding:8px 14px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:13px;}.btn-gold{background:#d97706;color:#fff;}.btn-green{background:#10b981;color:#fff;}.btn-blue{background:#2563eb;color:#fff;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action} Finished!</h1>";
-        echo "<pre>" . htmlspecialchars($gitLog . $composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.\n") . "Status membership berhasil disinkronisasi ke Standard & Premier.") . "</pre>";
+        echo "<pre>" . htmlspecialchars($gitLog . $composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.\n") . "Status membership disinkronisasi ke Standard & Premier.\nMail Notification & Brevo SMTP Server Configured.") . "</pre>";
         
+        if ($edbertUser) {
+            echo "<div class='box-tester'>";
+            echo "<h3 style='margin:0 0 8px;color:#92400e;'>⭐ Panel Uji Coba Upgrade Premier Client (@edberttjen)</h3>";
+            echo "<p style='margin:4px 0;'><strong>Nama:</strong> " . htmlspecialchars($edbertUser->name) . " | <strong>Username:</strong> @" . htmlspecialchars($edbertUser->username) . " | <strong>Email:</strong> " . htmlspecialchars($edbertUser->email) . "</p>";
+            echo "<p style='margin:4px 0;'><strong>Saldo E-Wallet:</strong> Rp " . number_format($edbertUser->saldo, 0, ',', '.') . " | <strong>Status Premier:</strong> " . ($edbertUser->isPremier() ? "<span style='color:#16a34a;font-weight:bold;'>PREMIER ACTIVE</span>" : "<span style='color:#d97706;font-weight:bold;'>BELUM PREMIER (Siap Di-Upgrade)</span>") . "</p>";
+            echo "<div style='margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;'>";
+            echo "<a href='/run_migrate.php?cmd=reset-edbert' class='btn btn-gold'>Reset Status Premier & Set Saldo Rp 10 JT</a>";
+            echo "<a href='/run_migrate.php?cmd=test-email' class='btn btn-blue'>Kirim Test Email Brevo SMTP ke edbert.tjen@gmail.com</a>";
+            echo "<a href='/login' class='btn btn-green'>Login Ke Member Area (edberttjen / password)</a>";
+            echo "</div>";
+            echo "</div>";
+        }
+
         echo "<h3 style='margin-top:1.5rem;'>Daftar User Akun Login (" . count($allUsers) . " Users):</h3>";
-        echo "<table><thead><tr><th>ID</th><th>Nama</th><th>Username</th><th>Email</th><th>Default Password</th></tr></thead><tbody>";
+        echo "<table><thead><tr><th>ID</th><th>Nama</th><th>Username</th><th>Email</th><th>Saldo</th><th>Status</th><th>Password</th></tr></thead><tbody>";
         foreach ($allUsers as $u) {
-            echo "<tr><td>" . $u->id . "</td><td>" . htmlspecialchars($u->name) . "</td><td><strong>" . htmlspecialchars($u->username) . "</strong></td><td>" . htmlspecialchars($u->email) . "</td><td><code>password</code></td></tr>";
+            $statusBadge = $u->isPremier() ? "<strong style='color:#16a34a;'>Premier</strong>" : "Standard";
+            echo "<tr><td>" . $u->id . "</td><td>" . htmlspecialchars($u->name) . "</td><td><strong>@" . htmlspecialchars($u->username) . "</strong></td><td>" . htmlspecialchars($u->email) . "</td><td>Rp " . number_format($u->saldo, 0, ',', '.') . "</td><td>" . $statusBadge . "</td><td><code>password</code></td></tr>";
         }
         echo "</tbody></table>";
 

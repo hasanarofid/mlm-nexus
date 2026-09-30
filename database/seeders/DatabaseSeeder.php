@@ -113,6 +113,32 @@ class DatabaseSeeder extends Seeder
         $eko->save();
         $eko->assignRole('client');
 
+        // Dummy User for Premier Upgrade Testing (@edberttjen)
+        $edbert = User::where('username', 'edberttjen')->orWhere('email', 'edbert.tjen@gmail.com')->first() ?: new User();
+        $edbert->fill([
+            'name' => 'Edbert Tjen',
+            'username' => 'edberttjen',
+            'email' => 'edbert.tjen@gmail.com',
+            'phone' => '082120000228',
+            'password' => bcrypt('password'),
+            'parent_id' => $budi->id,
+            'position' => 'left',
+            'package_name' => 'Standard',
+            'saldo' => 10000000.00,
+            'total_bonus' => 10000000.00,
+            'is_left_handed' => 'Tidak',
+            'beneficiary_name' => 'Edbert Tjen',
+            'beneficiary_birth_date' => '1993-12-20',
+            'beneficiary_relation' => 'Keluarga',
+            'beneficiary_phone' => '08123456789',
+            'emergency_phone' => '08123456789',
+            'bank_name' => 'Bank BRI',
+            'bank_account_name' => 'Edbert Tjen',
+            'bank_account_number' => '1234567890',
+        ]);
+        $edbert->save();
+        $edbert->assignRole('client');
+
         $fajar = User::where('username', 'fajar')->orWhere('email', 'fajar@nexuscommunity.com')->first() ?: new User();
         $fajar->fill([
             'name' => 'Fajar Hidayat',

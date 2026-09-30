@@ -136,6 +136,13 @@ class DashboardController extends Controller
         }
 
         \Illuminate\Support\Facades\DB::transaction(function () use ($user, $upgradeFee, $bonusPerLevel) {
+            // Send Email 1: Email Proses Upgrade Premier
+            try {
+                $user->notify(new \App\Notifications\UpgradePremierPendingNotification($user, $upgradeFee));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Gagal mengirim email proses upgrade premier: ' . $e->getMessage());
+            }
+
             // Deduct upgrade fee from user wallet
             $user->decrement('saldo', $upgradeFee);
             $user->update([
@@ -151,6 +158,15 @@ class DashboardController extends Controller
                 'amount' => $upgradeFee,
                 'description' => 'Upgrade Keanggotaan ke Premier Member (Masa Aktif 1 Tahun)',
             ]);
+
+            // Send Email 2: Email Aktivasi Premier Member
+            try {
+                $activatedNotif = (new \App\Notifications\UpgradePremierActivatedNotification($user))
+                    ->delay(now()->addMinutes(rand(1, 5)));
+                $user->notify($activatedNotif);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Gagal mengirim email aktivasi premier member: ' . $e->getMessage());
+            }
 
             // Allocate Multi-Tier 10-level upline bonus (Rp 250.000 per level)
             $currentUplineId = $user->parent_id;
@@ -169,12 +185,14 @@ class DashboardController extends Controller
                     $upline->increment('saldo', $bonusPerLevel);
                     $upline->increment('total_bonus', $bonusPerLevel);
 
+                    $desc = "Bonus Generasi Upgrade Premier Level {$gen} dari @{$user->username}";
+
                     BonusLog::create([
                         'transaction_code' => 'PRM' . sprintf('%03d', BonusLog::count() + 1),
                         'user_id' => $upline->id,
                         'category' => 'upgrade_premier',
                         'source_user_id' => $user->id,
-                        'description' => "Bonus Generasi Upgrade Premier Level {$gen} dari @{$user->username}",
+                        'description' => $desc,
                         'amount' => $bonusPerLevel,
                     ]);
 
@@ -183,8 +201,15 @@ class DashboardController extends Controller
                         'type' => 'in',
                         'category' => 'bonus_upgrade_premier',
                         'amount' => $bonusPerLevel,
-                        'description' => "Bonus Generasi Upgrade Premier Level {$gen} dari @{$user->username}",
+                        'description' => $desc,
                     ]);
+
+                    // Email Bonus Upgrade Premier ke Upline
+                    try {
+                        $upline->notify(new \App\Notifications\BonusReceivedNotification("Upgrade Premier Gen {$gen}", $bonusPerLevel, $desc));
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::error("Gagal mengirim email bonus upgrade premier gen {$gen}: " . $e->getMessage());
+                    }
                 }
 
                 $currentUplineId = $upline->parent_id;

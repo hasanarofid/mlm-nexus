@@ -207,6 +207,22 @@ class RegisteredUserController extends Controller
                 // Role fallback
             }
 
+            // Send Email 1: Email Pendaftaran Terkirim
+            try {
+                $user->notify(new \App\Notifications\RegistrationPendingNotification($user));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Gagal mengirim email pendaftaran terkirim: ' . $e->getMessage());
+            }
+
+            // Send Email 2: Email Aktivasi Member
+            try {
+                $welcomeNotif = (new \App\Notifications\WelcomeRegisterNotification($user, $request->password))
+                    ->delay(now()->addMinutes(rand(1, 5)));
+                $user->notify($welcomeNotif);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Gagal mengirim email aktivasi member: ' . $e->getMessage());
+            }
+
             // Allocation Bonus Sponsor (Gen 1: Rp 250.000) & Bonus Tim (Gen 2-10: Rp 5.000 / member)
             $sponsorBonus = 250000;
             $bonusPerGen = 5000;
@@ -215,12 +231,13 @@ class RegisteredUserController extends Controller
             $sponsor->increment('saldo', $sponsorBonus);
             $sponsor->increment('total_bonus', $sponsorBonus);
 
+            $sponsorDesc = "Bonus Sponsor Langsung dari pendaftaran @{$user->username}";
             BonusLog::create([
                 'transaction_code' => 'SP' . sprintf('%03d', BonusLog::count() + 1),
                 'user_id' => $sponsor->id,
                 'category' => 'sponsor',
                 'source_user_id' => $user->id,
-                'description' => "Bonus Sponsor Langsung dari pendaftaran @{$user->username}",
+                'description' => $sponsorDesc,
                 'amount' => $sponsorBonus,
             ]);
 
@@ -229,8 +246,15 @@ class RegisteredUserController extends Controller
                 'type' => 'in',
                 'category' => 'bonus_sponsor',
                 'amount' => $sponsorBonus,
-                'description' => "Bonus Sponsor Langsung dari pendaftaran @{$user->username}",
+                'description' => $sponsorDesc,
             ]);
+
+            // Email Bonus Sponsor ke Direct Sponsor
+            try {
+                $sponsor->notify(new \App\Notifications\BonusReceivedNotification('sponsor', $sponsorBonus, $sponsorDesc));
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Gagal mengirim email bonus sponsor: ' . $e->getMessage());
+            }
 
             // Multi-tier Gen 2 s/d Gen 10 Uplines (Rp 5.000 / level per member baru)
             $currentUpline = $sponsor;
@@ -249,12 +273,13 @@ class RegisteredUserController extends Controller
                     $upline->increment('saldo', $bonusPerGen);
                     $upline->increment('total_bonus', $bonusPerGen);
 
+                    $genDesc = "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}";
                     BonusLog::create([
                         'transaction_code' => 'G' . sprintf('%03d', BonusLog::count() + 1),
                         'user_id' => $upline->id,
                         'category' => 'generasi',
                         'source_user_id' => $user->id,
-                        'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
+                        'description' => $genDesc,
                         'amount' => $bonusPerGen,
                     ]);
 
@@ -263,8 +288,15 @@ class RegisteredUserController extends Controller
                         'type' => 'in',
                         'category' => 'bonus_generasi',
                         'amount' => $bonusPerGen,
-                        'description' => "Bonus Tim Gen {$gen} dari pendaftaran @{$user->username}",
+                        'description' => $genDesc,
                     ]);
+
+                    // Email Bonus Tim Generasi ke Upline
+                    try {
+                        $upline->notify(new \App\Notifications\BonusReceivedNotification("Tim Gen {$gen}", $bonusPerGen, $genDesc));
+                    } catch (\Throwable $e) {
+                        \Illuminate\Support\Facades\Log::error("Gagal mengirim email bonus gen {$gen}: " . $e->getMessage());
+                    }
                 }
 
                 $currentUpline = $upline;
@@ -273,14 +305,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        try {
-            $user->notify(new \App\Notifications\WelcomeRegisterNotification($user, $request->password));
-        } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error('Gagal mengirim email pendaftaran: ' . $e->getMessage());
-        }
-
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
 }
