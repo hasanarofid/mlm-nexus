@@ -585,13 +585,16 @@ const formatRupiah = (val) => {
               </div>
 
               <!-- Company Bank Details Box -->
-              <div class="mb-2.5 p-3 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-xl text-xs space-y-1">
-                <div class="flex items-center justify-between text-slate-800 font-bold">
-                  <span>Rekening Perusahaan:</span>
-                  <span class="text-[#B8922E]">Rp 500.000</span>
+              <div class="mb-3 p-4 bg-gradient-to-r from-[#fffbeb] via-[#faf6eb] to-[#fffbeb] border-2 border-[#D4AF37]/60 rounded-2xl shadow-xs space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs sm:text-sm font-black text-slate-950 uppercase tracking-tight">Rekening Perusahaan:</span>
+                  <span class="text-sm sm:text-base font-black text-[#B8922E] font-mono">Rp 500.000</span>
                 </div>
-                <div class="text-[11px] text-slate-600 font-mono">
-                  Bank BCA: <strong class="text-slate-900 font-bold">172-666-2020</strong> a/n <strong>PT. NEXUS KOMUNITAS BERSAMA</strong>
+                <div class="text-xs sm:text-sm text-slate-900 font-bold flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span class="font-extrabold text-slate-800">Bank BCA:</span>
+                  <span class="font-mono font-black text-sm sm:text-base text-slate-950 px-2 py-0.5 bg-white border border-[#D4AF37]/50 rounded-md shadow-2xs tracking-wider">172-666-2020</span>
+                  <span class="text-slate-700 font-semibold">a/n</span>
+                  <strong class="font-black text-slate-950 uppercase tracking-wide">PT. NEXUS KOMUNITAS BERSAMA</strong>
                 </div>
               </div>
 
