@@ -520,17 +520,17 @@ const submit = () => {
             <div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-4 space-y-3.5">
                 <div class="text-[11px] font-black tracking-wider text-[#D4AF37] uppercase flex items-center gap-1.5 border-b border-slate-200/60 pb-2">
                     <KeyRound class="w-3.5 h-3.5" />
-                    <span>5. Kode Referral / Sponsor</span>
+                    <span>5. Kode Referral</span>
                 </div>
 
                 <!-- Input Kode Referral -->
                 <div class="form-group">
                     <div class="flex items-center justify-between mb-1">
                         <label for="referral" class="block text-xs font-bold text-slate-700">
-                            Kode Referral / Username Sponsor <span class="text-rose-500">*</span>
+                            Kode Referral <span class="text-rose-500">*</span>
                         </label>
                         <span v-if="sponsorStatus.loading" class="text-[10px] text-amber-600 font-bold flex items-center gap-1 animate-pulse">
-                            Memeriksa sponsor...
+                            Memeriksa referral...
                         </span>
                     </div>
 
@@ -544,7 +544,7 @@ const submit = () => {
                             v-model="form.referral"
                             @blur="checkSponsorLive(form.referral)"
                             required
-                            placeholder="Masukkan kode referral / username sponsor"
+                            placeholder="Masukkan kode referral"
                             class="w-full text-sm font-semibold text-slate-800"
                         />
                     </div>
@@ -558,7 +558,7 @@ const submit = () => {
                                     <Check class="w-3.5 h-3.5 stroke-[3]" />
                                 </div>
                                 <div>
-                                    <span class="text-[9px] font-black text-emerald-800 uppercase tracking-wider block">SPONSOR VALID</span>
+                                    <span class="text-[9px] font-black text-emerald-800 uppercase tracking-wider block">REFERRAL VALID</span>
                                     <p class="text-xs font-bold text-emerald-950">
                                         {{ sponsorStatus.sponsor?.name }} <span class="font-mono text-emerald-700">(@{{ sponsorStatus.sponsor?.username }})</span>
                                     </p>
@@ -575,9 +575,9 @@ const submit = () => {
                                 <X class="w-3.5 h-3.5 stroke-[3]" />
                             </div>
                             <div>
-                                <span class="text-[9px] font-black text-rose-800 uppercase tracking-wider block">SPONSOR TIDAK DITEMUKAN</span>
+                                <span class="text-[9px] font-black text-rose-800 uppercase tracking-wider block">REFERRAL TIDAK DITEMUKAN</span>
                                 <p class="text-xs font-semibold text-rose-700 leading-tight">
-                                    Username "<strong>{{ form.referral }}</strong>" tidak terdaftar. Pendaftaran tidak dapat diproses jika kode sponsor salah / typo.
+                                    Username "<strong>{{ form.referral }}</strong>" tidak terdaftar. Pendaftaran tidak dapat diproses jika kode referral salah / typo.
                                 </p>
                             </div>
                         </div>
