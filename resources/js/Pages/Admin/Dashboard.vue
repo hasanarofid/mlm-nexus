@@ -584,17 +584,16 @@ const formatRupiah = (val) => {
                 <span class="text-[10px] text-slate-400 font-medium">Maks 10 MB (JPG, PNG, PDF)</span>
               </div>
 
-              <!-- Company Bank Details Box -->
-              <div class="mb-3 p-4 bg-gradient-to-r from-[#fffbeb] via-[#faf6eb] to-[#fffbeb] border-2 border-[#D4AF37]/60 rounded-2xl shadow-xs space-y-2">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs sm:text-sm font-black text-slate-950 uppercase tracking-tight">Rekening Perusahaan:</span>
-                  <span class="text-sm sm:text-base font-black text-[#B8922E] font-mono">Rp 500.000</span>
+              <div class="mb-3 p-4 sm:p-5 bg-gradient-to-r from-[#fffbeb] via-[#faf6eb] to-[#fffbeb] border-2 border-[#D4AF37] rounded-2xl shadow-sm space-y-2.5">
+                <div class="flex items-center justify-between gap-2 border-b border-[#D4AF37]/30 pb-2">
+                  <span class="text-sm sm:text-base font-black text-slate-950 uppercase tracking-tight">Rekening Perusahaan:</span>
+                  <span class="text-base sm:text-lg font-black text-[#B8922E] font-mono">Rp 500.000</span>
                 </div>
-                <div class="text-xs sm:text-sm text-slate-900 font-bold flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span class="font-extrabold text-slate-800">Bank BCA:</span>
-                  <span class="font-mono font-black text-sm sm:text-base text-slate-950 px-2 py-0.5 bg-white border border-[#D4AF37]/50 rounded-md shadow-2xs tracking-wider">172-666-2020</span>
-                  <span class="text-slate-700 font-semibold">a/n</span>
-                  <strong class="font-black text-slate-950 uppercase tracking-wide">PT. NEXUS KOMUNITAS BERSAMA</strong>
+                <div class="text-sm sm:text-base text-slate-900 font-black flex flex-wrap items-center gap-x-2.5 gap-y-1.5 pt-0.5">
+                  <span class="font-black text-slate-900">Bank BCA:</span>
+                  <span class="font-mono font-black text-base sm:text-lg text-slate-950 px-2.5 py-1 bg-white border-2 border-[#D4AF37]/70 rounded-lg shadow-2xs tracking-wider">172-666-2020</span>
+                  <span class="text-slate-700 font-bold text-xs sm:text-sm">a/n</span>
+                  <strong class="font-black text-slate-950 uppercase tracking-wide text-sm sm:text-base">PT. NEXUS KOMUNITAS BERSAMA</strong>
                 </div>
               </div>
 
