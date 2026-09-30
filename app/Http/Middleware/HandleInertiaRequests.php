@@ -45,13 +45,19 @@ class HandleInertiaRequests extends Middleware
                 $notifications = [];
 
                 // 1. Recent Bonus Logs
+                $notifiedUsernames = [];
                 try {
                     $bonusLogs = \App\Models\BonusLog::where('user_id', $user->id)
+                        ->with('sourceUser')
                         ->latest()
                         ->limit(4)
                         ->get();
 
                     foreach ($bonusLogs as $b) {
+                        if ($b->sourceUser && $b->sourceUser->username) {
+                            $notifiedUsernames[] = $b->sourceUser->username;
+                        }
+
                         $notifications[] = [
                             'id' => 'bonus_' . $b->id,
                             'type' => 'bonus',
@@ -65,9 +71,12 @@ class HandleInertiaRequests extends Middleware
                     }
                 } catch (\Throwable $e) {}
 
-                // 2. Recent Direct Downlines (Mitra Baru)
+                // 2. Recent Direct Downlines (Mitra Baru yang belum tercatat di bonus log)
                 try {
                     $newDownlines = \App\Models\User::where('parent_id', $user->id)
+                        ->when(!empty($notifiedUsernames), function($q) use ($notifiedUsernames) {
+                            $q->whereNotIn('username', $notifiedUsernames);
+                        })
                         ->latest()
                         ->limit(3)
                         ->get();

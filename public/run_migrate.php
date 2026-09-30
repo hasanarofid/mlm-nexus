@@ -300,6 +300,33 @@ try {
                 ->update(['phone' => $ph]);
         }
 
+        // Deduplicate and cleanup redundant wallet transactions if any exist
+        try {
+            $duplicateTx = \Illuminate\Support\Facades\DB::select("
+                SELECT id FROM wallet_transactions 
+                WHERE id NOT IN (
+                    SELECT MIN(id) FROM wallet_transactions 
+                    GROUP BY user_id, description, amount, DATE(created_at)
+                )
+            ");
+            if (!empty($duplicateTx)) {
+                $delIds = array_map(fn($r) => $r->id, $duplicateTx);
+                \Illuminate\Support\Facades\DB::table('wallet_transactions')->whereIn('id', $delIds)->delete();
+            }
+
+            $duplicateBonus = \Illuminate\Support\Facades\DB::select("
+                SELECT id FROM bonus_logs 
+                WHERE id NOT IN (
+                    SELECT MIN(id) FROM bonus_logs 
+                    GROUP BY user_id, source_user_id, category, amount, DATE(created_at)
+                )
+            ");
+            if (!empty($duplicateBonus)) {
+                $delBonusIds = array_map(fn($r) => $r->id, $duplicateBonus);
+                \Illuminate\Support\Facades\DB::table('bonus_logs')->whereIn('id', $delBonusIds)->delete();
+            }
+        } catch (\Throwable $e) {}
+
         $action = "Migrate & Seed Catalog (Update Only)";
 
         // Clear & rebuild application caches and bring app online (turn off maintenance mode)

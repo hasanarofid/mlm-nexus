@@ -14,12 +14,18 @@ class NotificationController extends Controller
         $notifications = [];
 
         // 1. Recent Bonus Logs
+        $notifiedUsernames = [];
         $bonusLogs = \App\Models\BonusLog::where('user_id', $user->id)
+            ->with('sourceUser')
             ->latest()
             ->limit(30)
             ->get();
 
         foreach ($bonusLogs as $b) {
+            if ($b->sourceUser && $b->sourceUser->username) {
+                $notifiedUsernames[] = $b->sourceUser->username;
+            }
+
             $notifications[] = [
                 'id' => 'bonus_' . $b->id,
                 'type' => 'bonus',
@@ -30,8 +36,11 @@ class NotificationController extends Controller
             ];
         }
 
-        // 2. Recent Registered Members (Jaringan)
+        // 2. Recent Registered Members (Jaringan yang belum tercatat di bonus log)
         $newMembers = \App\Models\User::where('parent_id', $user->id)
+            ->when(!empty($notifiedUsernames), function($q) use ($notifiedUsernames) {
+                $q->whereNotIn('username', $notifiedUsernames);
+            })
             ->latest()
             ->limit(20)
             ->get();
