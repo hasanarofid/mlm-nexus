@@ -205,9 +205,10 @@ const bankList = [
           <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
             {{ formatRupiah(wallet?.saldo ?? 0) }}
           </h2>
-          <p class="text-xs text-slate-500 font-medium pt-0.5">
-            Min. Penarikan: <strong class="text-slate-800">{{ formatRupiah(wallet?.min_withdrawal || 250000) }}</strong> | Biaya Admin: <strong class="text-emerald-600">{{ formatRupiah(wallet?.admin_fee || 0) }}</strong>
-          </p>
+          <div class="text-xs text-slate-500 font-medium pt-0.5 space-y-0.5">
+            <p>Min. Penarikan: <strong class="text-slate-800">{{ formatRupiah(wallet?.min_withdrawal || 250000) }}</strong></p>
+            <p>Biaya Admin: <strong class="text-emerald-600">{{ formatRupiah(wallet?.admin_fee || 0) }}</strong></p>
+          </div>
         </div>
 
         <!-- Right Side Badges (Total Cair & Sedang Diproses) -->
