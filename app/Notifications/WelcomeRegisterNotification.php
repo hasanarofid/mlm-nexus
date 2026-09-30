@@ -41,9 +41,9 @@ class WelcomeRegisterNotification extends Notification
         $packageName = $this->user->package_name ?: 'Standard';
 
         $mail = (new MailMessage)
-            ->subject('Selamat Datang di nexuscommunity.id - Akun Anda Berhasil Terdaftar!')
+            ->subject('Selamat Datang di Nexus Community')
             ->greeting('Halo ' . $this->user->name . ',')
-            ->line('Selamat datang di **nexuscommunity.id** (E-Commerce Trade Promotion Program).')
+            ->line('Selamat datang di **Nexus Community**.')
             ->line('Akun Anda telah berhasil terdaftar dan diaktifkan dengan rincian sebagai berikut:')
             ->line('• **Nama:** ' . $this->user->name)
             ->line('• **Username:** @' . ($this->user->username ?: strtolower(explode(' ', $this->user->name)[0])))
@@ -57,6 +57,6 @@ class WelcomeRegisterNotification extends Notification
         return $mail
             ->action('Masuk ke Member Area', $loginUrl)
             ->line('Silakan jaga kerahasiaan informasi akun dan PIN keamanan Anda.')
-            ->line('Terima kasih telah bergabung bersama nexuscommunity.id!');
+            ->line('Terima kasih telah bergabung bersama Nexus Community!');
     }
 }
