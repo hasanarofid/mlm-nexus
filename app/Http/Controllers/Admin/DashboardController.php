@@ -136,13 +136,6 @@ class DashboardController extends Controller
         }
 
         \Illuminate\Support\Facades\DB::transaction(function () use ($user, $upgradeFee, $bonusPerLevel) {
-            // Send Email 1: Email Proses Upgrade Premier
-            try {
-                $user->notify(new \App\Notifications\UpgradePremierPendingNotification($user, $upgradeFee));
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::error('Gagal mengirim email proses upgrade premier: ' . $e->getMessage());
-            }
-
             // Deduct upgrade fee from user wallet
             $user->decrement('saldo', $upgradeFee);
             $user->update([
@@ -159,11 +152,9 @@ class DashboardController extends Controller
                 'description' => 'Upgrade Keanggotaan ke Premier Member (Masa Aktif 1 Tahun)',
             ]);
 
-            // Send Email 2: Email Aktivasi Premier Member
+            // Email 2: Aktivasi Premier Member Berhasil
             try {
-                $activatedNotif = (new \App\Notifications\UpgradePremierActivatedNotification($user))
-                    ->delay(now()->addMinutes(rand(1, 5)));
-                $user->notify($activatedNotif);
+                $user->notify(new \App\Notifications\UpgradePremierActivatedNotification($user));
             } catch (\Throwable $e) {
                 \Illuminate\Support\Facades\Log::error('Gagal mengirim email aktivasi premier member: ' . $e->getMessage());
             }
@@ -203,13 +194,6 @@ class DashboardController extends Controller
                         'amount' => $bonusPerLevel,
                         'description' => $desc,
                     ]);
-
-                    // Email Bonus Upgrade Premier ke Upline
-                    try {
-                        $upline->notify(new \App\Notifications\BonusReceivedNotification("Upgrade Premier Gen {$gen}", $bonusPerLevel, $desc));
-                    } catch (\Throwable $e) {
-                        \Illuminate\Support\Facades\Log::error("Gagal mengirim email bonus upgrade premier gen {$gen}: " . $e->getMessage());
-                    }
                 }
 
                 $currentUplineId = $upline->parent_id;

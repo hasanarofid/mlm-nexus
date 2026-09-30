@@ -124,30 +124,16 @@ try {
     }
 
     if ($cmdKey === 'test-premier-email') {
-        // Send Premier Upgrade process & activation emails to edbert.tjen@gmail.com
+        // Send Premier Upgrade activation email to edbert.tjen@gmail.com
         $targetEmail = $_GET['email'] ?? 'edbert.tjen@gmail.com';
         $userObj = User::where('email', $targetEmail)->orWhere('username', 'edberttjen')->first() ?: User::first();
 
         $logs = [];
         try {
-            $userObj->notify(new \App\Notifications\UpgradePremierPendingNotification($userObj, 5000000));
-            $logs[] = "✓ Email 1: Permintaan Upgrade Premier Diterima -> Berhasil dikirim ke {$targetEmail}";
-        } catch (\Throwable $e) {
-            $logs[] = "✕ Email 1 Error: " . $e->getMessage();
-        }
-
-        try {
             $userObj->notify(new \App\Notifications\UpgradePremierActivatedNotification($userObj));
-            $logs[] = "✓ Email 2: Aktivasi Premier Member Berhasil -> Berhasil dikirim ke {$targetEmail}";
+            $logs[] = "✓ Email Upgrade Premier Berhasil -> Dikirim ke {$targetEmail}";
         } catch (\Throwable $e) {
-            $logs[] = "✕ Email 2 Error: " . $e->getMessage();
-        }
-
-        try {
-            $userObj->notify(new \App\Notifications\BonusReceivedNotification('Upgrade Premier Gen 1', 250000, "Bonus Generasi Upgrade Premier Level 1 dari @{$userObj->username}"));
-            $logs[] = "✓ Email 3: Bonus Upgrade Premier Rp 250.000 -> Berhasil dikirim ke {$targetEmail}";
-        } catch (\Throwable $e) {
-            $logs[] = "✕ Email 3 Error: " . $e->getMessage();
+            $logs[] = "✕ Email Upgrade Premier Error: " . $e->getMessage();
         }
 
         echo "<!DOCTYPE html><html><head><title>Test Email Premier - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
@@ -161,30 +147,16 @@ try {
     }
 
     if ($cmdKey === 'test-email') {
-        // Send a test registration email via Brevo SMTP
+        // Send registration welcome email to edbert.tjen@gmail.com
         $targetEmail = $_GET['email'] ?? 'edbert.tjen@gmail.com';
         $userObj = User::where('email', $targetEmail)->orWhere('username', 'edberttjen')->first() ?: User::first();
 
         $logs = [];
         try {
-            $userObj->notify(new \App\Notifications\RegistrationPendingNotification($userObj));
-            $logs[] = "✓ Email 1: Pendaftaran Member Terkirim -> Berhasil dikirim ke {$targetEmail}";
-        } catch (\Throwable $e) {
-            $logs[] = "✕ Email 1 Error: " . $e->getMessage();
-        }
-
-        try {
             $userObj->notify(new \App\Notifications\WelcomeRegisterNotification($userObj, 'password'));
-            $logs[] = "✓ Email 2: Email Aktivasi Member -> Berhasil dikirim ke {$targetEmail}";
+            $logs[] = "✓ Email Pendaftaran Member Berhasil -> Dikirim ke {$targetEmail}";
         } catch (\Throwable $e) {
-            $logs[] = "✕ Email 2 Error: " . $e->getMessage();
-        }
-
-        try {
-            $userObj->notify(new \App\Notifications\BonusReceivedNotification('Sponsor Langsung', 250000, "Bonus Sponsor Langsung dari pendaftaran @{$userObj->username}"));
-            $logs[] = "✓ Email 3: Bonus Sponsor Rp 250.000 -> Berhasil dikirim ke {$targetEmail}";
-        } catch (\Throwable $e) {
-            $logs[] = "✕ Email 3 Error: " . $e->getMessage();
+            $logs[] = "✕ Email Pendaftaran Error: " . $e->getMessage();
         }
 
         echo "<!DOCTYPE html><html><head><title>Test Email Registration - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
