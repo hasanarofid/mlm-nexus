@@ -123,23 +123,75 @@ try {
         exit;
     }
 
-    if ($cmdKey === 'test-email') {
-        // Send a test email via Brevo SMTP
+    if ($cmdKey === 'test-premier-email') {
+        // Send Premier Upgrade process & activation emails to edbert.tjen@gmail.com
         $targetEmail = $_GET['email'] ?? 'edbert.tjen@gmail.com';
-        $userObj = User::where('email', $targetEmail)->first() ?: User::first();
+        $userObj = User::where('email', $targetEmail)->orWhere('username', 'edberttjen')->first() ?: User::first();
 
-        $smtpStatus = "Sukses";
+        $logs = [];
         try {
-            $userObj->notify(new \App\Notifications\RegistrationPendingNotification($userObj));
+            $userObj->notify(new \App\Notifications\UpgradePremierPendingNotification($userObj, 5000000));
+            $logs[] = "✓ Email 1: Permintaan Upgrade Premier Diterima -> Berhasil dikirim ke {$targetEmail}";
         } catch (\Throwable $e) {
-            $smtpStatus = "Gagal: " . $e->getMessage();
+            $logs[] = "✕ Email 1 Error: " . $e->getMessage();
         }
 
-        echo "<!DOCTYPE html><html><head><title>Test Email SMTP - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
+        try {
+            $userObj->notify(new \App\Notifications\UpgradePremierActivatedNotification($userObj));
+            $logs[] = "✓ Email 2: Aktivasi Premier Member Berhasil -> Berhasil dikirim ke {$targetEmail}";
+        } catch (\Throwable $e) {
+            $logs[] = "✕ Email 2 Error: " . $e->getMessage();
+        }
+
+        try {
+            $userObj->notify(new \App\Notifications\BonusReceivedNotification('Upgrade Premier Gen 1', 250000, "Bonus Generasi Upgrade Premier Level 1 dari @{$userObj->username}"));
+            $logs[] = "✓ Email 3: Bonus Upgrade Premier Rp 250.000 -> Berhasil dikirim ke {$targetEmail}";
+        } catch (\Throwable $e) {
+            $logs[] = "✕ Email 3 Error: " . $e->getMessage();
+        }
+
+        echo "<!DOCTYPE html><html><head><title>Test Email Premier - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
         echo "<div class='card'>";
-        echo "<h1 style='color:#10b981;'>✓ Test Email Brevo SMTP Executed</h1>";
-        echo "<p>Pengiriman email tes ke <strong>" . htmlspecialchars($targetEmail) . "</strong>:</p>";
-        echo "<pre>Status Pengiriman: {$smtpStatus}\nHost SMTP: smtp-relay.brevo.com:587\nFrom: noreply@nexuscommunity.id</pre>";
+        echo "<h1 style='color:#10b981;'>✓ Test Email Upgrade Premier Completed</h1>";
+        echo "<p>Hasil uji coba pengiriman Email Upgrade Premier ke <strong>" . htmlspecialchars($targetEmail) . "</strong>:</p>";
+        echo "<pre>" . implode("\n", $logs) . "\n\nServer SMTP: smtp-relay.brevo.com:587\nPengirim: noreply@nexuscommunity.id</pre>";
+        echo "<p style='margin-top:20px;'><a href='/run_migrate.php' style='padding:10px 18px;background:#10b981;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Kembali ke Panel Migrate</a></p>";
+        echo "</div></body></html>";
+        exit;
+    }
+
+    if ($cmdKey === 'test-email') {
+        // Send a test registration email via Brevo SMTP
+        $targetEmail = $_GET['email'] ?? 'edbert.tjen@gmail.com';
+        $userObj = User::where('email', $targetEmail)->orWhere('username', 'edberttjen')->first() ?: User::first();
+
+        $logs = [];
+        try {
+            $userObj->notify(new \App\Notifications\RegistrationPendingNotification($userObj));
+            $logs[] = "✓ Email 1: Pendaftaran Member Terkirim -> Berhasil dikirim ke {$targetEmail}";
+        } catch (\Throwable $e) {
+            $logs[] = "✕ Email 1 Error: " . $e->getMessage();
+        }
+
+        try {
+            $userObj->notify(new \App\Notifications\WelcomeRegisterNotification($userObj, 'password'));
+            $logs[] = "✓ Email 2: Email Aktivasi Member -> Berhasil dikirim ke {$targetEmail}";
+        } catch (\Throwable $e) {
+            $logs[] = "✕ Email 2 Error: " . $e->getMessage();
+        }
+
+        try {
+            $userObj->notify(new \App\Notifications\BonusReceivedNotification('Sponsor Langsung', 250000, "Bonus Sponsor Langsung dari pendaftaran @{$userObj->username}"));
+            $logs[] = "✓ Email 3: Bonus Sponsor Rp 250.000 -> Berhasil dikirim ke {$targetEmail}";
+        } catch (\Throwable $e) {
+            $logs[] = "✕ Email 3 Error: " . $e->getMessage();
+        }
+
+        echo "<!DOCTYPE html><html><head><title>Test Email Registration - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:800px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}</style></head><body>";
+        echo "<div class='card'>";
+        echo "<h1 style='color:#10b981;'>✓ Test Email Pendaftaran & Aktivasi Executed</h1>";
+        echo "<p>Pengiriman email tes pendaftaran ke <strong>" . htmlspecialchars($targetEmail) . "</strong>:</p>";
+        echo "<pre>" . implode("\n", $logs) . "\n\nHost SMTP: smtp-relay.brevo.com:587\nFrom: noreply@nexuscommunity.id</pre>";
         echo "<p style='margin-top:20px;'><a href='/run_migrate.php' style='padding:10px 18px;background:#10b981;color:#fff;text-decoration:none;border-radius:8px;font-weight:bold;'>Kembali ke Panel Migrate</a></p>";
         echo "</div></body></html>";
         exit;
@@ -291,20 +343,21 @@ try {
         $allUsers = User::select('id', 'name', 'username', 'email', 'package_name', 'is_premier', 'saldo')->get();
         $edbertUser = User::where('username', 'edberttjen')->orWhere('email', 'edbert.tjen@gmail.com')->first();
 
-        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:850px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}.box-tester{background:#fef3c7;border:1px solid #f59e0b;padding:1.25rem;border-radius:10px;margin-top:1.5rem;}.btn{display:inline-block;padding:8px 14px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:13px;}.btn-gold{background:#d97706;color:#fff;}.btn-green{background:#10b981;color:#fff;}.btn-blue{background:#2563eb;color:#fff;}</style></head><body>";
+        echo "<!DOCTYPE html><html><head><title>Migration & Product Seeder - NEXUS COMMUNITY</title><style>body{font-family:sans-serif;padding:2rem;background:#f4f6f9;color:#333;}.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 4px 6px rgba(0,0,0,0.1);max-width:850px;margin:auto;}h1{margin-top:0;}pre{background:#1e293b;color:#38bdf8;padding:1rem;border-radius:8px;overflow-x:auto;}table{width:100%;border-collapse:collapse;margin-top:1rem;}th,td{padding:8px 12px;border:1px solid #e2e8f0;text-align:left;}th{background:#f1f5f9;}.box-tester{background:#fef3c7;border:1px solid #f59e0b;padding:1.25rem;border-radius:10px;margin-top:1.5rem;}.btn{display:inline-block;padding:9px 15px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:13px;}.btn-gold{background:#d97706;color:#fff;}.btn-green{background:#10b981;color:#fff;}.btn-blue{background:#2563eb;color:#fff;}.btn-purple{background:#7c3aed;color:#fff;}</style></head><body>";
         echo "<div class='card'>";
         echo "<h1 style='color:#10b981;'>✓ SUCCESS: {$action} Finished!</h1>";
         echo "<pre>" . htmlspecialchars($gitLog . $composerLog . ($migrateLog ?: "Database migration up-to-date.\n") . ($seedLog ?: "DatabaseSeeder executed successfully.\n") . "Status membership disinkronisasi ke Standard & Premier.\nMail Notification & Brevo SMTP Server Configured.") . "</pre>";
         
         if ($edbertUser) {
             echo "<div class='box-tester'>";
-            echo "<h3 style='margin:0 0 8px;color:#92400e;'>⭐ Panel Uji Coba Upgrade Premier Client (@edberttjen)</h3>";
+            echo "<h3 style='margin:0 0 8px;color:#92400e;'>⭐ Panel Uji Coba Email & Upgrade Premier Client (@edberttjen)</h3>";
             echo "<p style='margin:4px 0;'><strong>Nama:</strong> " . htmlspecialchars($edbertUser->name) . " | <strong>Username:</strong> @" . htmlspecialchars($edbertUser->username) . " | <strong>Email:</strong> " . htmlspecialchars($edbertUser->email) . "</p>";
             echo "<p style='margin:4px 0;'><strong>Saldo E-Wallet:</strong> Rp " . number_format($edbertUser->saldo, 0, ',', '.') . " | <strong>Status Premier:</strong> " . ($edbertUser->isPremier() ? "<span style='color:#16a34a;font-weight:bold;'>PREMIER ACTIVE</span>" : "<span style='color:#d97706;font-weight:bold;'>BELUM PREMIER (Siap Di-Upgrade)</span>") . "</p>";
             echo "<div style='margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;'>";
-            echo "<a href='/run_migrate.php?cmd=reset-edbert' class='btn btn-gold'>Reset Status Premier & Set Saldo Rp 10 JT</a>";
-            echo "<a href='/run_migrate.php?cmd=test-email' class='btn btn-blue'>Kirim Test Email Brevo SMTP ke edbert.tjen@gmail.com</a>";
-            echo "<a href='/login' class='btn btn-green'>Login Ke Member Area (edberttjen / password)</a>";
+            echo "<a href='/run_migrate.php?cmd=test-premier-email' class='btn btn-purple'>📧 Kirim Test Email Upgrade Premier ke edbert.tjen@gmail.com</a>";
+            echo "<a href='/run_migrate.php?cmd=test-email' class='btn btn-blue'>📧 Kirim Test Email Pendaftaran ke edbert.tjen@gmail.com</a>";
+            echo "<a href='/run_migrate.php?cmd=reset-edbert' class='btn btn-gold'>🔄 Reset Premier & Top Up Saldo Rp 10 JT</a>";
+            echo "<a href='/login' class='btn btn-green'>🔑 Login Ke Member Area (edberttjen)</a>";
             echo "</div>";
             echo "</div>";
         }
