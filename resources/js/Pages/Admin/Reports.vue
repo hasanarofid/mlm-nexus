@@ -187,8 +187,8 @@ const reportTabs = [
                 <th class="py-3.5 px-4">GENERASI</th>
                 <th class="py-3.5 px-4">SPONSOR</th>
                 <th class="py-3.5 px-4">MEMBERSHIP</th>
-                <th class="py-3.5 px-4 text-right">TGL DAFTAR</th>
-                <th class="py-3.5 px-4 text-center rounded-r-xl">AKSI</th>
+                <th class="py-3.5 px-4 text-right" :class="{ 'rounded-r-xl': !is_admin }">TGL DAFTAR</th>
+                <th v-if="is_admin" class="py-3.5 px-4 text-center rounded-r-xl">AKSI</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 font-medium">
@@ -224,7 +224,7 @@ const reportTabs = [
                 <td class="py-3.5 px-4 text-right text-slate-400 font-mono text-xs">
                   {{ row.created_at }}
                 </td>
-                <td class="py-3.5 px-4 text-center">
+                <td v-if="is_admin" class="py-3.5 px-4 text-center">
                   <button 
                     @click="openDetailModal(row)"
                     class="px-3 py-1.5 bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 text-[#B8922E] font-bold text-[10px] uppercase tracking-wider rounded-lg transition-colors border border-[#D4AF37]/20"
@@ -235,7 +235,7 @@ const reportTabs = [
               </tr>
 
               <tr v-if="report_data.length === 0">
-                <td colspan="8" class="py-14 text-center text-slate-400 text-xs italic space-y-2">
+                <td :colspan="is_admin ? 7 : 6" class="py-14 text-center text-slate-400 text-xs italic space-y-2">
                   <Users class="w-8 h-8 text-slate-300 mx-auto" />
                   <p>Belum ada member jaringan yang terdaftar.</p>
                 </td>
@@ -416,7 +416,7 @@ const reportTabs = [
     </div>
 
     <!-- Member Detail Modal -->
-    <Modal :show="isDetailModalOpen" @close="closeDetailModal" maxWidth="3xl">
+    <Modal v-if="is_admin" :show="isDetailModalOpen" @close="closeDetailModal" maxWidth="3xl">
       <div v-if="selectedMember" class="bg-white rounded-3xl shadow-xl overflow-hidden">
         <!-- Modal Header -->
         <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
