@@ -118,10 +118,11 @@ class RegisteredUserController extends Controller
             'bank_account_number' => 'nullable|string|max:100',
             'bank_account_name' => 'nullable|string|max:100',
             'ktp_image' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
-            'transfer_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'transfer_proof' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'referral' => 'required|string|max:255',
         ], [
+            'transfer_proof.required' => 'Bukti transfer pembayaran wajib diunggah.',
             'referral.required' => 'Kode Referral / Username Sponsor wajib diisi.',
         ]);
 

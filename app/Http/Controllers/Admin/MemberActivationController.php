@@ -131,9 +131,12 @@ class MemberActivationController extends Controller
             'bank_account_number' => 'nullable|string|max:100',
             'bank_account_name' => 'nullable|string|max:100',
             'ktp_image' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
-            'transfer_proof' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
+            'transfer_proof' => 'required|file|mimes:jpg,jpeg,png,webp,pdf|max:10240',
             'password' => 'required|string|min:8|confirmed',
             'sponsor_username' => 'required|string|exists:users,username',
+        ], [
+            'transfer_proof.required' => 'Bukti transfer pembayaran wajib diunggah.',
+            'ktp_image.required' => 'Foto KTP wajib diunggah.',
         ]);
 
         $sponsorUser = User::where('username', $request->sponsor_username)->first();

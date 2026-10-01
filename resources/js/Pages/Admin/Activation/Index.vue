@@ -132,6 +132,10 @@ const removeTransferProof = () => {
 };
 
 const submitForm = () => {
+  if (!form.transfer_proof) {
+    form.setError('transfer_proof', 'Bukti transfer pembayaran wajib diunggah.');
+    return;
+  }
   form.post(route('admin.activation.store'), {
     forceFormData: true,
     preserveScroll: true,
@@ -347,7 +351,9 @@ const submitForm = () => {
             <!-- Bukti Transfer Upload -->
             <div class="form-group pt-3 border-t border-slate-200/60">
               <div class="flex items-center justify-between mb-1">
-                <label class="text-xs font-bold text-slate-700">Bukti Transfer</label>
+                <label class="text-xs font-bold text-slate-700">
+                  Bukti Transfer <span class="text-rose-500">*</span>
+                </label>
                 <span class="text-[10px] text-slate-400 font-medium">Maks 10 MB (JPG, PNG, PDF)</span>
               </div>
 
