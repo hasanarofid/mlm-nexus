@@ -31,6 +31,7 @@ import {
     Award,
     Coins,
     Package,
+    Database,
 } from "@lucide/vue";
 
 const page = usePage();
@@ -189,10 +190,17 @@ const navigation = computed(() => {
                 icon: FileText,
                 current: route().current("admin.reports.index"),
             },
+            {
+                name: "Backup DB",
+                href: route("admin.backup-db"),
+                icon: Database,
+                external: true,
+                current: false,
+            },
         ];
     }
 
-    // Member Sidebar Navigation (Dashboard, Tambah Member, Team Member, Penarikan Saldo, Laporan)
+    // Member Sidebar Navigation (Dashboard, Tambah Member, Team Member, Penarikan Saldo, Laporan, Backup DB)
     return [
         {
             name: "Dashboard",
@@ -223,6 +231,13 @@ const navigation = computed(() => {
             href: route("admin.reports.index"),
             icon: FileText,
             current: route().current("admin.reports.index"),
+        },
+        {
+            name: "Backup DB",
+            href: route("admin.backup-db"),
+            icon: Database,
+            external: true,
+            current: false,
         },
     ];
 });
@@ -286,7 +301,7 @@ const logout = () => {
                         ? 'translate-x-0'
                         : '-translate-x-full lg:translate-x-0',
                     isSidebarCollapsed ? 'lg:w-20' : 'lg:w-64',
-                    'fixed top-0 bottom-0 left-0 z-40 bg-white border-r border-slate-200/80 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-sm h-full',
+                    'fixed top-0 bottom-0 left-0 z-40 bg-white border-r-2 border-slate-200/90 transition-all duration-300 ease-in-out flex flex-col justify-between shadow-sm h-full',
                 ]"
             >
                 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">

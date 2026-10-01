@@ -120,7 +120,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::post('/settings/rewards', [SettingController::class, 'updateRewards'])->name('settings.rewards');
 
-    // Backup Data (JSON)
+    // Backup Data (SQL & JSON)
+    Route::get('/backup-db', [\App\Http\Controllers\Admin\BackupController::class, 'downloadSql'])->name('backup-db');
     Route::get('/backup-data-json', [\App\Http\Controllers\Admin\BackupController::class, 'downloadJson'])->name('backup-json');
 
     // Pages

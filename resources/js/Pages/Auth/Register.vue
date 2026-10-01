@@ -193,6 +193,18 @@ const handleTransferProofUpload = async (e) => {
     }
 };
 
+const triggerKtpUpload = () => {
+    if (fileInput.value) {
+        fileInput.value.click();
+    }
+};
+
+const triggerTransferProofUpload = () => {
+    if (transferProofFileInput.value) {
+        transferProofFileInput.value.click();
+    }
+};
+
 const removeTransferProof = () => {
     form.transfer_proof = null;
     transferProofPreview.value = null;
