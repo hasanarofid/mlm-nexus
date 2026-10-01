@@ -3,10 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Category;
-use App\Models\Post;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,369 +14,34 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Seed Roles and Permissions
         $this->call(RoleAndPermissionSeeder::class);
-        $this->call(ProductSeeder::class);
 
-        // 2. Seed Default Users and Assign Roles
-        $admin = User::where('username', 'admin')->orWhere('email', 'admin@nexuscommunity.com')->first() ?: new User();
+        // 2. Seed Master Data (Products, Posts, Settings)
+        $this->call(ProductSeeder::class);
+        $this->call(PostSeeder::class);
+        $this->call(SettingSeeder::class);
+
+        // 3. Seed ONLY President Director (Admin) User
+        $admin = User::where('username', 'admin')
+            ->orWhere('email', 'admin@nexuscommunity.com')
+            ->orWhere('email', 'admin@nexuscommunity.id')
+            ->orWhere('id', 1)
+            ->first() ?: new User();
+
         $admin->fill([
             'name' => 'President Director (Admin)',
             'username' => 'admin',
             'email' => 'admin@nexuscommunity.com',
             'password' => bcrypt('password'),
-            'left_count' => 3,
-            'right_count' => 2,
-            'left_points' => 1,
+            'left_count' => 0,
+            'right_count' => 0,
+            'left_points' => 0,
             'right_points' => 0,
             'package_name' => 'Standard',
-            'saldo' => 500000.00,
-            'total_bonus' => 500000.00,
+            'saldo' => 0,
+            'total_bonus' => 0,
+            'is_premier' => false,
         ]);
         $admin->save();
         $admin->assignRole('admin');
-
-        // Level 2 (Children of Admin)
-        $budi = User::where('username', 'budi')->orWhere('email', 'budi@nexuscommunity.com')->first() ?: new User();
-        $budi->fill([
-            'name' => 'Budi Santoso',
-            'username' => 'budi',
-            'email' => 'budi@nexuscommunity.com',
-            'phone' => '081234567801',
-            'password' => bcrypt('password'),
-            'parent_id' => $admin->id,
-            'position' => 'left',
-            'left_count' => 1,
-            'right_count' => 1,
-            'left_points' => 0,
-            'right_points' => 0,
-            'package_name' => 'Standard',
-            'saldo' => 500000.00,
-            'total_bonus' => 500000.00,
-        ]);
-        $budi->save();
-        $budi->assignRole('client');
-
-        $siti = User::where('username', 'siti')->orWhere('email', 'siti@nexuscommunity.com')->first() ?: new User();
-        $siti->fill([
-            'name' => 'Siti Rahma',
-            'username' => 'siti',
-            'email' => 'siti@nexuscommunity.com',
-            'phone' => '081234567802',
-            'password' => bcrypt('password'),
-            'parent_id' => $admin->id,
-            'position' => 'right',
-            'left_count' => 1,
-            'right_count' => 0,
-            'left_points' => 0,
-            'right_points' => 0,
-            'package_name' => 'Standard',
-        ]);
-        $siti->save();
-        $siti->assignRole('client');
-
-        // Level 3 (Grandchildren)
-        $dewi = User::where('username', 'dewi')->orWhere('email', 'dewi@nexuscommunity.com')->first() ?: new User();
-        $dewi->fill([
-            'name' => 'Dewi Lestari',
-            'username' => 'dewi',
-            'email' => 'dewi@nexuscommunity.com',
-            'phone' => '081234567803',
-            'password' => bcrypt('password'),
-            'parent_id' => $budi->id,
-            'position' => 'left',
-            'left_count' => 0,
-            'right_count' => 0,
-            'left_points' => 0,
-            'right_points' => 0,
-            'package_name' => 'Standard',
-        ]);
-        $dewi->save();
-        $dewi->assignRole('client');
-
-        $eko = User::where('username', 'eko')->orWhere('email', 'eko@nexuscommunity.com')->first() ?: new User();
-        $eko->fill([
-            'name' => 'Eko Prasetyo',
-            'username' => 'eko',
-            'email' => 'eko@nexuscommunity.com',
-            'phone' => '081234567804',
-            'password' => bcrypt('password'),
-            'parent_id' => $budi->id,
-            'position' => 'right',
-            'left_count' => 0,
-            'right_count' => 0,
-            'left_points' => 0,
-            'right_points' => 0,
-            'package_name' => 'Standard',
-        ]);
-        $eko->save();
-        $eko->assignRole('client');
-
-        // Dummy User for Premier Upgrade Testing (@edberttjen)
-        $edbert = User::where('username', 'edberttjen')->orWhere('email', 'edbert.tjen@gmail.com')->first() ?: new User();
-        $edbert->fill([
-            'name' => 'Edbert Tjen',
-            'username' => 'edberttjen',
-            'email' => 'edbert.tjen@gmail.com',
-            'phone' => '082120000228',
-            'password' => bcrypt('password'),
-            'parent_id' => $budi->id,
-            'position' => 'left',
-            'package_name' => 'Standard',
-            'saldo' => 10000000.00,
-            'total_bonus' => 10000000.00,
-            'is_left_handed' => 'Tidak',
-            'beneficiary_name' => 'Edbert Tjen',
-            'beneficiary_birth_date' => '1993-12-20',
-            'beneficiary_relation' => 'Keluarga',
-            'beneficiary_phone' => '08123456789',
-            'emergency_phone' => '08123456789',
-            'bank_name' => 'Bank BRI',
-            'bank_account_name' => 'Edbert Tjen',
-            'bank_account_number' => '1234567890',
-        ]);
-        $edbert->save();
-        $edbert->assignRole('client');
-
-        $fajar = User::where('username', 'fajar')->orWhere('email', 'fajar@nexuscommunity.com')->first() ?: new User();
-        $fajar->fill([
-            'name' => 'Fajar Hidayat',
-            'username' => 'fajar',
-            'email' => 'fajar@nexuscommunity.com',
-            'phone' => '081234567805',
-            'password' => bcrypt('password'),
-            'parent_id' => $siti->id,
-            'position' => 'left',
-            'left_count' => 0,
-            'right_count' => 0,
-            'left_points' => 0,
-            'right_points' => 0,
-            'package_name' => 'Standard',
-        ]);
-        $fajar->save();
-        $fajar->assignRole('client');
-
-        // 2b. Seed Active & Used Vouchers for Admin matching mockup
-        $v1 = \App\Models\Voucher::updateOrCreate(
-            ['code' => 'PIN-9812-XYZ'],
-            [
-                'user_id' => $admin->id,
-                'package_name' => 'Standard',
-                'status' => 'active',
-                'created_at' => now()->subDays(5),
-            ]
-        );
-
-        $v2 = \App\Models\Voucher::updateOrCreate(
-            ['code' => 'PIN-4432-ABC'],
-            [
-                'user_id' => $admin->id,
-                'package_name' => 'Standard',
-                'status' => 'active',
-                'created_at' => now()->subDays(5),
-            ]
-        );
-
-        \App\Models\Voucher::updateOrCreate(
-            ['code' => 'PIN-1234-MNO'],
-            [
-                'user_id' => $admin->id,
-                'package_name' => 'Standard',
-                'status' => 'used',
-                'used_by_id' => $budi->id,
-                'used_at' => now()->subDays(4),
-                'created_at' => now()->subDays(5),
-            ]
-        );
-
-        \App\Models\Voucher::updateOrCreate(
-            ['code' => 'PIN-5678-PQR'],
-            [
-                'user_id' => $admin->id,
-                'package_name' => 'Standard',
-                'status' => 'used',
-                'used_by_id' => $siti->id,
-                'used_at' => now()->subDays(3),
-                'created_at' => now()->subDays(5),
-            ]
-        );
-
-        \App\Models\Voucher::updateOrCreate(
-            ['code' => 'PIN-2222-BBB'],
-            [
-                'user_id' => $admin->id,
-                'package_name' => 'Standard',
-                'status' => 'used',
-                'used_by_id' => $dewi->id,
-                'used_at' => now()->subDays(1),
-                'created_at' => now()->subDays(3),
-            ]
-        );
-
-        // Seed Transfer History matching mockup
-        $vt1 = \App\Models\Voucher::updateOrCreate(
-            ['code' => 'PIN-5555-DDD'],
-            [
-                'user_id' => $budi->id,
-                'package_name' => 'Standard',
-                'status' => 'active',
-                'created_at' => now()->subDays(2),
-            ]
-        );
-
-        \App\Models\VoucherTransfer::updateOrCreate(
-            ['voucher_code' => 'PIN-5555-DDD'],
-            [
-                'voucher_id' => $vt1->id,
-                'sender_id' => $admin->id,
-                'recipient_id' => $budi->id,
-                'created_at' => now()->subDays(2)->setHour(21)->setMinute(20),
-            ]
-        );
-
-        $vt2 = \App\Models\Voucher::updateOrCreate(
-            ['code' => 'PIN-8888-EEE'],
-            [
-                'user_id' => $siti->id,
-                'package_name' => 'Standard',
-                'status' => 'active',
-                'created_at' => now()->subDays(1),
-            ]
-        );
-
-        \App\Models\VoucherTransfer::updateOrCreate(
-            ['voucher_code' => 'PIN-8888-EEE'],
-            [
-                'voucher_id' => $vt2->id,
-                'sender_id' => $admin->id,
-                'recipient_id' => $siti->id,
-                'created_at' => now()->subDays(1)->setHour(23)->setMinute(0),
-            ]
-        );
-
-        // Seed Financial Wallet Transactions matching mockup
-        \App\Models\WalletTransaction::updateOrCreate(
-            ['description' => 'Transfer saldo modal awal', 'user_id' => $admin->id],
-            [
-                'type' => 'out',
-                'category' => 'transfer',
-                'amount' => 150000,
-                'related_user_id' => $budi->id,
-                'created_at' => now()->subDays(3)->setHour(10)->setMinute(15)->setSecond(0),
-            ]
-        );
-
-        \App\Models\WalletTransaction::updateOrCreate(
-            ['description' => 'Bonus Referral: Pendaftaran Mitra Dewi', 'user_id' => $budi->id],
-            [
-                'type' => 'in',
-                'category' => 'sponsor',
-                'amount' => 250000,
-                'related_user_id' => $dewi->id,
-                'created_at' => now()->subDays(2)->setHour(10)->setMinute(0)->setSecond(0),
-            ]
-        );
-
-        \App\Models\WalletTransaction::updateOrCreate(
-            ['description' => 'Bonus Referral: Pendaftaran Mitra Eko', 'user_id' => $budi->id],
-            [
-                'type' => 'in',
-                'category' => 'sponsor',
-                'amount' => 250000,
-                'related_user_id' => $eko->id,
-                'created_at' => now()->subDays(1)->setHour(14)->setMinute(0)->setSecond(0),
-            ]
-        );
-
-        \App\Models\WalletTransaction::updateOrCreate(
-            ['description' => 'Cairkan bonus sponsor ke E-Wallet', 'user_id' => $admin->id],
-            [
-                'type' => 'in',
-                'category' => 'payout',
-                'amount' => 300000,
-                'created_at' => now()->subDays(2)->setHour(14)->setMinute(30)->setSecond(0),
-            ]
-        );
-
-        // Seed Activity Bonus Logs matching mockup
-        \App\Models\BonusLog::updateOrCreate(
-            ['transaction_code' => 'B001'],
-            [
-                'user_id' => $admin->id,
-                'category' => 'sponsor',
-                'source_user_id' => $budi->id,
-                'description' => 'Bonus Referral: Pendaftaran budi (USR002)',
-                'amount' => 250000,
-                'created_at' => now()->subDays(4)->setHour(18)->setMinute(30)->setSecond(0),
-            ]
-        );
-
-        \App\Models\BonusLog::updateOrCreate(
-            ['transaction_code' => 'B002'],
-            [
-                'user_id' => $admin->id,
-                'category' => 'sponsor',
-                'source_user_id' => $siti->id,
-                'description' => 'Bonus Referral: Pendaftaran siti (USR003)',
-                'amount' => 250000,
-                'created_at' => now()->subDays(3)->setHour(16)->setMinute(15)->setSecond(0),
-            ]
-        );
-
-        \App\Models\BonusLog::updateOrCreate(
-            ['transaction_code' => 'B003'],
-            [
-                'user_id' => $budi->id,
-                'category' => 'sponsor',
-                'source_user_id' => $dewi->id,
-                'description' => 'Bonus Referral: Pendaftaran dewi (dewi)',
-                'amount' => 250000,
-                'created_at' => now()->subDays(2)->setHour(10)->setMinute(0)->setSecond(0),
-            ]
-        );
-
-        \App\Models\BonusLog::updateOrCreate(
-            ['transaction_code' => 'B004'],
-            [
-                'user_id' => $budi->id,
-                'category' => 'sponsor',
-                'source_user_id' => $eko->id,
-                'description' => 'Bonus Referral: Pendaftaran eko (eko)',
-                'amount' => 250000,
-                'created_at' => now()->subDays(1)->setHour(14)->setMinute(0)->setSecond(0),
-            ]
-        );
-
-        \App\Models\BonusLog::updateOrCreate(
-            ['transaction_code' => 'B005'],
-            [
-                'user_id' => $admin->id,
-                'category' => 'generasi',
-                'source_user_id' => $eko->id,
-                'description' => 'Bonus Tim Gen 2: Pendaftaran eko (USR005)',
-                'amount' => 5000,
-                'created_at' => now()->subDays(1)->setHour(23)->setMinute(0)->setSecond(0),
-            ]
-        );
-
-        \App\Models\BonusLog::updateOrCreate(
-            ['transaction_code' => 'P001'],
-            [
-                'user_id' => $admin->id,
-                'category' => 'generasi',
-                'source_user_id' => $budi->id,
-                'description' => 'Bonus Tim Gen 2: Pendaftaran dewi (USR004)',
-                'amount' => 5000,
-                'created_at' => now()->subDays(2)->setHour(12)->setMinute(0)->setSecond(0),
-            ]
-        );
-
-        // 3. Seed Settings
-        $this->call(SettingSeeder::class);
-
-        // 4. Seed Pages and Sections
-        $this->call(PageAndSectionSeeder::class);
-
-        // 5. Seed Categories & Posts
-        $this->call(PostSeeder::class);
     }
 }
-

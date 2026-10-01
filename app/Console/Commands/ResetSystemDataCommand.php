@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\BonusLog;
+use App\Models\PremiPayment;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\RepeatOrder;
@@ -30,18 +31,18 @@ class ResetSystemDataCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Reset all transactional data, member users, bonus logs, and orders except admin, yayan, arif & product catalog.';
+    protected $description = 'Reset all member accounts and transactional data, keeping ONLY Admin and Master Catalog Data.';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('Starting System Data Reset (Keeping Admin, Yayan, Arif & Product Catalog)...');
+        $this->info('Starting System Data Reset (Keeping ONLY Admin & Master Catalog Data)...');
 
         Schema::disableForeignKeyConstraints();
 
-        // 1. Clear all transaction logs & orders
+        // 1. Clear all transaction logs, orders & requests
         BonusLog::query()->delete();
         $this->info('✓ Bonus logs cleared.');
 
@@ -50,6 +51,11 @@ class ResetSystemDataCommand extends Command
 
         Withdrawal::query()->delete();
         $this->info('✓ Withdrawals cleared.');
+
+        if (Schema::hasTable('premi_payments')) {
+            PremiPayment::query()->delete();
+            $this->info('✓ Premi payments cleared.');
+        }
 
         RepeatOrder::query()->delete();
         $this->info('✓ Repeat orders cleared.');
@@ -69,29 +75,24 @@ class ResetSystemDataCommand extends Command
         TprRequest::query()->delete();
         $this->info('✓ TPR requests cleared.');
 
-        // Usernames to keep
-        $preservedUsernames = ['admin', 'yayan', 'arif'];
+        // 2. Delete all non-admin member user accounts
+        $deletedUsers = User::where('username', '!=', 'admin')
+            ->where('email', '!=', 'admin@nexuscommunity.com')
+            ->where('email', '!=', 'admin@nexuscommunity.id')
+            ->where('id', '>', 1)
+            ->delete();
 
-        // 2. Delete all non-preserved users (including users with NULL username)
-        $deletedUsers = User::where(function ($query) use ($preservedUsernames) {
-            $query->whereNotIn('username', $preservedUsernames)
-                  ->orWhereNull('username');
-        })
-        ->where('email', '!=', 'admin@nexuscommunity.id')
-        ->where('id', '>', 1)
-        ->delete();
+        $this->info("✓ Deleted {$deletedUsers} member user accounts.");
 
-        $this->info("✓ Deleted {$deletedUsers} other member user accounts.");
+        // 3. Reset Admin user account stats to initial clean 0 state
+        $admin = User::where('username', 'admin')
+            ->orWhere('email', 'admin@nexuscommunity.com')
+            ->orWhere('email', 'admin@nexuscommunity.id')
+            ->orWhere('id', 1)
+            ->first();
 
-        // 3. Reset preserved users (Admin, Yayan, Arif)
-        $preservedUsers = User::where(function($q) use ($preservedUsernames) {
-            $q->whereIn('username', $preservedUsernames)
-              ->orWhere('email', 'admin@nexuscommunity.id')
-              ->orWhere('id', 1);
-        })->get();
-
-        foreach ($preservedUsers as $u) {
-            $u->update([
+        if ($admin) {
+            $admin->update([
                 'saldo' => 0,
                 'total_bonus' => 0,
                 'parent_id' => null,
@@ -104,8 +105,11 @@ class ResetSystemDataCommand extends Command
                 'ro_points' => 0,
                 'po_points' => 0,
                 'bonus_uncashed' => 0,
+                'is_premier' => false,
+                'premier_activated_at' => null,
+                'premier_expires_at' => null,
             ]);
-            $this->info("✓ User @{$u->username} ({$u->name}) reset to initial 0 state.");
+            $this->info("✓ Admin user @{$admin->username} reset to initial clean 0 state.");
         }
 
         Schema::enableForeignKeyConstraints();
