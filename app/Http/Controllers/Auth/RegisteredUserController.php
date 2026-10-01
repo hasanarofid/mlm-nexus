@@ -24,9 +24,9 @@ class RegisteredUserController extends Controller
      */
     public function create(Request $request): Response
     {
-        $ref = $request->query('sponsor') 
+        $ref = $request->query('referral') 
+            ?? $request->query('sponsor') 
             ?? $request->query('ref') 
-            ?? $request->query('referral') 
             ?? $request->query('reff') 
             ?? '';
 

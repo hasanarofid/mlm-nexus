@@ -79,7 +79,7 @@ const form = useForm({
     ktp_image: null,
     password: '',
     password_confirmation: '',
-    referral: props.referral_code || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('sponsor') || new URLSearchParams(window.location.search).get('ref') || new URLSearchParams(window.location.search).get('referral') || new URLSearchParams(window.location.search).get('reff') || '') : ''),
+    referral: props.referral_code || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('referral') || new URLSearchParams(window.location.search).get('sponsor') || new URLSearchParams(window.location.search).get('ref') || new URLSearchParams(window.location.search).get('reff') || '') : ''),
     terms: true,
 });
 

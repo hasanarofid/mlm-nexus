@@ -90,8 +90,8 @@ class DashboardController extends Controller
             'registration_fee' => 100000,
             'all_sponsors' => $allSponsors,
             'referral_links' => [
-                'default' => url('/register?sponsor=' . ($user ? ($user->username ?: $user->id) : 1)),
-                'url' => url('/register?sponsor=' . ($user ? ($user->username ?: $user->id) : 1)),
+                'default' => url('/register?referral=' . ($user ? ($user->username ?: $user->id) : 1)),
+                'url' => url('/register?referral=' . ($user ? ($user->username ?: $user->id) : 1)),
             ],
             'wallet' => [
                 'total_saldo' => $totalSaldo,
