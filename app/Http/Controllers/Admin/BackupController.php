@@ -15,10 +15,31 @@ use Illuminate\Support\Facades\DB;
 class BackupController extends Controller
 {
     /**
+     * Ensure only admin users can access backup functionality.
+     */
+    private function checkAdminPermission()
+    {
+        $user = auth()->user();
+        if (!$user) {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $isAdmin = $user->username === 'admin' 
+            || $user->email === 'admin@nexuscommunity.id' 
+            || (method_exists($user, 'hasRole') && $user->hasRole('admin'));
+
+        if (!$isAdmin) {
+            abort(403, 'Akses ditolak. Fitur Backup DB hanya dapat diakses oleh Admin.');
+        }
+    }
+
+    /**
      * Download complete database backup in SQL format.
      */
     public function downloadSql()
     {
+        $this->checkAdminPermission();
+
         $tables = DB::select('SHOW TABLES');
         $dbName = DB::getDatabaseName();
 
@@ -82,6 +103,8 @@ class BackupController extends Controller
      */
     public function downloadJson()
     {
+        $this->checkAdminPermission();
+
         $backupData = [
             'app_info' => [
                 'name' => 'nexuscommunity.id',

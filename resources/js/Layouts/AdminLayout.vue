@@ -200,7 +200,7 @@ const navigation = computed(() => {
         ];
     }
 
-    // Member Sidebar Navigation (Dashboard, Tambah Member, Team Member, Penarikan Saldo, Laporan, Backup DB)
+    // Member Sidebar Navigation (Dashboard, Tambah Member, Team Member, Penarikan Saldo, Laporan)
     return [
         {
             name: "Dashboard",
@@ -231,13 +231,6 @@ const navigation = computed(() => {
             href: route("admin.reports.index"),
             icon: FileText,
             current: route().current("admin.reports.index"),
-        },
-        {
-            name: "Backup DB",
-            href: route("admin.backup-db"),
-            icon: Database,
-            external: true,
-            current: false,
         },
     ];
 });
