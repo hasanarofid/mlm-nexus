@@ -185,7 +185,7 @@ const reportTabs = [
                 <th class="py-3.5 px-4 rounded-l-xl">NO</th>
                 <th class="py-3.5 px-4">NAMA MEMBER</th>
                 <th class="py-3.5 px-4">GENERASI</th>
-                <th class="py-3.5 px-4">SPONSOR</th>
+                <th class="py-3.5 px-4">REFERRAL</th>
                 <th class="py-3.5 px-4">MEMBERSHIP</th>
                 <th class="py-3.5 px-4 text-right" :class="{ 'rounded-r-xl': !is_admin }">TGL DAFTAR</th>
                 <th v-if="is_admin" class="py-3.5 px-4 text-center rounded-r-xl">AKSI</th>
