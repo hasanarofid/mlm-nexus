@@ -122,7 +122,7 @@ class HandleInertiaRequests extends Middleware
                         'id' => 'system_welcome',
                         'type' => 'system',
                         'title' => 'Selamat Datang di Nexus Community',
-                        'message' => 'Akun Anda aktif. Mulai bangun tim dan raih komisi multi-tier unilevel Anda!',
+                        'message' => 'Akun telah diaktifkan. Gunakan link referral Anda untuk mengajak orang bergabung bersama Nexus Community',
                         'time' => 'Sistem',
                         'timestamp' => time(),
                         'read' => false,
