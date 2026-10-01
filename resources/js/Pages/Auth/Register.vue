@@ -24,6 +24,8 @@ const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
 const ktpPreview = ref(null);
 const fileInput = ref(null);
+const transferProofPreview = ref(null);
+const transferProofFileInput = ref(null);
 
 const sponsorStatus = ref({
     checked: !!props.initial_sponsor,
@@ -77,39 +79,78 @@ const form = useForm({
     bank_account_number: '',
     bank_account_name: '',
     ktp_image: null,
+    transfer_proof: null,
     password: '',
     password_confirmation: '',
     referral: props.referral_code || (typeof window !== 'undefined' ? (new URLSearchParams(window.location.search).get('referral') || new URLSearchParams(window.location.search).get('sponsor') || new URLSearchParams(window.location.search).get('ref') || new URLSearchParams(window.location.search).get('reff') || '') : ''),
     terms: true,
 });
 
-const bankOptions = [
-    'Bank BCA',
-    'Bank BRI',
-    'Bank BNI',
-    'Bank Mandiri',
-    'Bank BSI',
-    'Bank CIMB Niaga',
-    'Bank Permata',
-    'Bank Danamon',
-    'Bank Tabungan Negara (BTN)',
-    'Bank Jago',
-    'Seabank',
-    'DANA (E-Wallet)',
-    'OVO (E-Wallet)',
-    'GoPay (E-Wallet)',
-    'Lainnya',
-];
+const compressImage = (file, maxWidth = 1600, maxHeight = 1600, quality = 0.82) => {
+    return new Promise((resolve) => {
+        if (!file || !file.type.startsWith('image/')) {
+            resolve(file);
+            return;
+        }
 
-const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
 
-    if (file.size > 10 * 1024 * 1024) {
-        alert('Ukuran file maksimal adalah 10 MB');
+                if (width > maxWidth || height > maxHeight) {
+                    if (width > height) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    } else {
+                        width = Math.round((width * maxHeight) / height);
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob(
+                    (blob) => {
+                        if (!blob) {
+                            resolve(file);
+                            return;
+                        }
+                        const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+                            type: 'image/jpeg',
+                            lastModified: Date.now(),
+                        });
+                        resolve(compressedFile);
+                    },
+                    'image/jpeg',
+                    quality
+                );
+            };
+            img.onerror = () => resolve(file);
+        };
+        reader.onerror = () => resolve(file);
+    });
+};
+
+const handleFileUpload = async (e) => {
+    const rawFile = e.target.files[0];
+    if (!rawFile) return;
+
+    if (rawFile.size > 15 * 1024 * 1024) {
+        alert('Ukuran file maksimal adalah 15 MB');
         return;
     }
 
+    const file = await compressImage(rawFile);
     form.ktp_image = file;
     if (file.type.startsWith('image/')) {
         const reader = new FileReader();
@@ -130,6 +171,36 @@ const removeFile = () => {
     }
 };
 
+const handleTransferProofUpload = async (e) => {
+    const rawFile = e.target.files[0];
+    if (!rawFile) return;
+
+    if (rawFile.size > 15 * 1024 * 1024) {
+        alert('Ukuran file maksimal adalah 15 MB');
+        return;
+    }
+
+    const file = await compressImage(rawFile);
+    form.transfer_proof = file;
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            transferProofPreview.value = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        transferProofPreview.value = 'document';
+    }
+};
+
+const removeTransferProof = () => {
+    form.transfer_proof = null;
+    transferProofPreview.value = null;
+    if (transferProofFileInput.value) {
+        transferProofFileInput.value.value = '';
+    }
+};
+
 watch(() => form.referral, (newVal) => {
     if (sponsorCheckTimeout) clearTimeout(sponsorCheckTimeout);
     sponsorCheckTimeout = setTimeout(() => {
@@ -146,6 +217,10 @@ onMounted(() => {
 const submit = () => {
     if (sponsorStatus.value.checked && !sponsorStatus.value.valid && form.referral) {
         form.setError('referral', `Sponsor "${form.referral}" tidak ditemukan. Pendaftaran tidak dapat diproses.`);
+        return;
+    }
+    if (!form.transfer_proof) {
+        form.setError('transfer_proof', 'Bukti transfer pembayaran wajib diunggah.');
         return;
     }
     form.post(route('register'), {
@@ -445,6 +520,83 @@ const submit = () => {
                         class="hidden"
                     />
                     <InputError class="mt-1" :message="form.errors.ktp_image" />
+                </div>
+
+                <!-- Bukti Transfer Upload -->
+                <div class="form-group pt-3 border-t border-slate-200/60">
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="text-xs font-bold text-slate-700">
+                            Bukti Transfer <span class="text-rose-500">*</span>
+                        </label>
+                        <span class="text-[10px] text-slate-400 font-medium">Maks 10 MB (JPG, PNG, PDF)</span>
+                    </div>
+
+                    <div class="mb-3 p-3.5 bg-gradient-to-r from-[#fffbeb] via-[#faf6eb] to-[#fffbeb] border-2 border-[#D4AF37] rounded-xl shadow-2xs space-y-2">
+                        <div class="flex items-center justify-between gap-2 border-b border-[#D4AF37]/30 pb-1.5">
+                            <span class="text-xs font-black text-slate-950 uppercase tracking-tight">Rekening Perusahaan:</span>
+                            <span class="text-sm font-black text-[#B8922E] font-mono">Rp 500.000</span>
+                        </div>
+                        <div class="text-xs text-slate-900 font-black flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5">
+                            <span class="font-black text-slate-900">Bank BCA:</span>
+                            <span class="font-mono font-black text-xs text-slate-950 px-2 py-0.5 bg-white border border-[#D4AF37]/70 rounded-md shadow-2xs tracking-wider">172-666-2020</span>
+                            <span class="text-slate-700 font-bold text-[11px]">a/n</span>
+                            <strong class="font-black text-slate-950 uppercase tracking-wide text-xs">PT. NEXUS KOMUNITAS BERSAMA</strong>
+                        </div>
+                    </div>
+
+                    <div 
+                        v-if="!form.transfer_proof"
+                        @click="$refs.transferProofFileInput.click()"
+                        class="border-2 border-dashed border-slate-300 hover:border-[#D4AF37] rounded-xl p-4 text-center cursor-pointer transition-colors bg-white group flex flex-col items-center justify-center gap-2"
+                    >
+                        <div class="w-10 h-10 rounded-full bg-slate-100 group-hover:bg-[#D4AF37]/10 flex items-center justify-center text-slate-500 group-hover:text-[#D4AF37] transition-colors">
+                            <CreditCard class="w-5 h-5" />
+                        </div>
+                        <div class="text-xs font-bold text-slate-700 group-hover:text-slate-900">
+                            Tambahkan Bukti Transfer
+                        </div>
+                        <div class="text-[11px] text-slate-400">
+                            Klik untuk memilih foto/file bukti transfer pembayaran
+                        </div>
+                    </div>
+
+                    <!-- File Attached Preview -->
+                    <div v-else class="p-3 bg-white border border-[#D4AF37]/40 rounded-xl flex items-center justify-between shadow-sm">
+                        <div class="flex items-center gap-3 overflow-hidden">
+                            <div v-if="transferProofPreview && transferProofPreview !== 'document'" class="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 flex-shrink-0">
+                                <img :src="transferProofPreview" alt="Transfer Proof Preview" class="w-full h-full object-cover" />
+                            </div>
+                            <div v-else class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                                <CreditCard class="w-5 h-5" />
+                            </div>
+                            <div class="overflow-hidden">
+                                <p class="text-xs font-bold text-slate-800 truncate max-w-[180px] sm:max-w-xs">
+                                    {{ form.transfer_proof.name }}
+                                </p>
+                                <p class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                                    <Check class="w-3 h-3" /> Siap diunggah ({{ (form.transfer_proof.size / 1024 / 1024).toFixed(2) }} MB)
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            @click="removeTransferProof"
+                            class="p-1.5 text-slate-400 hover:text-rose-500 rounded-lg hover:bg-rose-50 transition-colors"
+                            title="Hapus file"
+                        >
+                            <X class="w-4 h-4" />
+                        </button>
+                    </div>
+
+                    <input
+                        ref="transferProofFileInput"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,application/pdf"
+                        @change="handleTransferProofUpload"
+                        class="hidden"
+                    />
+                    <InputError class="mt-1" :message="form.errors.transfer_proof" />
                 </div>
             </div>
 

@@ -73,15 +73,71 @@ const form = useForm({
   sponsor_username: props.default_sponsor || 'admin',
 });
 
-const handleFileUpload = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+const compressImage = (file, maxWidth = 1600, maxHeight = 1600, quality = 0.82) => {
+  return new Promise((resolve) => {
+    if (!file || !file.type.startsWith('image/')) {
+      resolve(file);
+      return;
+    }
 
-  if (file.size > 10 * 1024 * 1024) {
-    alert('Ukuran file maksimal adalah 10 MB');
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth || height > maxHeight) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            width = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              resolve(file);
+              return;
+            }
+            const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(compressedFile);
+          },
+          'image/jpeg',
+          quality
+        );
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => resolve(file);
+  });
+};
+
+const handleFileUpload = async (e) => {
+  const rawFile = e.target.files[0];
+  if (!rawFile) return;
+
+  if (rawFile.size > 15 * 1024 * 1024) {
+    alert('Ukuran file maksimal adalah 15 MB');
     return;
   }
 
+  const file = await compressImage(rawFile);
   form.ktp_image = file;
   if (file.type.startsWith('image/')) {
     const reader = new FileReader();
@@ -102,15 +158,16 @@ const removeFile = () => {
   }
 };
 
-const handleTransferProofUpload = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+const handleTransferProofUpload = async (e) => {
+  const rawFile = e.target.files[0];
+  if (!rawFile) return;
 
-  if (file.size > 10 * 1024 * 1024) {
-    alert('Ukuran file maksimal adalah 10 MB');
+  if (rawFile.size > 15 * 1024 * 1024) {
+    alert('Ukuran file maksimal adalah 15 MB');
     return;
   }
 
+  const file = await compressImage(rawFile);
   form.transfer_proof = file;
   if (file.type.startsWith('image/')) {
     const reader = new FileReader();
