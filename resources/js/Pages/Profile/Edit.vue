@@ -58,7 +58,7 @@ const memberForm = useForm({
     beneficiary_name: props.user?.beneficiary_name || "",
     beneficiary_relation: props.user?.beneficiary_relation || "Pasangan (Suami/Istri)",
     beneficiary_phone: props.user?.beneficiary_phone || "",
-    bank_name: props.user?.bank_name || "Bank BRI",
+    bank_name: props.user?.bank_name || "Bank Sinarmas",
     bank_account_number: props.user?.bank_account_number || "",
     bank_account_name: props.user?.bank_account_name || props.user?.name || "",
     password: "",
@@ -284,26 +284,10 @@ const saveBanks = () => {
                                 <h2
                                     class="text-lg md:text-xl font-black text-slate-900 tracking-tight"
                                 >
-                                    Data Diri Anggota NEXUS COMMUNITY & Rekening Bank
+                                    Data Diri Anggota NEXUS COMMUNITY
                                 </h2>
-                                <span
-                                    class="px-2.5 py-0.5 text-[10px] font-extrabold bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200 uppercase tracking-wider"
-                                >
-                                    Member NEXUS COMMUNITY
-                                </span>
                             </div>
-                            <p class="text-xs text-slate-500 font-medium mt-1">
-                                Lengkapi identitas kependudukan, alamat domisili, data ahli waris, serta rekening bank untuk tertib administrasi NEXUS COMMUNITY & pencairan saldo (WD).
-                            </p>
                         </div>
-                    </div>
-
-                    <!-- Notice Badge -->
-                    <div
-                        class="px-4 py-2.5 bg-amber-50 border border-amber-200/80 rounded-2xl text-[11px] text-amber-900 font-semibold flex items-center gap-2"
-                    >
-                        <Shield class="w-4 h-4 text-amber-600 shrink-0" />
-                        <span>Data tersimpan aman & terlindungi untuk legalitas keanggotaan NEXUS COMMUNITY.</span>
                     </div>
                 </div>
 
@@ -320,12 +304,9 @@ const saveBanks = () => {
                                 <h3
                                     class="text-xs font-black text-slate-900 uppercase tracking-tight"
                                 >
-                                    1. INFORMASI IDENTITAS KEPENDUDUKAN & PRIBADI
+                                    1. IDENTITAS KEPENDUDUKAN & PRIBADI
                                 </h3>
                             </div>
-                            <span class="text-[10px] font-bold text-slate-400">
-                                Sesuai KTP / KK
-                            </span>
                         </div>
 
                         <!-- KTP PHOTO UPLOAD BOX -->
@@ -640,12 +621,9 @@ const saveBanks = () => {
                                 <h3
                                     class="text-xs font-black text-slate-900 uppercase tracking-tight"
                                 >
-                                    2. ALAMAT DOMISILI LENGKAP (TEMPAT TINGGAL)
+                                    2. ALAMAT DOMISILI LENGKAP
                                 </h3>
                             </div>
-                            <span class="text-[10px] font-bold text-slate-400">
-                                Wilayah Domisili
-                            </span>
                         </div>
 
                         <div class="space-y-4">
@@ -757,12 +735,9 @@ const saveBanks = () => {
                                 <h3
                                     class="text-xs font-black text-indigo-950 uppercase tracking-tight"
                                 >
-                                    3. DATA AHLI WARIS & KONTAK DARURAT (NEXUS COMMUNITY)
+                                    3. DATA AHLI WARIS & KONTAK DARURAT
                                 </h3>
                             </div>
-                            <span class="text-[10px] font-bold text-indigo-500">
-                                Penerima Manfaat / Santunan
-                            </span>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -802,12 +777,12 @@ const saveBanks = () => {
                                 </select>
                             </div>
 
-                            <!-- NO HP AHLI WARIS -->
+                            <!-- WA KONTAK DARURAT -->
                             <div>
                                 <label
                                     class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
-                                    NO HP / WA AHLI WARIS
+                                    WA KONTAK DARURAT
                                 </label>
                                 <input
                                     v-model="memberForm.beneficiary_phone"
@@ -831,12 +806,9 @@ const saveBanks = () => {
                                 <h3
                                     class="text-xs font-black text-emerald-950 uppercase tracking-tight"
                                 >
-                                    4. INFORMASI REKENING BANK & VIRTUAL WALLET (PENARIKAN SALDO / WD)
+                                    4. REKENING BANK
                                 </h3>
                             </div>
-                            <span class="text-[10px] font-bold text-emerald-600">
-                                Rekening Penerima WD
-                            </span>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -844,12 +816,12 @@ const saveBanks = () => {
                                 <label
                                     class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
-                                    NAMA BANK / PROVIDER E-WALLET
+                                    NAMA BANK
                                 </label>
                                 <input
                                     v-model="memberForm.bank_name"
                                     type="text"
-                                    placeholder="cth: Bank Mandiri / BRI / DANA"
+                                    placeholder="cth: Bank Sinarmas / Mandiri / BCA"
                                     class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
                             </div>
@@ -858,7 +830,7 @@ const saveBanks = () => {
                                 <label
                                     class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1"
                                 >
-                                    NOMOR REKENING / NO. HP E-WALLET
+                                    NOMOR REKENING
                                 </label>
                                 <input
                                     v-model="memberForm.bank_account_number"
@@ -895,7 +867,7 @@ const saveBanks = () => {
                             <h3
                                     class="text-xs font-black text-slate-900 uppercase tracking-tight"
                             >
-                                5. UBAH PASSWORD LOGIN (OPSIONAL)
+                                5. UBAH PASSWORD LOGIN
                             </h3>
                         </div>
 
@@ -921,17 +893,14 @@ const saveBanks = () => {
                     </div>
 
                     <!-- Bottom Submit Button -->
-                    <div class="flex items-center justify-between flex-wrap gap-4 pt-2">
-                        <span class="text-xs text-slate-400 font-medium italic">
-                            * Pastikan seluruh data diri Anda telah benar sebelum menekan tombol simpan.
-                        </span>
+                    <div class="flex items-center justify-end flex-wrap gap-4 pt-2">
                         <button
                             type="submit"
                             :disabled="memberForm.processing"
                             class="px-8 py-3.5 bg-gradient-to-r from-[#B8922E] via-[#D4AF37] to-[#F3E5AB] hover:opacity-95 active:scale-[0.99] text-slate-950 text-xs font-black uppercase tracking-wider rounded-2xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
                         >
                             <Check class="w-4 h-4 stroke-[3]" />
-                            <span>Simpan Data Profil NEXUS COMMUNITY</span>
+                            <span>Simpan Perubahan</span>
                         </button>
                     </div>
                 </form>
