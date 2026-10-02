@@ -188,11 +188,19 @@ class ReportController extends Controller
      */
     private function getTeamMitraData($currentUser, bool $isAdmin): array
     {
+        $formatImageUrl = function ($path) {
+            if (!$path) return null;
+            if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+                return $path;
+            }
+            return asset(ltrim($path, '/'));
+        };
+
         if ($isAdmin) {
             return User::with('parent')
                 ->latest()
                 ->get()
-                ->map(function ($u) {
+                ->map(function ($u) use ($formatImageUrl) {
                     $sponsorLabel = $u->parent 
                         ? ('@' . ($u->parent->username ?: 'user_' . $u->parent->id) . ' (' . $u->parent->name . ')') 
                         : 'DIRECT / PERUSAHAAN';
@@ -216,7 +224,8 @@ class ReportController extends Controller
                         'bank_account_name' => $u->bank_account_name ?: '-',
                         'beneficiary_name' => $u->beneficiary_name ?: '-',
                         'beneficiary_relation' => $u->beneficiary_relation ?: '-',
-                        'ktp_image' => $u->ktp_image ? asset('storage/' . $u->ktp_image) : null,
+                        'ktp_image' => $formatImageUrl($u->ktp_image),
+                        'transfer_proof' => $formatImageUrl($u->transfer_proof),
                         'generation' => 'Direct / Admin',
                         'gen_level' => 0,
                         'sponsor' => $sponsorLabel,
@@ -270,7 +279,8 @@ class ReportController extends Controller
                     'bank_account_name' => $u->bank_account_name ?: '-',
                     'beneficiary_name' => $u->beneficiary_name ?: '-',
                     'beneficiary_relation' => $u->beneficiary_relation ?: '-',
-                    'ktp_image' => $u->ktp_image ? asset('storage/' . $u->ktp_image) : null,
+                    'ktp_image' => $formatImageUrl($u->ktp_image),
+                    'transfer_proof' => $formatImageUrl($u->transfer_proof),
                     'generation' => "GEN {$gen}",
                     'gen_level' => $gen,
                     'sponsor' => $sponsorLabel,

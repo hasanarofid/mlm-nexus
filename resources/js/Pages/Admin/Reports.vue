@@ -16,7 +16,8 @@ import {
   ShieldCheck,
   TrendingUp,
   Clock,
-  Sparkles
+  Sparkles,
+  CreditCard
 } from '@lucide/vue';
 
 const props = defineProps({
@@ -87,6 +88,10 @@ const openDetailModal = (member) => {
 const closeDetailModal = () => {
   isDetailModalOpen.value = false;
   setTimeout(() => { selectedMember.value = null; }, 300);
+};
+
+const openImageInNewTab = (url) => {
+  if (url) window.open(url, '_blank');
 };
 
 const reportTabs = [
@@ -539,16 +544,37 @@ const reportTabs = [
 
               <!-- Dokumen KTP -->
               <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
-                <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-2 flex items-center gap-2">
-                  <FileText class="w-3.5 h-3.5 text-slate-500" />
-                  Foto KTP
+                <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-2 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <FileText class="w-3.5 h-3.5 text-slate-500" />
+                    <span>Foto KTP</span>
+                  </div>
+                  <a v-if="selectedMember.ktp_image" :href="selectedMember.ktp_image" target="_blank" class="text-[10px] text-[#B8922E] font-bold hover:underline">Buka Gambar Full</a>
                 </h4>
-                <div v-if="selectedMember.ktp_image" class="rounded-xl overflow-hidden border border-slate-200">
-                  <img :src="selectedMember.ktp_image" alt="Foto KTP" class="w-full h-auto object-cover max-h-48 cursor-pointer hover:opacity-90 transition-opacity" @click="window.open(selectedMember.ktp_image, '_blank')" title="Klik untuk memperbesar">
+                <div v-if="selectedMember.ktp_image" class="rounded-xl overflow-hidden border border-slate-200 bg-white p-1">
+                  <img :src="selectedMember.ktp_image" alt="Foto KTP" class="w-full h-auto object-contain max-h-52 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" @click="openImageInNewTab(selectedMember.ktp_image)" title="Klik untuk memperbesar">
                 </div>
-                <div v-else class="py-8 bg-slate-100 rounded-xl flex flex-col items-center justify-center text-slate-400 border border-slate-200 border-dashed">
-                  <FileText class="w-8 h-8 mb-2 text-slate-300" />
+                <div v-else class="py-6 bg-slate-100/70 rounded-xl flex flex-col items-center justify-center text-slate-400 border border-slate-200 border-dashed">
+                  <FileText class="w-7 h-7 mb-1.5 text-slate-300" />
                   <span class="text-xs font-medium italic">Belum ada foto KTP</span>
+                </div>
+              </div>
+
+              <!-- Dokumen Bukti Transfer -->
+              <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
+                <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-2 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <CreditCard class="w-3.5 h-3.5 text-[#B8922E]" />
+                    <span>Bukti Transfer Pembayaran</span>
+                  </div>
+                  <a v-if="selectedMember.transfer_proof" :href="selectedMember.transfer_proof" target="_blank" class="text-[10px] text-[#B8922E] font-bold hover:underline">Buka Gambar Full</a>
+                </h4>
+                <div v-if="selectedMember.transfer_proof" class="rounded-xl overflow-hidden border border-slate-200 bg-white p-1">
+                  <img :src="selectedMember.transfer_proof" alt="Bukti Transfer" class="w-full h-auto object-contain max-h-52 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" @click="openImageInNewTab(selectedMember.transfer_proof)" title="Klik untuk memperbesar">
+                </div>
+                <div v-else class="py-6 bg-slate-100/70 rounded-xl flex flex-col items-center justify-center text-slate-400 border border-slate-200 border-dashed">
+                  <CreditCard class="w-7 h-7 mb-1.5 text-slate-300" />
+                  <span class="text-xs font-medium italic">Belum ada bukti transfer</span>
                 </div>
               </div>
             </div>
