@@ -189,11 +189,18 @@ class ReportController extends Controller
     private function getTeamMitraData($currentUser, bool $isAdmin): array
     {
         $formatImageUrl = function ($path) {
-            if (!$path) return null;
-            if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
-                return $path;
+            if (!$path || trim($path) === '' || trim($path) === '-') {
+                return null;
             }
-            return asset(ltrim($path, '/'));
+            $clean = trim($path);
+            if (str_starts_with($clean, 'http://') || str_starts_with($clean, 'https://')) {
+                return $clean;
+            }
+            $clean = ltrim($clean, '/');
+            if (str_starts_with($clean, 'public/')) {
+                $clean = substr($clean, 7);
+            }
+            return asset($clean);
         };
 
         if ($isAdmin) {
@@ -207,6 +214,8 @@ class ReportController extends Controller
 
                     $membership = ($u->is_premier || strtolower($u->package_name ?? '') === 'premier') ? 'Premier' : 'Standard';
 
+                    $hasBankAcc = !empty($u->bank_account_number) && trim($u->bank_account_number) !== '-';
+
                     return [
                         'id' => $u->id,
                         'name' => $u->name,
@@ -219,9 +228,9 @@ class ReportController extends Controller
                         'city' => $u->city ?: '-',
                         'province' => $u->province ?: '-',
                         'postal_code' => $u->postal_code ?: '-',
-                        'bank_name' => $u->bank_name ?: '-',
-                        'bank_account_number' => $u->bank_account_number ?: '-',
-                        'bank_account_name' => $u->bank_account_name ?: '-',
+                        'bank_name' => $hasBankAcc ? ($u->bank_name ?: '-') : '-',
+                        'bank_account_number' => $hasBankAcc ? $u->bank_account_number : '-',
+                        'bank_account_name' => $hasBankAcc ? ($u->bank_account_name ?: '-') : '-',
                         'beneficiary_name' => $u->beneficiary_name ?: '-',
                         'beneficiary_relation' => $u->beneficiary_relation ?: '-',
                         'ktp_image' => $formatImageUrl($u->ktp_image),
@@ -262,6 +271,8 @@ class ReportController extends Controller
 
                 $membership = ($u->is_premier || strtolower($u->package_name ?? '') === 'premier') ? 'Premier' : 'Standard';
 
+                $hasBankAcc = !empty($u->bank_account_number) && trim($u->bank_account_number) !== '-';
+
                 $team[] = [
                     'id' => $u->id,
                     'name' => $u->name,
@@ -274,9 +285,9 @@ class ReportController extends Controller
                     'city' => $u->city ?: '-',
                     'province' => $u->province ?: '-',
                     'postal_code' => $u->postal_code ?: '-',
-                    'bank_name' => $u->bank_name ?: '-',
-                    'bank_account_number' => $u->bank_account_number ?: '-',
-                    'bank_account_name' => $u->bank_account_name ?: '-',
+                    'bank_name' => $hasBankAcc ? ($u->bank_name ?: '-') : '-',
+                    'bank_account_number' => $hasBankAcc ? $u->bank_account_number : '-',
+                    'bank_account_name' => $hasBankAcc ? ($u->bank_account_name ?: '-') : '-',
                     'beneficiary_name' => $u->beneficiary_name ?: '-',
                     'beneficiary_relation' => $u->beneficiary_relation ?: '-',
                     'ktp_image' => $formatImageUrl($u->ktp_image),

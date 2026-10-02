@@ -75,7 +75,7 @@ const form = useForm({
     beneficiary_birth_date: '',
     beneficiary_relation: '',
     emergency_phone: '',
-    bank_name: 'Bank BRI',
+    bank_name: '',
     bank_account_number: '',
     bank_account_name: '',
     ktp_image: null,
