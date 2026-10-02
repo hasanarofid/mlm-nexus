@@ -321,7 +321,7 @@ const formatRupiah = (val) => {
               <Users class="w-5 h-5 text-[#0F172A]" />
               <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Team Member</h3>
             </div>
-            <Link :href="route('admin.pohon-jaringan')" class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] hover:underline flex items-center gap-1 transition-colors">
+            <Link :href="route('admin.team')" class="text-xs font-bold text-[#B8922E] hover:text-[#0F172A] hover:underline flex items-center gap-1 transition-colors">
               <span>Rincian Team</span>
               <ArrowUpRight class="w-3.5 h-3.5" />
             </Link>

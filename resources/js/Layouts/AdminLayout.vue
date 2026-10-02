@@ -162,9 +162,9 @@ const navigation = computed(() => {
             },
             {
                 name: "Team Member",
-                href: route("admin.pohon-jaringan"),
+                href: route("admin.team"),
                 icon: GitFork,
-                current: route().current("admin.pohon-jaringan"),
+                current: route().current("admin.team"),
             },
             {
                 name: "Data Member",
@@ -216,9 +216,9 @@ const navigation = computed(() => {
         },
         {
             name: "Team Member",
-            href: route("admin.pohon-jaringan"),
+            href: route("admin.team"),
             icon: GitFork,
-            current: route().current("admin.pohon-jaringan"),
+            current: route().current("admin.team"),
         },
         {
             name: "Penarikan Saldo",

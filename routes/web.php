@@ -40,8 +40,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/premi-invoice', [DashboardController::class, 'premiInvoice'])->name('premi-invoice');
     Route::post('/premi-invoice/upload-proof', [DashboardController::class, 'uploadPremiProof'])->name('premi-invoice.upload-proof');
     
-    // Pohon Jaringan (Genealogy Binary Tree)
-    Route::get('/pohon-jaringan', [\App\Http\Controllers\Admin\GenealogyController::class, 'index'])->name('pohon-jaringan');
+    // Team Member (Genealogy Tree)
+    Route::get('/team', [\App\Http\Controllers\Admin\GenealogyController::class, 'index'])->name('team');
+    Route::get('/pohon-jaringan', function () {
+        return redirect()->route('admin.team', request()->query());
+    })->name('pohon-jaringan');
 
     // Aktivasi Member Baru
     Route::get('/aktivasi-member', [\App\Http\Controllers\Admin\MemberActivationController::class, 'index'])->name('activation.index');

@@ -90,7 +90,7 @@ class HandleInertiaRequests extends Middleware
                             'time' => $d->created_at ? $d->created_at->diffForHumans() : 'Baru saja',
                             'timestamp' => $d->created_at ? $d->created_at->timestamp : time(),
                             'read' => false,
-                            'link' => '/admin/pohon-jaringan',
+                            'link' => '/admin/team',
                         ];
                     }
                 } catch (\Throwable $e) {}

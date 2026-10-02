@@ -65,12 +65,12 @@ const collapseAll = () => {
 
 const focusUser = (userId) => {
   if (!userId) return;
-  router.get(route('admin.pohon-jaringan'), { focus_id: userId }, { preserveState: true });
+  router.get(route('admin.team'), { focus_id: userId }, { preserveState: true });
 };
 
 const resetFocus = () => {
   selectedUserSearch.value = '';
-  router.get(route('admin.pohon-jaringan'));
+  router.get(route('admin.team'));
 };
 
 const getBadgeColor = (pkg) => {

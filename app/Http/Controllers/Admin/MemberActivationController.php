@@ -290,7 +290,7 @@ class MemberActivationController extends Controller
             return redirect()->route('admin.dashboard')->with('success', $successMsg);
         }
 
-        return redirect()->route('admin.pohon-jaringan', ['focus_id' => $sponsorUser->id])
+        return redirect()->route('admin.team', ['focus_id' => $sponsorUser->id])
             ->with('success', $successMsg);
     }
 
