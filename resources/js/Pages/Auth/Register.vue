@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
+import BirthDatePicker from '@/Components/BirthDatePicker.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { 
     User, Mail, Phone, Calendar, Users, AlertCircle, 
@@ -405,18 +406,11 @@ const submit = () => {
                     <label for="beneficiary_birth_date" class="block text-xs font-bold text-slate-700 mb-1">
                         Tanggal Lahir Ahli Waris: <span class="text-rose-500">*</span>
                     </label>
-                    <div class="auth-input-wrap">
-                        <span class="auth-input-icon">
-                            <Calendar class="w-4.5 h-4.5 text-slate-400" />
-                        </span>
-                        <input
-                            id="beneficiary_birth_date"
-                            type="date"
-                            v-model="form.beneficiary_birth_date"
-                            required
-                            class="w-full text-sm bg-transparent"
-                        />
-                    </div>
+                    <BirthDatePicker
+                        id="beneficiary_birth_date"
+                        v-model="form.beneficiary_birth_date"
+                        :required="true"
+                    />
                     <InputError class="mt-1" :message="form.errors.beneficiary_birth_date" />
                 </div>
 

@@ -1,6 +1,7 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import InputError from '@/Components/InputError.vue';
+import BirthDatePicker from '@/Components/BirthDatePicker.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { 
@@ -321,10 +322,10 @@ const submitForm = () => {
                 <label class="block text-xs font-bold text-slate-700 mb-1">
                   Tanggal Lahir Ahli Waris <span class="text-rose-500">*</span>
                 </label>
-                <div class="auth-input-wrap">
-                  <span class="auth-input-icon"><Calendar class="w-4 h-4 text-slate-400" /></span>
-                  <input type="date" v-model="form.beneficiary_birth_date" required class="w-full text-sm bg-transparent" />
-                </div>
+                <BirthDatePicker
+                  v-model="form.beneficiary_birth_date"
+                  :required="true"
+                />
                 <InputError class="mt-1" :message="form.errors.beneficiary_birth_date" />
               </div>
 

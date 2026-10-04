@@ -1,5 +1,6 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
+import BirthDatePicker from "@/Components/BirthDatePicker.vue";
 import { Head, useForm, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue";
 import {
@@ -522,10 +523,8 @@ const saveBanks = () => {
                                 >
                                     TANGGAL LAHIR
                                 </label>
-                                <input
+                                <BirthDatePicker
                                     v-model="memberForm.birth_date"
-                                    type="date"
-                                    class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 text-xs font-bold focus:outline-none focus:border-emerald-500 transition-colors"
                                 />
                             </div>
 
