@@ -417,8 +417,8 @@ const submitForm = () => {
 
               <div class="mb-3 p-4 sm:p-5 bg-gradient-to-r from-[#fffbeb] via-[#faf6eb] to-[#fffbeb] border-2 border-[#D4AF37] rounded-2xl shadow-sm space-y-2.5">
                 <div class="flex items-center justify-between gap-2 border-b border-[#D4AF37]/30 pb-2">
-                  <span class="text-sm sm:text-base font-black text-slate-950 uppercase tracking-tight">Rekening Perusahaan:</span>
-                  <span class="text-base sm:text-lg font-black text-[#B8922E] font-mono">Rp 500.000</span>
+                  <span class="text-xs sm:text-base font-black text-slate-950 uppercase tracking-tight">Rekening Perusahaan:</span>
+                  <span class="text-sm sm:text-lg font-black text-[#B8922E] font-mono whitespace-nowrap shrink-0">Rp 500.000</span>
                 </div>
                 <div class="text-sm sm:text-base text-slate-900 font-black flex flex-wrap items-center gap-x-2.5 gap-y-1.5 pt-0.5">
                   <span class="font-black text-slate-900">Bank BCA:</span>

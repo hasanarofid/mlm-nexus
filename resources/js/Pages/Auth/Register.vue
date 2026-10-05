@@ -540,7 +540,7 @@ const submit = () => {
                     <div class="mb-3 p-3.5 bg-gradient-to-r from-[#fffbeb] via-[#faf6eb] to-[#fffbeb] border-2 border-[#D4AF37] rounded-xl shadow-2xs space-y-2">
                         <div class="flex items-center justify-between gap-2 border-b border-[#D4AF37]/30 pb-1.5">
                             <span class="text-xs font-black text-slate-950 uppercase tracking-tight">Rekening Perusahaan:</span>
-                            <span class="text-sm font-black text-[#B8922E] font-mono">Rp 500.000</span>
+                            <span class="text-xs sm:text-sm font-black text-[#B8922E] font-mono whitespace-nowrap shrink-0">Rp 500.000</span>
                         </div>
                         <div class="text-xs text-slate-900 font-black flex flex-wrap items-center gap-x-2 gap-y-1 pt-0.5">
                             <span class="font-black text-slate-900">Bank BCA:</span>
