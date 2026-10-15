@@ -203,11 +203,22 @@ class ReportController extends Controller
             return asset($clean);
         };
 
+        $formatBirthDate = function ($date) {
+            if (!$date || trim((string)$date) === '' || trim((string)$date) === '-') {
+                return '-';
+            }
+            try {
+                return \Carbon\Carbon::parse($date)->format('d/m/Y');
+            } catch (\Throwable $e) {
+                return (string)$date;
+            }
+        };
+
         if ($isAdmin) {
             return User::with('parent')
                 ->latest()
                 ->get()
-                ->map(function ($u) use ($formatImageUrl) {
+                ->map(function ($u) use ($formatImageUrl, $formatBirthDate) {
                     $sponsorLabel = $u->parent 
                         ? ('@' . ($u->parent->username ?: 'user_' . $u->parent->id) . ' (' . $u->parent->name . ')') 
                         : 'DIRECT / PERUSAHAAN';
@@ -222,6 +233,7 @@ class ReportController extends Controller
                         'username' => $u->username ?: ('user_' . $u->id),
                         'email' => $u->email ?: '-',
                         'phone' => $u->phone ?: '-',
+                        'is_left_handed' => $u->is_left_handed ?: 'Tidak',
                         'nik' => $u->nik ?: '-',
                         'gender' => $u->gender ?: '-',
                         'address' => $u->address ?: '-',
@@ -232,7 +244,9 @@ class ReportController extends Controller
                         'bank_account_number' => $hasBankAcc ? $u->bank_account_number : '-',
                         'bank_account_name' => $hasBankAcc ? ($u->bank_account_name ?: '-') : '-',
                         'beneficiary_name' => $u->beneficiary_name ?: '-',
+                        'beneficiary_birth_date' => $formatBirthDate($u->beneficiary_birth_date),
                         'beneficiary_relation' => $u->beneficiary_relation ?: '-',
+                        'emergency_phone' => $u->emergency_phone ?: '-',
                         'ktp_image' => $formatImageUrl($u->ktp_image),
                         'transfer_proof' => $formatImageUrl($u->transfer_proof),
                         'generation' => 'Direct / Admin',
@@ -279,6 +293,7 @@ class ReportController extends Controller
                     'username' => $u->username ?: ('user_' . $u->id),
                     'email' => $u->email ?: '-',
                     'phone' => $u->phone ?: '-',
+                    'is_left_handed' => $u->is_left_handed ?: 'Tidak',
                     'nik' => $u->nik ?: '-',
                     'gender' => $u->gender ?: '-',
                     'address' => $u->address ?: '-',
@@ -289,7 +304,9 @@ class ReportController extends Controller
                     'bank_account_number' => $hasBankAcc ? $u->bank_account_number : '-',
                     'bank_account_name' => $hasBankAcc ? ($u->bank_account_name ?: '-') : '-',
                     'beneficiary_name' => $u->beneficiary_name ?: '-',
+                    'beneficiary_birth_date' => $formatBirthDate($u->beneficiary_birth_date),
                     'beneficiary_relation' => $u->beneficiary_relation ?: '-',
+                    'emergency_phone' => $u->emergency_phone ?: '-',
                     'ktp_image' => $formatImageUrl($u->ktp_image),
                     'transfer_proof' => $formatImageUrl($u->transfer_proof),
                     'generation' => "GEN {$gen}",
@@ -353,7 +370,7 @@ class ReportController extends Controller
         $html .= '<table>';
 
         if ($type === 'team') {
-            $html .= '<thead><tr><th>NO</th><th>NAMA MEMBER</th><th>USERNAME</th><th>WHATSAPP / HP</th><th>EMAIL</th><th>GENERASI</th><th>SPONSOR</th><th>STATUS MEMBERSHIP</th><th>NIK KTP</th><th>JENIS KELAMIN</th><th>ALAMAT</th><th>KOTA</th><th>PROVINSI</th><th>KODE POS</th><th>NAMA BANK</th><th>NO REKENING</th><th>ATAS NAMA</th><th>AHLI WARIS</th><th>HUBUNGAN AHLI WARIS</th><th>TGL DAFTAR</th></tr></thead><tbody>';
+            $html .= '<thead><tr><th>NO</th><th>NAMA MEMBER</th><th>USERNAME</th><th>WHATSAPP / HP</th><th>EMAIL</th><th>DOMINAN TANGAN KIRI (KIDAL)</th><th>GENERASI</th><th>SPONSOR</th><th>STATUS MEMBERSHIP</th><th>NIK KTP</th><th>JENIS KELAMIN</th><th>ALAMAT</th><th>KOTA</th><th>PROVINSI</th><th>KODE POS</th><th>NAMA BANK</th><th>NO REKENING</th><th>ATAS NAMA</th><th>AHLI WARIS</th><th>TGL LAHIR AHLI WARIS</th><th>HUBUNGAN AHLI WARIS</th><th>WA KONTAK DARURAT</th><th>LINK FOTO KTP</th><th>LINK BUKTI TRANSFER</th><th>TGL DAFTAR</th></tr></thead><tbody>';
             $no = 1;
             foreach ($data as $row) {
                 $html .= '<tr>';
@@ -362,6 +379,7 @@ class ReportController extends Controller
                 $html .= '<td>@' . htmlspecialchars($row['username']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['phone']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['email']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['is_left_handed'] ?? 'Tidak') . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['generation']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['sponsor']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['tier']) . '</td>';
@@ -375,7 +393,24 @@ class ReportController extends Controller
                 $html .= '<td>&nbsp;' . htmlspecialchars($row['bank_account_number']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['bank_account_name']) . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['beneficiary_name']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['beneficiary_birth_date'] ?? '-') . '</td>';
                 $html .= '<td>' . htmlspecialchars($row['beneficiary_relation']) . '</td>';
+                $html .= '<td>' . htmlspecialchars($row['emergency_phone'] ?? '-') . '</td>';
+                
+                // Link Foto KTP
+                if (!empty($row['ktp_image'])) {
+                    $html .= '<td><a href="' . htmlspecialchars($row['ktp_image']) . '" target="_blank">' . htmlspecialchars($row['ktp_image']) . '</a></td>';
+                } else {
+                    $html .= '<td>-</td>';
+                }
+
+                // Link Bukti Transfer
+                if (!empty($row['transfer_proof'])) {
+                    $html .= '<td><a href="' . htmlspecialchars($row['transfer_proof']) . '" target="_blank">' . htmlspecialchars($row['transfer_proof']) . '</a></td>';
+                } else {
+                    $html .= '<td>-</td>';
+                }
+
                 $html .= '<td>' . $row['created_at'] . '</td>';
                 $html .= '</tr>';
             }

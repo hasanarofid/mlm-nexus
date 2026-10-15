@@ -480,6 +480,13 @@ const reportTabs = [
                   <div class="text-slate-500 font-medium">No. HP / WA</div>
                   <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.phone }}</div>
 
+                  <div class="text-slate-500 font-medium">Dominan Tangan</div>
+                  <div class="col-span-2 font-bold text-slate-900">
+                    <span :class="selectedMember.is_left_handed === 'Iya' ? 'px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-md font-bold text-[11px]' : 'text-slate-900 font-semibold'">
+                      {{ selectedMember.is_left_handed === 'Iya' ? 'Kidal (Tangan Kiri)' : 'Tidak (Tangan Kanan)' }}
+                    </span>
+                  </div>
+
                   <div class="text-slate-500 font-medium">Jenis Kelamin</div>
                   <div class="col-span-2 font-bold text-slate-900">{{ selectedMember.gender === 'L' ? 'Laki-laki' : (selectedMember.gender === 'P' ? 'Perempuan' : '-') }}</div>
                   
@@ -527,18 +534,24 @@ const reportTabs = [
                 </div>
               </div>
 
-              <!-- Ahli Waris -->
+              <!-- Ahli Waris & Kontak Darurat -->
               <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 space-y-3">
                 <h4 class="text-xs font-black text-indigo-900 uppercase tracking-wider mb-2 border-b border-indigo-200/60 pb-2 flex items-center gap-2">
                   <Users class="w-3.5 h-3.5 text-indigo-600" />
-                  Ahli Waris
+                  Data Ahli Waris & Kontak Darurat
                 </h4>
                 <div class="grid grid-cols-3 gap-2 text-xs">
-                  <div class="text-indigo-700/70 font-medium">Nama</div>
+                  <div class="text-indigo-700/70 font-medium">Nama Ahli Waris</div>
                   <div class="col-span-2 font-bold text-indigo-900">{{ selectedMember.beneficiary_name }}</div>
                   
+                  <div class="text-indigo-700/70 font-medium">Tgl Lahir Ahli Waris</div>
+                  <div class="col-span-2 font-bold text-indigo-900">{{ selectedMember.beneficiary_birth_date || '-' }}</div>
+
                   <div class="text-indigo-700/70 font-medium">Hubungan</div>
                   <div class="col-span-2 font-bold text-indigo-900">{{ selectedMember.beneficiary_relation }}</div>
+
+                  <div class="text-indigo-700/70 font-medium">WA Kontak Darurat</div>
+                  <div class="col-span-2 font-bold text-indigo-900 font-mono">{{ selectedMember.emergency_phone || '-' }}</div>
                 </div>
               </div>
 

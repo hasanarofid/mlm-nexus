@@ -124,6 +124,7 @@
                     <th>NO</th>
                     <th>NAMA MEMBER & USERNAME</th>
                     <th>NO. WHATSAPP</th>
+                    <th>KIDAL</th>
                     <th>GENERASI</th>
                     <th>SPONSOR</th>
                     <th>MEMBERSHIP</th>
@@ -134,7 +135,8 @@
                     <th>PROVINSI</th>
                     <th>KODE POS</th>
                     <th>INFO BANK</th>
-                    <th>AHLI WARIS</th>
+                    <th>AHLI WARIS & KONTAK DARURAT</th>
+                    <th>DOKUMEN</th>
                     <th>TGL DAFTAR</th>
                 </tr>
             @elseif($type === 'bonus')
@@ -177,6 +179,7 @@
                             <span style="color:#64748b;font-weight:normal;">@{{ $row['username'] }}</span>
                         </td>
                         <td>{{ $row['phone'] }}</td>
+                        <td>{{ $row['is_left_handed'] ?? 'Tidak' }}</td>
                         <td><span class="badge badge-gold">{{ $row['generation'] }}</span></td>
                         <td>{{ $row['sponsor'] }}</td>
                         <td><strong>{{ $row['tier'] }}</strong></td>
@@ -187,7 +190,26 @@
                         <td>{{ $row['province'] }}</td>
                         <td>{{ $row['postal_code'] }}</td>
                         <td>{{ $row['bank_name'] }}<br>{{ $row['bank_account_number'] }}<br>{{ $row['bank_account_name'] }}</td>
-                        <td>{{ $row['beneficiary_name'] }}<br>({{ $row['beneficiary_relation'] }})</td>
+                        <td>
+                            <strong>{{ $row['beneficiary_name'] }}</strong><br>
+                            <span style="font-size:9px;color:#64748b;">
+                                Tgl Lahir: {{ $row['beneficiary_birth_date'] ?? '-' }}<br>
+                                Hub: {{ $row['beneficiary_relation'] }}<br>
+                                WA Darurat: {{ $row['emergency_phone'] ?? '-' }}
+                            </span>
+                        </td>
+                        <td style="font-size:9px;">
+                            @if(!empty($row['ktp_image']))
+                                <a href="{{ $row['ktp_image'] }}" target="_blank" style="color:#b8922e;font-weight:bold;">[Lihat KTP]</a><br>
+                            @else
+                                <span style="color:#94a3b8;">KTP: -</span><br>
+                            @endif
+                            @if(!empty($row['transfer_proof']))
+                                <a href="{{ $row['transfer_proof'] }}" target="_blank" style="color:#059669;font-weight:bold;">[Bukti Trf]</a>
+                            @else
+                                <span style="color:#94a3b8;">Trf: -</span>
+                            @endif
+                        </td>
                         <td>{{ $row['created_at'] }}</td>
                     </tr>
                 @elseif($type === 'bonus')
