@@ -35,7 +35,7 @@ const form = useForm({
   diamond_reward_percent: props.config?.diamond_reward_percent || 75000,
   crown_reward_percent: props.config?.crown_reward_percent || 375000,
   business_mode: props.config?.business_mode ?? true,
-  min_withdrawal: props.config?.min_withdrawal || 250000,
+  min_withdrawal: props.config?.min_withdrawal ?? 0,
   max_level_depth: props.config?.max_level_depth || 0,
   allow_sponsor_exceed: props.config?.allow_sponsor_exceed ?? true,
   allow_pairing_exceed: props.config?.allow_pairing_exceed ?? true,
@@ -63,7 +63,7 @@ const resetDefaults = () => {
     form.sponsor_percent = 100;
     form.pairing_percent = 50;
     form.titik_percent = 1;
-    form.min_withdrawal = 250000;
+    form.min_withdrawal = 0;
     form.max_level_depth = 0;
     submitSettings();
   }
@@ -290,6 +290,7 @@ const saveRewards = () => {
               <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">MINIMAL PENARIKAN (RUPIAH)</label>
                 <input v-model="form.min_withdrawal" type="number" step="5000" class="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold" />
+                <p class="text-[10px] text-slate-400 mt-1">Isi <strong>0</strong> untuk tanpa batas minimal (tetap dikenakan biaya admin Rp 10.000 per penarikan).</p>
               </div>
             </div>
           </div>

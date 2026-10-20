@@ -165,8 +165,8 @@ try {
         ]);
         $resetLog = $kernel->output();
 
-        // Ensure minimum withdrawal is set to 250.000
-        \App\Models\Setting::setValue('min_withdrawal', 250000);
+        // Set minimum withdrawal to 0 (tanpa limit, tetap ada biaya admin 10k)
+        \App\Models\Setting::setValue('min_withdrawal', 0);
 
         $action = "Migrate & Reset Clean Member Data (Hanya Sisakan Admin & Master Data)";
 

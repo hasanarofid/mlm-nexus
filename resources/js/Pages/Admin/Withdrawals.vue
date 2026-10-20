@@ -147,6 +147,22 @@ const formatRupiah = (val) => {
   return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
 };
 
+const effectiveMinWithdrawal = computed(() => {
+  const adminFee = props.wallet?.admin_fee || 10000;
+  const configuredMin = props.wallet?.min_withdrawal || 0;
+  return configuredMin > adminFee ? configuredMin : (adminFee + 1);
+});
+
+const estimatedNet = computed(() => {
+  const amt = parseFloat(form.amount) || 0;
+  const adminFee = props.wallet?.admin_fee || 10000;
+  return Math.max(0, amt - adminFee);
+});
+
+const selectedWithdrawal = computed(() => {
+  return (props.withdrawals || []).find(w => w.id === selectedApproveId.value);
+});
+
 const bankList = [
   'Bank Sinarmas',
   'Bank Central Asia',
@@ -206,8 +222,13 @@ const bankList = [
             {{ formatRupiah(wallet?.saldo ?? 0) }}
           </h2>
           <div class="text-xs text-slate-500 font-medium pt-0.5 space-y-0.5">
-            <p>Min. Penarikan: <strong class="text-slate-800">{{ formatRupiah(wallet?.min_withdrawal || 250000) }}</strong></p>
-            <p>Biaya Admin: <strong class="text-emerald-600">{{ formatRupiah(wallet?.admin_fee || 0) }}</strong></p>
+            <p v-if="wallet?.min_withdrawal && wallet.min_withdrawal > (wallet?.admin_fee || 10000)">
+              Min. Penarikan: <strong class="text-slate-800">{{ formatRupiah(wallet.min_withdrawal) }}</strong>
+            </p>
+            <p v-else>
+              Min. Penarikan: <strong class="text-slate-800">Bebas (Tanpa Limit)</strong>
+            </p>
+            <p>Biaya Admin: <strong class="text-emerald-600">{{ formatRupiah(wallet?.admin_fee || 10000) }}</strong> / penarikan</p>
           </div>
         </div>
 
@@ -313,7 +334,7 @@ const bankList = [
               </div>
 
               <!-- Nominal Penarikan (Rupiah) -->
-              <div>
+              <div class="space-y-2">
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                   NOMINAL PENARIKAN (RUPIAH)
                 </label>
@@ -321,14 +342,41 @@ const bankList = [
                   v-model="form.amount"
                   type="number"
                   required
-                  min="250000"
+                  :min="effectiveMinWithdrawal"
                   step="1000"
-                  placeholder="Min. Rp 250.000"
+                  placeholder="Contoh: 50.000"
                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs font-bold focus:outline-none focus:border-[#D4AF37]"
                 />
-                <div class="flex items-center justify-between text-[10px] mt-1.5 font-medium">
-                  <span class="text-slate-400">Min. {{ formatRupiah(wallet?.min_withdrawal || 250000) }}</span>
+                
+                <div class="flex items-center justify-between text-[10px] font-medium">
+                  <span class="text-slate-400">
+                    <template v-if="wallet?.min_withdrawal && wallet.min_withdrawal > (wallet?.admin_fee || 10000)">
+                      Min. {{ formatRupiah(wallet.min_withdrawal) }}
+                    </template>
+                    <template v-else>
+                      Min. > {{ formatRupiah(wallet?.admin_fee || 10000) }} (Bebas / Tanpa Limit)
+                    </template>
+                  </span>
                   <span class="text-slate-500">Max. Bisa ditarik: <strong class="text-[#B8922E] font-bold">{{ formatRupiah(wallet?.saldo ?? 0) }}</strong></span>
+                </div>
+
+                <!-- Live calculation breakdown box -->
+                <div v-if="form.amount" class="p-3 bg-[#faf6eb] border border-[#D4AF37]/40 rounded-xl space-y-1.5 text-xs">
+                  <div class="flex items-center justify-between text-slate-600">
+                    <span>Nominal Penarikan:</span>
+                    <span class="font-mono font-bold text-slate-900">{{ formatRupiah(form.amount) }}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-slate-600">
+                    <span>Biaya Admin:</span>
+                    <span class="font-mono font-bold text-rose-600">-{{ formatRupiah(wallet?.admin_fee || 10000) }}</span>
+                  </div>
+                  <div class="flex items-center justify-between border-t border-[#D4AF37]/30 pt-1.5 text-slate-900 font-extrabold">
+                    <span>Diterima di Rekening:</span>
+                    <span class="font-mono text-sm text-emerald-600 font-black">{{ formatRupiah(estimatedNet) }}</span>
+                  </div>
+                  <p v-if="form.amount <= (wallet?.admin_fee || 10000)" class="text-[10px] text-rose-500 font-semibold pt-0.5">
+                    * Nominal penarikan harus lebih besar dari biaya admin ({{ formatRupiah(wallet?.admin_fee || 10000) }}).
+                  </p>
                 </div>
               </div>
 
@@ -408,13 +456,18 @@ const bankList = [
                 </div>
 
                 <!-- Right Side: Amount & Admin Actions -->
-                <div class="flex flex-col items-end gap-2 shrink-0">
+                <div class="flex flex-col items-end gap-1.5 shrink-0">
                   <span class="text-sm font-black text-slate-900 font-mono tracking-tight">
                     {{ formatRupiah(item.amount) }}
                   </span>
-                  <span class="text-[10px] text-slate-400 font-medium">
-                    (Potongan Admin: {{ formatRupiah(item.fee || 10000) }})
-                  </span>
+                  <div class="text-[10px] text-right space-y-0.5">
+                    <span class="text-slate-400 block font-medium">
+                      Biaya Admin: {{ formatRupiah(item.fee || 10000) }}
+                    </span>
+                    <span class="text-emerald-600 font-black font-mono block">
+                      Diterima: {{ formatRupiah(Math.max(0, item.amount - (item.fee || 10000))) }}
+                    </span>
+                  </div>
 
                   <!-- Admin Action Buttons (Approve / Reject) -->
                   <div v-if="is_admin && item.status === 'pending'" class="flex items-center gap-1.5 pt-1">
@@ -451,6 +504,32 @@ const bankList = [
             <button @click="closeApproveModal" class="text-slate-400 hover:text-slate-600">
               <X class="w-5 h-5" />
             </button>
+          </div>
+
+          <!-- Rincian Transfer Dana -->
+          <div v-if="selectedWithdrawal" class="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-2 text-xs">
+            <div class="flex items-center justify-between text-slate-500">
+              <span>Member:</span>
+              <strong class="text-slate-800">{{ selectedWithdrawal.user_name }} (@{{ selectedWithdrawal.user_username }})</strong>
+            </div>
+            <div class="flex items-center justify-between text-slate-500">
+              <span>Rekening Tujuan:</span>
+              <strong class="text-slate-800 font-mono">{{ selectedWithdrawal.bank_name }} - {{ selectedWithdrawal.bank_account_number }} (a.n {{ selectedWithdrawal.bank_account_name }})</strong>
+            </div>
+            <div class="flex items-center justify-between text-slate-500 pt-1 border-t border-slate-200/60">
+              <span>Nominal WD:</span>
+              <span class="font-mono font-bold text-slate-800">{{ formatRupiah(selectedWithdrawal.amount) }}</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-500">
+              <span>Biaya Admin:</span>
+              <span class="font-mono font-bold text-rose-600">-{{ formatRupiah(selectedWithdrawal.fee || 10000) }}</span>
+            </div>
+            <div class="flex items-center justify-between pt-1 border-t border-slate-200 text-slate-900 font-black">
+              <span class="uppercase">Total Dana Ditransfer:</span>
+              <span class="font-mono text-sm text-emerald-600 font-black">
+                {{ formatRupiah(Math.max(0, selectedWithdrawal.amount - (selectedWithdrawal.fee || 10000))) }}
+              </span>
+            </div>
           </div>
 
           <form @submit.prevent="submitApproveWithdrawal" class="space-y-4">

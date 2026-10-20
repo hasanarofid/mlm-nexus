@@ -320,7 +320,10 @@ const reportTabs = [
                   {{ row.bank_name }} - <strong class="font-mono text-slate-900">{{ row.bank_account_number }}</strong>
                   <span class="block text-[10px] text-slate-400">a.n {{ row.bank_account_name }}</span>
                 </td>
-                <td class="py-3.5 px-4 font-black text-slate-900 font-mono text-xs">{{ formatRupiah(row.amount) }}</td>
+                <td class="py-3.5 px-4">
+                  <span class="font-black text-slate-900 font-mono text-xs block">{{ formatRupiah(row.amount) }}</span>
+                  <span class="text-[10px] text-emerald-600 font-extrabold font-mono block">Diterima: {{ formatRupiah(Math.max(0, row.amount - (row.fee || 10000))) }}</span>
+                </td>
                 <td class="py-3.5 px-4">
                   <span 
                     :class="[

@@ -52,7 +52,7 @@ class WithdrawalController extends Controller
             ];
         });
 
-        $minWithdrawal = (float) \App\Models\Setting::getValue('min_withdrawal', 250000);
+        $minWithdrawal = (float) \App\Models\Setting::getValue('min_withdrawal', 0);
 
         return Inertia::render('Admin/Withdrawals', [
             'wallet' => [
@@ -77,20 +77,28 @@ class WithdrawalController extends Controller
      */
     public function store(Request $request)
     {
-        $minWithdrawal = (float) \App\Models\Setting::getValue('min_withdrawal', 250000);
+        $fee = 10000;
+        $minWithdrawal = (float) \App\Models\Setting::getValue('min_withdrawal', 0);
+        $minLimit = $minWithdrawal > $fee ? $minWithdrawal : ($fee + 1);
 
         $request->validate([
             'bank_name' => 'required|string',
             'bank_account_number' => 'required|string',
             'bank_account_name' => 'required|string',
-            'amount' => 'required|numeric|min:' . $minWithdrawal,
+            'amount' => 'required|numeric|min:' . $minLimit,
+        ], [
+            'amount.min' => $minWithdrawal > $fee 
+                ? 'Nominal penarikan minimum adalah Rp ' . number_format($minWithdrawal, 0, ',', '.') . '!'
+                : 'Nominal penarikan harus lebih besar dari biaya admin (Rp ' . number_format($fee, 0, ',', '.') . ') agar dana dapat diterima!',
         ]);
 
         $user = auth()->user();
-        $fee = 10000;
 
-        if ($request->amount < $minWithdrawal) {
-            return back()->with('error', 'Nominal penarikan minimum adalah Rp ' . number_format($minWithdrawal, 0, ',', '.') . '!');
+        if ($request->amount < $minLimit) {
+            $msg = $minWithdrawal > $fee 
+                ? 'Nominal penarikan minimum adalah Rp ' . number_format($minWithdrawal, 0, ',', '.') . '!'
+                : 'Nominal penarikan harus lebih besar dari biaya admin (Rp ' . number_format($fee, 0, ',', '.') . ')!';
+            return back()->with('error', $msg);
         }
 
         if (($user->saldo ?? 0) < $request->amount) {
@@ -98,7 +106,9 @@ class WithdrawalController extends Controller
         }
 
         $withdrawal = null;
-        DB::transaction(function () use ($user, $request, $fee, &$withdrawal) {
+        $netAmount = max(0, $request->amount - $fee);
+
+        DB::transaction(function () use ($user, $request, $fee, $netAmount, &$withdrawal) {
             // Reserve money from user saldo
             $user->decrement('saldo', $request->amount);
 
@@ -126,7 +136,7 @@ class WithdrawalController extends Controller
                 'type' => 'out',
                 'category' => 'withdrawal',
                 'amount' => $request->amount,
-                'description' => 'Permohonan Penarikan Saldo (WD #' . $withdrawal->id . ') ke ' . $request->bank_name . ' (' . $request->bank_account_number . ') - Biaya Potongan: Rp ' . number_format($fee, 0, ',', '.'),
+                'description' => 'Permohonan Penarikan Saldo (WD #' . $withdrawal->id . ') ke ' . $request->bank_name . ' (' . $request->bank_account_number . ') - Biaya Admin: Rp ' . number_format($fee, 0, ',', '.') . ' (Diterima: Rp ' . number_format($netAmount, 0, ',', '.') . ')',
             ]);
         });
 
@@ -138,7 +148,7 @@ class WithdrawalController extends Controller
             \Illuminate\Support\Facades\Log::error('Gagal mengirim email permohonan penarikan saldo: ' . $e->getMessage());
         }
 
-        return back()->with('success', 'Permohonan penarikan saldo (WD) sebesar Rp ' . number_format($request->amount, 0, ',', '.') . ' berhasil dikirim! Potongan biaya admin Rp 10.000.');
+        return back()->with('success', 'Permohonan penarikan saldo (WD) sebesar Rp ' . number_format($request->amount, 0, ',', '.') . ' berhasil dikirim! Biaya admin Rp ' . number_format($fee, 0, ',', '.') . ', dana diterima di rekening Rp ' . number_format($netAmount, 0, ',', '.') . '.');
     }
 
     /**
@@ -179,7 +189,8 @@ class WithdrawalController extends Controller
             \Illuminate\Support\Facades\Log::error('Gagal mengirim email persetujuan penarikan saldo: ' . $e->getMessage());
         }
 
-        return back()->with('success', 'Penarikan saldo #' . $withdrawal->id . ' sebesar Rp ' . number_format($withdrawal->amount, 0, ',', '.') . ' berhasil disetujui!');
+        $net = max(0, $withdrawal->amount - ($withdrawal->fee ?? 10000));
+        return back()->with('success', 'Penarikan saldo #' . $withdrawal->id . ' sebesar Rp ' . number_format($withdrawal->amount, 0, ',', '.') . ' (Dana ditransfer: Rp ' . number_format($net, 0, ',', '.') . ') berhasil disetujui!');
     }
 
     /**

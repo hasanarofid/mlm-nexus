@@ -37,6 +37,10 @@ class WithdrawalStatusNotification extends Notification
     {
         $status = strtolower($this->withdrawal->status);
         $amountFormatted = 'Rp ' . number_format($this->withdrawal->amount, 0, ',', '.');
+        $fee = (float) ($this->withdrawal->fee ?? 10000);
+        $feeFormatted = 'Rp ' . number_format($fee, 0, ',', '.');
+        $netAmount = max(0, $this->withdrawal->amount - $fee);
+        $netFormatted = 'Rp ' . number_format($netAmount, 0, ',', '.');
         $wdUrl = route('admin.withdrawals.index');
 
         $mail = new MailMessage();
@@ -44,8 +48,10 @@ class WithdrawalStatusNotification extends Notification
         if ($status === 'approved') {
             $mail->subject('Penarikan Saldo ' . $amountFormatted . ' Berhasil Disetujui (WD #' . $this->withdrawal->id . ')')
                 ->greeting('Halo ' . $notifiable->name . ',')
-                ->line('Permohonan penarikan saldo (WD) Anda telah **DISETUJUI** dan ditransfer ke rekening bank Anda.')
+                ->line('Permohonan penarikan saldo (WD) Anda telah **DISETUJUI** dan dana bersih telah ditransfer ke rekening bank Anda.')
                 ->line('• **Nominal WD:** ' . $amountFormatted)
+                ->line('• **Biaya Admin:** ' . $feeFormatted)
+                ->line('• **Dana Diterima di Rekening:** **' . $netFormatted . '**')
                 ->line('• **Bank Tujuan:** ' . $this->withdrawal->bank_name)
                 ->line('• **Nomor Rekening:** ' . $this->withdrawal->bank_account_number)
                 ->line('• **Atas Nama:** ' . $this->withdrawal->bank_account_name);
@@ -59,6 +65,9 @@ class WithdrawalStatusNotification extends Notification
             $mail->subject('Permohonan Penarikan Saldo ' . $amountFormatted . ' Diterima (WD #' . $this->withdrawal->id . ')')
                 ->greeting('Halo ' . $notifiable->name . ',')
                 ->line('Permohonan penarikan saldo (WD) Anda sebesar ' . $amountFormatted . ' telah berhasil terkirim dan sedang diproses oleh Tim Keuangan nexuscommunity.id.')
+                ->line('• **Nominal WD:** ' . $amountFormatted)
+                ->line('• **Biaya Admin:** ' . $feeFormatted)
+                ->line('• **Estimasi Dana Diterima:** **' . $netFormatted . '**')
                 ->line('• **Bank Tujuan:** ' . $this->withdrawal->bank_name . ' (' . $this->withdrawal->bank_account_number . ')');
         }
 
