@@ -151,24 +151,13 @@ try {
             '--force' => true,
         ]);
         $migrateLog = $kernel->output();
-        
-        // Auto seed DatabaseSeeder to ensure admin & master data are created/updated
-        $kernel->call('db:seed', [
-            '--class' => 'DatabaseSeeder',
-            '--force' => true,
-        ]);
-        $seedLog = $kernel->output();
-
-        // Purge non-admin member accounts & transaction logs
-        $kernel->call('reset:system-data', [
-            '--force' => true,
-        ]);
-        $resetLog = $kernel->output();
+        $seedLog = 'Skipped data seeding (Safe Production Mode)';
+        $resetLog = 'Skipped reset system data (Safe Production Mode - Data Preserved)';
 
         // Set minimum withdrawal to 0 (tanpa limit, tetap ada biaya admin 10k)
         \App\Models\Setting::setValue('min_withdrawal', 0);
 
-        $action = "Migrate & Reset Clean Member Data (Hanya Sisakan Admin & Master Data)";
+        $action = "Safe Migration & Cache Clear (Data Member Tetap Aman)";
 
         // Clear & rebuild application caches and bring app online (turn off maintenance mode)
         @$kernel->call('up');
