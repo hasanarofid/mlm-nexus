@@ -57,7 +57,7 @@ class WithdrawalController extends Controller
         return Inertia::render('Admin/Withdrawals', [
             'wallet' => [
                 'saldo' => (float) ($user->saldo ?? 0),
-                'min_withdrawal' => $minWithdrawal,
+                'min_withdrawal' => 0,
                 'admin_fee' => 10000,
                 'total_cair' => (float) $totalCair,
                 'total_proses' => (float) $totalProses,
@@ -78,8 +78,7 @@ class WithdrawalController extends Controller
     public function store(Request $request)
     {
         $fee = 10000;
-        $minWithdrawal = (float) \App\Models\Setting::getValue('min_withdrawal', 0);
-        $minLimit = $minWithdrawal > $fee ? $minWithdrawal : ($fee + 1);
+        $minLimit = $fee + 1;
 
         $request->validate([
             'bank_name' => 'required|string',
@@ -87,18 +86,13 @@ class WithdrawalController extends Controller
             'bank_account_name' => 'required|string',
             'amount' => 'required|numeric|min:' . $minLimit,
         ], [
-            'amount.min' => $minWithdrawal > $fee 
-                ? 'Nominal penarikan minimum adalah Rp ' . number_format($minWithdrawal, 0, ',', '.') . '!'
-                : 'Nominal penarikan harus lebih besar dari biaya admin (Rp ' . number_format($fee, 0, ',', '.') . ') agar dana dapat diterima!',
+            'amount.min' => 'Nominal penarikan harus lebih besar dari biaya admin (Rp ' . number_format($fee, 0, ',', '.') . ') agar dana dapat diterima!',
         ]);
 
         $user = auth()->user();
 
         if ($request->amount < $minLimit) {
-            $msg = $minWithdrawal > $fee 
-                ? 'Nominal penarikan minimum adalah Rp ' . number_format($minWithdrawal, 0, ',', '.') . '!'
-                : 'Nominal penarikan harus lebih besar dari biaya admin (Rp ' . number_format($fee, 0, ',', '.') . ')!';
-            return back()->with('error', $msg);
+            return back()->with('error', 'Nominal penarikan harus lebih besar dari biaya admin (Rp ' . number_format($fee, 0, ',', '.') . ')!');
         }
 
         if (($user->saldo ?? 0) < $request->amount) {

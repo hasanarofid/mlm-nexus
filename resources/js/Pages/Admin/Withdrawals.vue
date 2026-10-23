@@ -149,8 +149,7 @@ const formatRupiah = (val) => {
 
 const effectiveMinWithdrawal = computed(() => {
   const adminFee = props.wallet?.admin_fee || 10000;
-  const configuredMin = props.wallet?.min_withdrawal || 0;
-  return configuredMin > adminFee ? configuredMin : (adminFee + 1);
+  return adminFee + 1;
 });
 
 const estimatedNet = computed(() => {
@@ -222,12 +221,6 @@ const bankList = [
             {{ formatRupiah(wallet?.saldo ?? 0) }}
           </h2>
           <div class="text-xs text-slate-500 font-medium pt-0.5 space-y-0.5">
-            <p v-if="wallet?.min_withdrawal && wallet.min_withdrawal > (wallet?.admin_fee || 10000)">
-              Min. Penarikan: <strong class="text-slate-800">{{ formatRupiah(wallet.min_withdrawal) }}</strong>
-            </p>
-            <p v-else>
-              Min. Penarikan: <strong class="text-slate-800">Bebas (Tanpa Limit)</strong>
-            </p>
             <p>Biaya Admin: <strong class="text-emerald-600">{{ formatRupiah(wallet?.admin_fee || 10000) }}</strong> / penarikan</p>
           </div>
         </div>
@@ -348,15 +341,7 @@ const bankList = [
                   class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs font-bold focus:outline-none focus:border-[#D4AF37]"
                 />
                 
-                <div class="flex items-center justify-between text-[10px] font-medium">
-                  <span class="text-slate-400">
-                    <template v-if="wallet?.min_withdrawal && wallet.min_withdrawal > (wallet?.admin_fee || 10000)">
-                      Min. {{ formatRupiah(wallet.min_withdrawal) }}
-                    </template>
-                    <template v-else>
-                      Min. > {{ formatRupiah(wallet?.admin_fee || 10000) }} (Bebas / Tanpa Limit)
-                    </template>
-                  </span>
+                <div class="flex items-center justify-end text-[10px] font-medium">
                   <span class="text-slate-500">Max. Bisa ditarik: <strong class="text-[#B8922E] font-bold">{{ formatRupiah(wallet?.saldo ?? 0) }}</strong></span>
                 </div>
 
